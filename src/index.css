@@ -151,6 +151,10 @@
     @apply border-border outline-ring/50;
   }
 
+  :root::selection {
+    @apply bg-brand-pink/40
+  }
+
   body {
     @apply bg-background text-foreground;
   }
