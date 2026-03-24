@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom'
 
 const useAuth = () => {
-  const isAuthenticated = true
+  const isAuthenticated = false
   return isAuthenticated
 }
 

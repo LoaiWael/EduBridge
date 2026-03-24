@@ -23,15 +23,17 @@ import ChatBotPage from '@/pages/ChatBotPage'
 import SupervisionRequestsPage from '@/pages/SupervisionRequestsPage'
 import MyTeamsPage from '@/pages/MyTeamsPage'
 import TeamDetailsPage from '@/pages/TeamDetailsPage'
+import RoleSelectionPage from '@/pages/RoleSelectionPage'
 
 const routes = createRoutesFromElements(
   <>
     {/* Public auth routes */}
     <Route element={<AuthRoutes />}>
+      <Route path="/role-selection" element={<RoleSelectionPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/forget-pass" element={<ForgetPassPage />} />
-      <Route path="/reset-pass" element={<ResetPassPage />} />
+      <Route path="/forget-password" element={<ForgetPassPage />} />
+      <Route path="/reset-password" element={<ResetPassPage />} />
       <Route path="/verify" element={<VerificationPage />} />
     </Route>
 

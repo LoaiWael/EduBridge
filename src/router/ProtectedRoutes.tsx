@@ -2,7 +2,7 @@ import { Navigate, Outlet } from 'react-router-dom'
 
 // TODO: Replace with actual auth store (Zustand)
 const useAuth = () => {
-  const isAuthenticated = true // localStorage.getItem('token') !== null
+  const isAuthenticated = false // localStorage.getItem('token') !== null
   return isAuthenticated
 }
 

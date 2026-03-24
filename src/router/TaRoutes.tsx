@@ -1,4 +1,4 @@
-import type { Role } from "@/features/auth";
+import type { Role } from "@/features/profile";
 import { Navigate, Outlet } from "react-router-dom";
 
 const TaRoutes = () => {
