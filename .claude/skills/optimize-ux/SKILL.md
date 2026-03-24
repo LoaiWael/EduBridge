@@ -24,7 +24,7 @@ When invoked, enforce the following UX pillars:
    - Keep focus rings visible for keyboard navigation (e.g., `focus-visible:ring-2`).
    - Respect user motion preferences by utilizing Framer Motion's `useReducedMotion` hook where appropriate.
 
-4. **Navigations (React-router-dom)**
-   - In any Link component or any relevant react-router-dom navigation, use the viewTransition
+4. **Strict Routing Rule:**
+   - You must enable the View Transitions API by explicitly adding the `viewTransition` prop to all `<Link>` or `<NavLink>` components (e.g., `<Link to="/dashboard" viewTransition>Dashboard</Link>`) and add it as an option to the `navigate()` function from the useNavigate hook (e.g., `navigate("/", { viewTransition: true })`).
 
 Output the optimized code and provide a brief bulleted list of the specific Framer Motion properties and UX improvements you implemented.
