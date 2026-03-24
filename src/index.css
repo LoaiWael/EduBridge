@@ -152,7 +152,7 @@
   }
 
   :root::selection {
-    @apply bg-brand-pink/40
+    @apply bg-brand-primary/40
   }
 
   body {
