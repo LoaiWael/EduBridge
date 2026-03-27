@@ -15,17 +15,27 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   const headerVariants = {
-    hidden: { opacity: 0, y: -50 },
+    hidden: { opacity: 0 },
     visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        ease: [0.25, 0.46, 0.45, 0.94] as const,
+      },
+    },
+  };
+
+  const headerChildrenVariants = {
+    hidden: { opacity: 0, y: -15 },
+    visible: (i: number) => ({
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring" as const,
-        stiffness: 80,
-        damping: 20,
-        mass: 0.8,
+        delay: 0.3 + i * 0.1,
+        duration: 0.5,
+        ease: [0.25, 0.46, 0.45, 0.94] as const,
       },
-    },
+    }),
   };
 
   const containerVariants = {
@@ -63,7 +73,11 @@ const HomePage = () => {
             >
 
               {/* Top App Bar */}
-              <div className="flex justify-between items-center z-10 relative">
+              <motion.div
+                custom={0}
+                variants={headerChildrenVariants}
+                className="flex justify-between items-center z-10 relative"
+              >
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
@@ -104,10 +118,14 @@ const HomePage = () => {
                     </TooltipContent>
                   </Tooltip>
                 </div>
-              </div>
+              </motion.div>
 
               {/* Search Bar */}
-              <div className="mt-7 relative z-10 hover:opacity-90 transition-opacity">
+              <motion.div
+                custom={1}
+                variants={headerChildrenVariants}
+                className="mt-7 relative z-10 hover:opacity-90 transition-opacity"
+              >
                 <div className="relative flex items-center">
                   <Search className="absolute left-4 w-[22px] h-[22px] text-[#444444]" strokeWidth={1.5} />
                   <input
@@ -117,10 +135,14 @@ const HomePage = () => {
                     className="w-full h-14 bg-[#F2F4F7] text-[#444444] rounded-brand-input pl-12 pr-6 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/50 text-base"
                   />
                 </div>
-              </div>
+              </motion.div>
 
               {/* Hero Banner */}
-              <div className="mt-10 relative z-10 flex flex-col flex-wrap min-h-[160px]">
+              <motion.div
+                custom={2}
+                variants={headerChildrenVariants}
+                className="mt-10 relative z-10 flex flex-col flex-wrap min-h-[160px]"
+              >
                 <div
                   className="lg:max-w-[30%] z-20"
                 >
@@ -147,7 +169,7 @@ const HomePage = () => {
                   alt="Team Interaction"
                   className="lg:absolute -right-8 -bottom-6 w-[280px] object-contain z-10"
                 />
-              </div>
+              </motion.div>
             </motion.div>
 
             {/* Content Section */}
