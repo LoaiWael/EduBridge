@@ -59,7 +59,6 @@ const HomePage = () => {
 
   return (
     <>
-      <title>EduBridge - Home</title>
       <TooltipProvider delayDuration={300}>
         <div className="w-full bg-[#F5F7FB]">
           <div className="min-h-screen lg:max-w-4/5 mx-auto pb-28 relative overflow-x-hidden">
@@ -107,7 +106,7 @@ const HomePage = () => {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button
-                        onClick={() => navigate("/:userName", { viewTransition: true })}
+                        onClick={() => navigate("/bridge/:userName", { viewTransition: true })}
                         className="focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded-full"
                       >
                         <ProfileAvatar />

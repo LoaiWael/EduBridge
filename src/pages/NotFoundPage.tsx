@@ -1,4 +1,4 @@
-import { useNavigate, type To } from "react-router"
+import { useNavigate } from "react-router"
 import { motion } from "motion/react"
 import { Home, AlertCircle, ArrowLeft } from "lucide-react"
 
@@ -60,7 +60,7 @@ const NotFoundPage = () => {
           className="flex flex-col sm:flex-row gap-3 justify-center"
         >
           <Button
-            onClick={() => navigate(-1 as To, { viewTransition: true })}
+            onClick={() => navigate('..', { viewTransition: true })}
             variant="outline"
             size="lg"
             className="gap-2"
