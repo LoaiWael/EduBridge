@@ -1,1 +1,1 @@
-export type { Message, ChatSession } from "./types";
+export { default as ChatbotButton } from "./components/ChatbotButton";

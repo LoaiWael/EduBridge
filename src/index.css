@@ -152,7 +152,7 @@
   }
 
   :root::selection {
-    @apply bg-brand-primary/40
+    @apply bg-brand-secondary/20
   }
 
   body {

@@ -24,6 +24,8 @@ import SupervisionRequestsPage from '@/pages/SupervisionRequestsPage'
 import MyTeamsPage from '@/pages/MyTeamsPage'
 import TeamDetailsPage from '@/pages/TeamDetailsPage'
 import RoleSelectionPage from '@/pages/RoleSelectionPage'
+import WithoutNavLayout from '@/layouts/WithoutNavLayout'
+import RootLayout from '@/layouts/RootLayout'
 
 const routes = createRoutesFromElements(
   <>
@@ -34,41 +36,43 @@ const routes = createRoutesFromElements(
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/forget-password" element={<ForgetPassPage />} />
       <Route path="/reset-password" element={<ResetPassPage />} />
-      <Route path="/verify" element={<VerificationPage />} />
+      <Route path="/verification" element={<VerificationPage />} />
     </Route>
 
     {/* Protected routes */}
     <Route element={<ProtectedRoutes />}>
       {/* General routes */}
       <Route path="/">
-        <Route index element={<HomePage />} />
-        <Route path=":userName" element={<ProfilePage />} />
-
-        <Route path="settings">
-          <Route index element={<SettingsPage />} />
-          <Route path="profile" element={<SettingsProfilePage />} />
-          <Route path="password-security" element={<SettingsPasswordPage />} />
-          <Route path="notifications" element={<SettingsNotificationsPage />} />
+        <Route element={<RootLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path=":userName" element={<ProfilePage />} />
+          <Route path="ideas-lib">
+            <Route index element={<IdeasLibPage />} />
+            <Route path=":idea" element={<IdeaDetailsPage />} />
+          </Route>
+          <Route element={<StudentRoutes />}>
+            <Route path='teams' element={<TeamsPage />} />
+          </Route>
         </Route>
 
-        <Route path="ideas-lib">
-          <Route index element={<IdeasLibPage />} />
-          <Route path=":idea" element={<IdeaDetailsPage />} />
+        <Route element={<WithoutNavLayout />}>
+          <Route path="boarding" element={<BoardingPage />} />
+          <Route path="settings">
+            <Route index element={<SettingsPage />} />
+            <Route path="profile" element={<SettingsProfilePage />} />
+            <Route path="password-security" element={<SettingsPasswordPage />} />
+            <Route path="notifications" element={<SettingsNotificationsPage />} />
+          </Route>
+          <Route path='my-teams' element={<MyTeamsPage />} />
+          <Route path='team-details/:id' element={<TeamDetailsPage />} />
+          <Route element={<StudentRoutes />}>
+            <Route path='chatbot' element={<ChatBotPage />} />
+          </Route>
+          <Route element={<TaRoutes />}>
+            <Route path='supervision-requests' element={<SupervisionRequestsPage />} />
+          </Route>
         </Route>
 
-        <Route path="boarding" element={<BoardingPage />} />
-        <Route path='my-teams' element={<MyTeamsPage />} />
-        <Route path='team-details/:id' element={<TeamDetailsPage />} />
-
-        {/* Role-based routes */}
-        <Route element={<StudentRoutes />}>
-          <Route path='teams' element={<TeamsPage />} />
-          <Route path='chatbot' element={<ChatBotPage />} />
-        </Route>
-
-        <Route element={<TaRoutes />}>
-          <Route path='supervision-requests' element={<SupervisionRequestsPage />} />
-        </Route>
       </Route>
     </Route>
 

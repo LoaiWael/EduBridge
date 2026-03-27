@@ -10,27 +10,38 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import { useProfileStore } from "@/features/profile";
+import type { RegisterFormData } from "@/features/auth";
 
 const RegisterPage = () => {
   const navigate = useNavigate();
   const shouldReduceMotion = useReducedMotion();
   const role = useProfileStore((state) => state.role);
   const [showPassword, setShowPassword] = useState(false);
+  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { register, handleSubmit, control, formState: { errors } } = useForm();
+  const { register, handleSubmit, control, watch, formState: { errors } } = useForm<RegisterFormData>();
+  const setFirstName = useProfileStore(state => state.setFirstName);
+  const setLastName = useProfileStore(state => state.setLastName);
+  const setUniversity = useProfileStore(state => state.setUniversity);
+  const setEmail = useProfileStore(state => state.setEmail);
 
   // Protect against users visiting register directly without selecting a role.
   // We can just default to 'student' if null, or ideally redirect back to /role-selection
   const currentRole = role || 'student';
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: RegisterFormData) => {
     setIsLoading(true);
     // Submit registration logic goes here
     console.log("Register submitted", data, "Role:", currentRole);
+
+    setFirstName(data.firstName);
+    setLastName(data.lastName);
+    setUniversity(data.universityName ?? "");
+    setEmail(data.email);
     // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 800));
     setIsLoading(false);
-    navigate('/', { viewTransition: true })
+    navigate('/verification', { viewTransition: true })
   };
 
   const formVariants: Variants = {
@@ -112,15 +123,52 @@ const RegisterPage = () => {
           >
             <div className="space-y-4">
 
-              <motion.div variants={itemVariants} className="relative">
+              {/* First Name - Small screens */}
+              <motion.div variants={itemVariants} className="relative lg:hidden">
                 <Input
                   type="text"
-                  placeholder="Full Name"
-                  {...register("fullName", { required: "Full name is required" })}
-                  autoComplete="name"
-                  className={`bg-[#F3F6FB]/80 border ${errors.fullName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                  placeholder="First Name"
+                  {...register("firstName", { required: "First name is required" })}
+                  autoComplete="given-name"
+                  className={`bg-[#F3F6FB]/80 border ${errors.firstName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
                 />
-                {errors.fullName && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.fullName.message as string}</p>}
+                {errors.firstName && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.firstName.message as string}</p>}
+              </motion.div>
+
+              {/* Last Name - Small screens */}
+              <motion.div variants={itemVariants} className="relative lg:hidden">
+                <Input
+                  type="text"
+                  placeholder="Last Name"
+                  {...register("lastName", { required: "Last name is required" })}
+                  autoComplete="family-name"
+                  className={`bg-[#F3F6FB]/80 border ${errors.lastName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                />
+                {errors.lastName && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.lastName.message as string}</p>}
+              </motion.div>
+
+              {/* First Name & Last Name - Large screens (side by side) */}
+              <motion.div variants={itemVariants} className="relative hidden lg:flex gap-4">
+                <div className="flex-1">
+                  <Input
+                    type="text"
+                    placeholder="First Name"
+                    {...register("firstName", { required: "First name is required" })}
+                    autoComplete="given-name"
+                    className={`bg-[#F3F6FB]/80 border ${errors.firstName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                  />
+                  {errors.firstName && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.firstName.message as string}</p>}
+                </div>
+                <div className="flex-1">
+                  <Input
+                    type="text"
+                    placeholder="Last Name"
+                    {...register("lastName", { required: "Last name is required" })}
+                    autoComplete="family-name"
+                    className={`bg-[#F3F6FB]/80 border ${errors.lastName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                  />
+                  {errors.lastName && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.lastName.message as string}</p>}
+                </div>
               </motion.div>
 
               <motion.div variants={itemVariants} className="relative">
@@ -195,6 +243,28 @@ const RegisterPage = () => {
                   {showPassword ? <Eye className="w-[22px] h-[22px]" /> : <EyeOff className="w-[22px] h-[22px]" strokeWidth={1.5} />}
                 </button>
                 {errors.password && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.password.message as string}</p>}
+              </motion.div>
+
+              <motion.div variants={itemVariants} className="relative">
+                <Input
+                  type={showPasswordConfirmation ? "text" : "password"}
+                  placeholder="Confirm Password"
+                  {...register("confirmPassword", {
+                    required: "Please confirm your password",
+                    validate: (value) => value === watch('password') || "Passwords do not match"
+                  })}
+                  autoComplete="new-password"
+                  className={`bg-[#F3F6FB]/80 border ${errors.confirmPassword ? 'border-brand-red' : 'border-0'} h-14 pl-5 pr-12 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#888888] hover:text-[#555555] transition-colors focus:outline-none rounded-full p-1 focus-visible:ring-2 focus-visible:ring-brand-text-primary/40"
+                  aria-label={showPasswordConfirmation ? "Hide password" : "Show password"}
+                >
+                  {showPasswordConfirmation ? <Eye className="w-[22px] h-[22px]" /> : <EyeOff className="w-[22px] h-[22px]" strokeWidth={1.5} />}
+                </button>
+                {errors.confirmPassword && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.confirmPassword.message as string}</p>}
               </motion.div>
             </div>
 

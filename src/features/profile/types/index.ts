@@ -1,19 +1,33 @@
 export type Role = 'student' | 'ta';
 
-export interface UserProfile {
+export interface UserSkill {
   id: string;
-  userName: string;
+  name: string;
+}
+
+export interface UserProfile {
+  firstName: string;
+  lastName: string;
   email: string;
-  role: Role;
-  avatarUrl?: string;
   bio?: string;
-  createdAt: Date;
+  major?: string;
+  university?: string;
+  profileImageUrl?: string;
+  githubUrl?: string;
+  linkedInUrl?: string;
+  isDisabled: boolean;
+  skills: UserSkill[];
 }
 
 export interface UpdateProfileRequest {
-  userName?: string;
+  firstName?: string;
+  lastName?: string;
   bio?: string;
-  avatarUrl?: string;
+  major?: string;
+  university?: string;
+  profileImageUrl?: string;
+  githubUrl?: string;
+  linkedInUrl?: string;
 }
 
 export interface PasswordChangeRequest {
