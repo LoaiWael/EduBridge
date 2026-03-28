@@ -1,13 +1,10 @@
+import { useAuthStore } from '@/features/auth'
 import { Navigate, Outlet } from 'react-router-dom'
 
-const useAuth = () => {
-  const isAuthenticated = true
-  return isAuthenticated
-}
-
 const AuthRoutes = () => {
-  const isAuthenticated = useAuth()
-  return isAuthenticated ? <Navigate to="/:userName" replace /> : <Outlet />
+  const isAuthenticated = useAuthStore(state => state.isAuthenticated);
+
+  return isAuthenticated ? <Navigate to="/bridge/:userName" replace /> : <Outlet />
 }
 
 export default AuthRoutes

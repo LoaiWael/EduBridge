@@ -40,7 +40,7 @@ export const useProfileStore = create<ProfileState>((set) => ({
   linkedInUrl: '',
   isDisabled: false,
   skills: [],
-  role: null,
+  role: 'student',
   setFirstName: (firstName) => set({ firstName: firstName }),
   setLastName: (lastName) => set({ lastName: lastName }),
   setEmail: (email) => set({ email: email }),

@@ -1,8 +1,8 @@
-import type { Role } from "@/features/profile";
+import { useProfileStore } from "@/features/profile";
 import { Navigate, Outlet } from "react-router-dom";
 
 const StudentRoutes = () => {
-  const role: Role = 'student';
+  const role = useProfileStore(state => state.role);
 
   if (role === 'student') return <Outlet />
   else return <Navigate to={'/'} replace />

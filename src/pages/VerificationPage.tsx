@@ -70,7 +70,7 @@ const VerificationPage = () => {
     // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 800));
     setIsLoading(false);
-    navigate('/', { viewTransition: true });
+    navigate('/boarding', { viewTransition: true });
   };
 
   const formVariants: Variants = {
