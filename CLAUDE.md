@@ -27,18 +27,38 @@ npm run preview  # Preview production build
 - Path alias: `@` → `./src`
 
 **Structure:**
-- `src/features/` - Feature modules (auth, ideas_lib) as barrel exports
-- `src/pages/` - Route-level page components (HomePage, ProfilePage, etc.)
-- `src/router/` - React Router configuration
+- `src/features/` - Feature modules with barrel exports
+- `src/pages/` - Route-level page components
+- `src/router/` - React Router configuration with route guards
 - `src/components/ui/` - shadcn reusable UI components
 - `src/lib/` - Utilities (e.g., `cn()` for class merging)
+- `src/layouts/` - Layout components (RootLayout, WithoutNavLayout)
 - `src/assets/` - Static assets
 
-**Key Patterns:**
-- UI components use `class-variance-authority` for variant-based styling
-- All components use TypeScript with strict mode
-- Features are organized as isolated modules for scalability
-- Tailwind v4 uses native CSS variable integration in `index.css`
+**Feature Module Pattern:**
+Each feature follows a consistent structure:
+```
+src/features/[feature]/
+├── index.ts           # Barrel exports (types, stores, components)
+├── types/index.ts     # TypeScript interfaces/types
+├── store/             # Zustand stores (e.g., useAuthStore)
+└── components/       # Feature-specific components
+```
+
+Current features: `auth`, `profile`, `ideas`, `teams`, `notifications`, `supervision`, `chatbot`
+
+**Routing:**
+- `AuthRoutes` - Unauthenticated routes (login, register, etc.)
+- `ProtectedRoutes` - Authenticated route wrapper
+- `StudentRoutes` - Role-based route guard for students
+- `TaRoutes` - Role-based route guard for teaching assistants
+- Routes use `createRoutesFromElements` with nested layouts
+
+**UI Components:**
+- Use `class-variance-authority` (CVA) for variant-based styling
+- shadcn components located in `src/components/ui/`
+- Custom theme variables in `index.css` (brand colors, shadows, radii)
+- Tailwind v4 `@theme inline` block defines design tokens
 
 ## Rules
 ALWAYS before making any change. Search on the web for the newest documentation. And only implement if you are 100% sure it will work.

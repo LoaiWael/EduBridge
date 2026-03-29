@@ -19,15 +19,30 @@ export interface UserProfile {
   skills: UserSkill[];
 }
 
+export interface TaProfile extends UserProfile {
+  department: string;
+  academicTitle?: string;
+  officeLocation?: unknown;
+  maxSlots: number;
+  rating: number;
+}
+
 export interface UpdateProfileRequest {
   firstName?: string;
   lastName?: string;
   bio?: string;
   major?: string;
   university?: string;
-  profileImageUrl?: string;
+  // profileImageUrl?: string;
   githubUrl?: string;
   linkedInUrl?: string;
+}
+
+export interface UpdateTaProfileRequest extends UpdateProfileRequest {
+  department: string;
+  academicTitle?: string;
+  officeLocation?: unknown;
+  maxSlots: number;
 }
 
 export interface PasswordChangeRequest {

@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import BackButton from "@/components/BackButton";
 import { useProfileStore } from "@/features/profile";
+import { maskEmail } from "@/utils";
 
 const VerificationPage = () => {
   const navigate = useNavigate();
@@ -19,11 +20,7 @@ const VerificationPage = () => {
   const [otp, setOtp] = useState(["", "", "", ""]);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([] as (HTMLInputElement | null)[]);
 
-  const maskedEmail = email ? (() => {
-    const [username, domain] = email.split('@');
-    const maskedUsername = username.slice(0, 3) + '*'.repeat(Math.max(0, username.length - 3));
-    return `${maskedUsername}@${domain}`;
-  })() : '';
+  const maskedEmail = email ? maskEmail(email) : '';
 
   const handleChange = (index: number, value: string) => {
     if (value.length > 1) {

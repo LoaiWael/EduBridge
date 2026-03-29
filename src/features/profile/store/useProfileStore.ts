@@ -14,6 +14,12 @@ interface ProfileState {
   isDisabled: boolean;
   skills: UserSkill[];
   role: Role | null;
+  // TA-specific fields
+  department: string;
+  academicTitle?: string;
+  officeLocation?: unknown;
+  maxSlots: number;
+  rating: number;
   setFirstName: (firstName: string) => void;
   setLastName: (lastName: string) => void;
   setEmail: (email: string) => void;
@@ -26,6 +32,11 @@ interface ProfileState {
   setIsDisabled: (isDisabled: boolean) => void;
   setSkills: (skills: UserSkill[]) => void;
   setRole: (role: Role) => void;
+  setDepartment: (department: string) => void;
+  setAcademicTitle: (academicTitle?: string) => void;
+  setOfficeLocation: (officeLocation?: unknown) => void;
+  setMaxSlots: (maxSlots: number) => void;
+  setRating: (rating: number) => void;
 }
 
 export const useProfileStore = create<ProfileState>((set) => ({
@@ -41,6 +52,11 @@ export const useProfileStore = create<ProfileState>((set) => ({
   isDisabled: false,
   skills: [],
   role: 'student',
+  department: '',
+  academicTitle: undefined,
+  officeLocation: undefined,
+  maxSlots: 0,
+  rating: 0,
   setFirstName: (firstName) => set({ firstName: firstName }),
   setLastName: (lastName) => set({ lastName: lastName }),
   setEmail: (email) => set({ email: email }),
@@ -52,5 +68,10 @@ export const useProfileStore = create<ProfileState>((set) => ({
   setLinkedInUrl: (linkedInUrl) => set({ linkedInUrl: linkedInUrl }),
   setIsDisabled: (isDisabled) => set({ isDisabled: isDisabled }),
   setSkills: (skills) => set({ skills: skills }),
-  setRole: (role) => set({ role: role })
+  setRole: (role) => set({ role: role }),
+  setDepartment: (department) => set({ department: department }),
+  setAcademicTitle: (academicTitle) => set({ academicTitle: academicTitle }),
+  setOfficeLocation: (officeLocation) => set({ officeLocation: officeLocation }),
+  setMaxSlots: (maxSlots) => set({ maxSlots: maxSlots }),
+  setRating: (rating) => set({ rating: rating })
 }));

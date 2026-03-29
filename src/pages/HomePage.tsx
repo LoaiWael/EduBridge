@@ -106,8 +106,8 @@ const HomePage = () => {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button
-                        onClick={() => navigate("/bridge/:userName", { viewTransition: true })}
-                        className="focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded-full"
+                        onClick={() => navigate("/bridge/:userId", { viewTransition: true })}
+                        className="cursor-pointer hover:ring-2 hover:ring-brand-pink transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded-full"
                       >
                         <ProfileAvatar />
                       </button>

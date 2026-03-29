@@ -1,161 +1,193 @@
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { useProfileStore } from "@/features/profile/store/useProfileStore";
-import { Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect } from "react"
+import { Link, useParams } from "react-router-dom"
+import { motion, useReducedMotion } from "framer-motion"
+import { Pencil, Briefcase, GraduationCap, Bookmark, ChevronRight, Network } from "lucide-react"
+import { toast } from "sonner"
+import { useProfileStore } from "@/features/profile/store/useProfileStore"
+import { useAuthStore } from "@/features/auth"
+import ProfileAvatar from "@/features/profile/components/ProfileAvatar"
+import BackButton from "@/components/BackButton"
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
+import { maskEmail } from "@/utils"
 
 const ProfilePage = () => {
-  const shouldReduceMotion = useReducedMotion();
-  const { firstName, lastName, setFirstName, setLastName } = useProfileStore();
-  const [isLoading, setIsLoading] = useState(false);
-  const { register, handleSubmit, setValue, formState: { errors } } = useForm();
+  const shouldReduceMotion = useReducedMotion()
+  const { userId } = useParams()
+  const firstName = useProfileStore(state => state.firstName);
+  const lastName = useProfileStore(state => state.lastName);
+  const email = useProfileStore(state => state.email);
+  const major = useProfileStore(state => state.major);
+  const university = useProfileStore(state => state.university);
+  const department = useProfileStore(state => state.department);
+  const authId = useAuthStore(state => state.id)
+
+  const isOwnProfile = userId === authId || (userId && authId && userId.replace(/^ID/, '') === authId.replace(/^ID/, ''))
+
+  const displayName = firstName && lastName ? `${firstName} ${lastName}` : "Olivia Brown"
+  const displayId = userId || (authId ? (authId.toString().startsWith("ID") ? authId : `ID${authId}`) : "ID1000274875")
+  const displayEmail = maskEmail(email)
+
+  const handleSavedTeamsClick = () => {
+    toast.info("Navigating to your saved teams", {
+      description: "Here you can view and manage your bookmarked teams"
+    })
+  }
+
+  // Stagger variants for list items
+  const listItemVariants = {
+    hidden: { opacity: 0, x: -10 },
+    visible: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      transition: {
+        delay: i * 0.08,
+        duration: 0.3
+      }
+    })
+  }
 
   useEffect(() => {
-    setValue("firstName", firstName);
-    setValue("lastName", lastName);
-  }, [firstName, lastName, setValue]);
+    const previousTitle = document.title
+    document.title = `EduBridge - ${displayName}`
 
-  const onSubmit = async (data: any) => {
-    setIsLoading(true);
-    setFirstName(data.firstName);
-    setLastName(data.lastName);
-    await new Promise((resolve) => setTimeout(resolve, 500));
-    setIsLoading(false);
-  };
+    return () => {
+      document.title = previousTitle
+    }
+  }, [displayName])
 
-  const formVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
+  // Fallbacks for missing store details in the mocked UI
+  const details = [
+    {
+      label: "Track",
+      value: major || "UI/UX",
+      icon: <Briefcase className="w-5 h-5 text-brand-text-primary" />
     },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 15 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        stiffness: 120,
-        damping: 12,
-      },
+    {
+      label: "Faculty",
+      value: university || "Computer Science",
+      icon: <GraduationCap className="w-5 h-5 text-brand-text-primary" />
     },
-  };
+    ...(isOwnProfile ? [{
+      label: "Saved Teams",
+      value: <ChevronRight className="w-5 h-5 text-brand-text-secondary" />,
+      icon: <Bookmark className="w-5 h-5 text-brand-text-primary" />,
+      link: "/my-teams"
+    }] : []),
+    {
+      label: "Department",
+      value: department || "CS",
+      icon: <Network className="w-5 h-5 text-brand-text-primary" />
+    }
+  ]
 
   return (
-    <>
-      <title>EduBridge - Profile</title>
-      <div className="min-h-screen w-full bg-brand-background pb-24">
+    <TooltipProvider delayDuration={300}>
+      <div className="min-h-screen w-full bg-linear-to-b from-[#EFE9FF] via-white to-[#F8F5FF] pb-24 relative overflow-x-hidden">
+
         {/* Header */}
         <motion.div
           initial={shouldReduceMotion ? {} : { opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="px-6 py-8"
+          className="px-6 pb-12 pt-6 flex flex-col gap-4"
         >
-          <h1 className="text-[32px] font-bold text-brand-text-primary">
-            Profile
-          </h1>
-          <p className="text-brand-text-secondary text-sm mt-1">
-            Manage your personal information
-          </p>
+          <div className="flex items-center gap-5">
+            <BackButton />
+            <h1 className="text-[32px] font-bold text-brand-text-primary">
+              Profile
+            </h1>
+          </div>
         </motion.div>
 
-        {/* Form Card */}
-        <motion.div
-          initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="mx-6 bg-white rounded-3xl p-6 shadow-brand-card"
-        >
-          <motion.form
-            variants={formVariants}
-            initial="hidden"
-            animate="visible"
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col space-y-5"
+        {/* User Info Card */}
+        <div className=" lg:max-w-[80dvw] mx-auto">
+          <motion.div
+            initial={shouldReduceMotion ? {} : { opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="mx-6 bg-white rounded-3xl p-6 shadow-brand-card flex flex-col items-center text-center relative z-10"
           >
-            {/* First Name */}
-            <motion.div variants={itemVariants} className="space-y-2">
-              <Label
-                htmlFor="firstName"
-                className="text-sm font-semibold text-brand-text-primary"
-              >
-                First Name
-              </Label>
-              <Input
-                id="firstName"
-                placeholder="Enter your first name"
-                {...register("firstName", {
-                  required: "First name is required",
-                })}
-                className={`bg-[#F3F6FB]/80 border ${
-                  errors.firstName ? "border-brand-red" : "border-0"
-                } h-12 px-4 text-brand-text-primary placeholder:text-brand-text-secondary/60 text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
-              />
-              {errors.firstName && (
-                <p className="text-brand-red text-xs ml-1">
-                  {errors.firstName.message as string}
-                </p>
-              )}
-            </motion.div>
+            {/* Profile Avatar overridden with inline style to be larger like UI */}
+            <div className="mb-3">
+              <ProfileAvatar style={{ width: '96px', height: '96px', fontSize: '32px' }} />
+            </div>
 
-            {/* Last Name */}
-            <motion.div variants={itemVariants} className="space-y-2">
-              <Label
-                htmlFor="lastName"
-                className="text-sm font-semibold text-brand-text-primary"
-              >
-                Last Name
-              </Label>
-              <Input
-                id="lastName"
-                placeholder="Enter your last name"
-                {...register("lastName", {
-                  required: "Last name is required",
-                })}
-                className={`bg-[#F3F6FB]/80 border ${
-                  errors.lastName ? "border-brand-red" : "border-0"
-                } h-12 px-4 text-brand-text-primary placeholder:text-brand-text-secondary/60 text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
-              />
-              {errors.lastName && (
-                <p className="text-brand-red text-xs ml-1">
-                  {errors.lastName.message as string}
-                </p>
-              )}
-            </motion.div>
+            <h2 className="text-xl font-bold text-brand-text-primary mb-1">
+              {displayName}
+            </h2>
+            <p className="text-brand-text-secondary text-sm mb-1">
+              {displayId}
+            </p>
+            <p className="text-brand-text-secondary text-sm mb-4">
+              {displayEmail}
+            </p>
 
-            {/* Submit Button */}
-            <motion.div variants={itemVariants} className="pt-4">
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="w-full h-12 bg-brand-secondary hover:bg-brand-secondary/90 text-white font-bold text-base shadow-md transition-all focus-visible:ring-4 focus-visible:ring-brand-secondary/30 disabled:opacity-70 disabled:cursor-not-allowed"
-              >
-                {isLoading ? (
-                  <div className="flex items-center justify-center gap-2">
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    Saving...
+            {isOwnProfile && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Link
+                    to="/settings/profile"
+                    viewTransition
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-brand-pink/60 rounded-brand-card text-brand-text-primary text-sm font-semibold hover:bg-brand-pink/40 transition-colors focus-visible:ring-2 focus-visible:ring-brand-text-primary"
+                  >
+                    <Pencil className="w-4 h-4" />
+                    Edit Profile
+                  </Link>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Update your profile information</p>
+                </TooltipContent>
+              </Tooltip>
+            )}
+          </motion.div>
+
+          {/* Details Card */}
+          <motion.div
+            initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mx-6 mt-6 bg-white rounded-3xl overflow-hidden shadow-brand-card flex flex-col relative z-10"
+          >
+            {details.map((item, index) => {
+              const content = (
+                <motion.div
+                  custom={index}
+                  variants={listItemVariants}
+                  initial={shouldReduceMotion ? "visible" : "hidden"}
+                  animate="visible"
+                  className={`flex flex-row items-center justify-between p-4 ${index !== details.length - 1 ? 'border-b border-brand-grey/50' : ''} ${item.link ? 'hover:bg-black/5 transition-colors cursor-pointer' : ''}`}
+                >
+                  <div className="flex items-center gap-3">
+                    {item.icon}
+                    <span className="text-brand-text-primary font-medium">{item.label}</span>
                   </div>
-                ) : (
-                  "Save Changes"
-                )}
-              </Button>
-            </motion.div>
-          </motion.form>
-        </motion.div>
-      </div>
-    </>
-  );
-};
+                  <div className="text-brand-text-secondary text-sm">
+                    {item.value}
+                  </div>
+                </motion.div>
+              );
 
-export default ProfilePage;
+              return item.link ? (
+                <Link
+                  to={item.link}
+                  viewTransition
+                  key={item.label}
+                  onClick={handleSavedTeamsClick}
+                  className="focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-text-primary focus-visible:z-10 relative"
+                >
+                  {content}
+                </Link>
+              ) : (
+                <div key={item.label}>
+                  {content}
+                </div>
+              )
+            })}
+          </motion.div>
+        </div>
+      </div>
+    </TooltipProvider>
+  )
+}
+
+export default ProfilePage

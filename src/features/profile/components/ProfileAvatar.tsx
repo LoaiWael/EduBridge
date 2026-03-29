@@ -2,14 +2,15 @@ import { forwardRef } from "react";
 import { useProfileStore } from "../store/useProfileStore";
 
 const ProfileAvatar = forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>((props, ref) => {
-  const { profileImageUrl, firstName } = useProfileStore();
+  const profileImageUrl = useProfileStore(state => state.profileImageUrl);
+  const firstName = useProfileStore(state => state.firstName);
   const initial = firstName ? firstName.charAt(0).toUpperCase() : "?";
 
   return (
     <div
       ref={ref}
       {...props}
-      className="w-10 h-10 rounded-full overflow-hidden bg-brand-grey flex items-center justify-center cursor-pointer shadow-sm hover:ring-2 hover:ring-brand-pink transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-pink"
+      className="w-10 h-10 rounded-full overflow-hidden bg-brand-grey flex items-center justify-center shadow-sm"
     >
       {profileImageUrl ? (
         <img
