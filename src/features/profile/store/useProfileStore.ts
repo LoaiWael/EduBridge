@@ -51,7 +51,7 @@ export const useProfileStore = create<ProfileState>((set) => ({
   linkedInUrl: '',
   isDisabled: false,
   skills: [],
-  role: 'student',
+  role: 'ta',
   department: '',
   academicTitle: undefined,
   officeLocation: undefined,

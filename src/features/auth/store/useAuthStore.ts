@@ -8,7 +8,7 @@ interface authState {
 }
 
 export const useAuthStore = create<authState>(set => ({
-  id: '',
+  id: '1',
   isAuthenticated: true,
   setId: (id) => set({ id: id }),
   setIsAuthenticated: (isAuthenticated) => set({ isAuthenticated: isAuthenticated })
