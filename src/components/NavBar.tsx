@@ -22,7 +22,7 @@ const NavBar = () => {
 
   const navItems = [
     { id: "home", icon: Home, label: "Home", path: "/" },
-    { id: "idea-library", icon: Library, label: "Idea Library", path: "/ideas-lib" },
+    { id: "idea-library", icon: Library, label: "Idea Library", path: "/library" },
     ...(role !== "ta" ? [{ id: "teams", icon: Users, label: "Teams", path: "/teams" }] : []),
     { id: "profile", icon: User, label: "Profile", path: `/bridge/${authId}` },
   ];

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { SlidersHorizontal, Bell, Search } from "lucide-react";
@@ -17,6 +18,10 @@ const HomePage = () => {
   const shouldReduceMotion = useReducedMotion();
   const navigate = useNavigate();
   const role = useProfileStore(state => state.role);
+
+  useEffect(() => {
+    document.title = "EduBridge";
+  }, []);
 
   const headerVariants = {
     hidden: { opacity: 0 },
@@ -265,7 +270,7 @@ const HomePage = () => {
                     {/* Community Card */}
                     <motion.div variants={itemVariants}>
                       <Link
-                        to="/ideas-lib"
+                        to="/library"
                         viewTransition
                         title="Visit Community"
                         className="bg-brand-card rounded-brand-input shadow-brand-card p-4 flex flex-col justify-end items-start relative overflow-visible h-[140px] group transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
@@ -371,14 +376,7 @@ const HomePage = () => {
 
             {/* Floating Chatbot Button */}
             {role !== "ta" && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <ChatbotButton />
-                </TooltipTrigger>
-                <TooltipContent side="left" sideOffset={8}>
-                  <p>Talk to EduBridge Chatbot</p>
-                </TooltipContent>
-              </Tooltip>
+              <ChatbotButton />
             )}
           </div>
         </div>

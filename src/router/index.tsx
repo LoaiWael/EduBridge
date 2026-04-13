@@ -48,9 +48,9 @@ const routes = createRoutesFromElements(
         <Route element={<RootLayout />}>
           <Route index element={<HomePage />} />
           <Route path="bridge/:userId" element={<ProfilePage />} />
-          <Route path="ideas-lib">
+          <Route path="library">
             <Route index element={<IdeasLibPage />} />
-            <Route path=":idea" element={<IdeaDetailsPage />} />
+            <Route path=":id" element={<IdeaDetailsPage />} />
           </Route>
           <Route element={<StudentRoutes />}>
             <Route path='teams' element={<TeamsPage />} />
