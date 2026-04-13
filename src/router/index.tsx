@@ -26,6 +26,8 @@ import TeamDetailsPage from '@/pages/TeamDetailsPage'
 import RoleSelectionPage from '@/pages/RoleSelectionPage'
 import WithoutNavLayout from '@/layouts/WithoutNavLayout'
 import RootLayout from '@/layouts/RootLayout'
+import ManageTeamsPage from '@/pages/ManageTeamsPage'
+import TaTeamsPage from '@/pages/TaTeamsPage'
 
 const routes = createRoutesFromElements(
   <>
@@ -52,6 +54,7 @@ const routes = createRoutesFromElements(
           </Route>
           <Route element={<StudentRoutes />}>
             <Route path='teams' element={<TeamsPage />} />
+            <Route path='bridge/' element={<TeamsPage />} />
           </Route>
         </Route>
 
@@ -64,12 +67,16 @@ const routes = createRoutesFromElements(
             <Route path="notifications" element={<SettingsNotificationsPage />} />
           </Route>
           <Route path='my-teams' element={<MyTeamsPage />} />
-          <Route path='team-details/:id' element={<TeamDetailsPage />} />
+          <Route element={<StudentRoutes />}>
+            <Route path='bridge/:userId/teams' element={<TaTeamsPage />} />
+          </Route>
+          <Route path='teams/:id' element={<TeamDetailsPage />} />
           <Route element={<StudentRoutes />}>
             <Route path='chatbot' element={<ChatBotPage />} />
           </Route>
           <Route element={<TaRoutes />}>
             <Route path='supervision-requests' element={<SupervisionRequestsPage />} />
+            <Route path='manage-teams' element={<ManageTeamsPage />} />
           </Route>
         </Route>
 
