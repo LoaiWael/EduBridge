@@ -33,7 +33,8 @@ npm run preview  # Preview production build
 - `src/components/ui/` - shadcn reusable UI components
 - `src/lib/` - Utilities (e.g., `cn()` for class merging)
 - `src/layouts/` - Layout components (RootLayout, WithoutNavLayout)
-- `src/assets/` - Static assets
+- `src/assets/` - Static assets (SVG illustrations in `src/assets/imgs/svg/`)
+- `src/utils/` - Helper functions
 
 **Feature Module Pattern:**
 Each feature follows a consistent structure:
@@ -48,17 +49,22 @@ src/features/[feature]/
 Current features: `auth`, `profile`, `ideas`, `teams`, `notifications`, `supervision`, `chatbot`
 
 **Routing:**
-- `AuthRoutes` - Unauthenticated routes (login, register, etc.)
-- `ProtectedRoutes` - Authenticated route wrapper
-- `StudentRoutes` - Role-based route guard for students
-- `TaRoutes` - Role-based route guard for teaching assistants
-- Routes use `createRoutesFromElements` with nested layouts
+- `src/router/index.tsx` - Main router using `createRoutesFromElements`
+- `AuthRoutes` - Unauthenticated routes (login, register, etc.) - redirects to profile if already authenticated
+- `ProtectedRoutes` - Authenticated route wrapper - redirects to /login if not authenticated
+- `StudentRoutes` - Role-based route guard - only allows `role === 'student'` through
+- `TaRoutes` - Role-based route guard - only allows `role === 'ta'` through
+- Two layout wrappers: `RootLayout` (includes NavBar) and `WithoutNavLayout` (full-screen pages like settings)
 
-**UI Components:**
-- Use `class-variance-authority` (CVA) for variant-based styling
-- shadcn components located in `src/components/ui/`
-- Custom theme variables in `index.css` (brand colors, shadows, radii)
-- Tailwind v4 `@theme inline` block defines design tokens
+**State Management:**
+- `useAuthStore` in `src/features/auth/store/useAuthStore.ts` - authentication state (`isAuthenticated`, `id`)
+- `useProfileStore` in `src/features/profile/store/useProfileStore.ts` - user profile including role (`'student'` or `'ta'`)
+
+**Theme & Styling:**
+- Custom theme variables defined in `src/index.css` with light/dark mode variants
+- Tailwind v4 `@theme inline` block defines design tokens (colors, typography, spacing, shadows, radii)
+- Use `shadcn/tailwind.css` for component styles
+- `tw-animate-css` for animations
 
 ## Rules
 ALWAYS before making any change. Search on the web for the newest documentation. And only implement if you are 100% sure it will work.
