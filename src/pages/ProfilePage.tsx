@@ -1,13 +1,14 @@
 import { useEffect } from "react"
 import { Link, useParams } from "react-router-dom"
 import { motion, useReducedMotion } from "framer-motion"
-import { Pencil, Briefcase, GraduationCap, Bookmark, ChevronRight, Network } from "lucide-react"
+import { Briefcase, GraduationCap, Bookmark, ChevronRight, Network, Star, Users } from "lucide-react"
 import { toast } from "sonner"
 import { useProfileStore } from "@/features/profile/store/useProfileStore"
 import { useAuthStore } from "@/features/auth"
 import ProfileAvatar from "@/features/profile/components/ProfileAvatar"
+import EditProfileButton from "@/features/profile/components/EditProfileButton"
 import BackButton from "@/components/BackButton"
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import { maskEmail } from "@/utils"
 
 const ProfilePage = () => {
@@ -19,6 +20,10 @@ const ProfilePage = () => {
   const major = useProfileStore(state => state.major);
   const university = useProfileStore(state => state.university);
   const department = useProfileStore(state => state.department);
+  const role = useProfileStore(state => state.role);
+  const academicTitle = useProfileStore(state => state.academicTitle);
+  const rating = useProfileStore(state => state.rating);
+  const maxSlots = useProfileStore(state => state.maxSlots);
   const authId = useAuthStore(state => state.id)
 
   const isOwnProfile = userId === authId || (userId && authId && userId.replace(/^ID/, '') === authId.replace(/^ID/, ''))
@@ -56,7 +61,36 @@ const ProfilePage = () => {
   }, [displayName])
 
   // Fallbacks for missing store details in the mocked UI
-  const details = [
+  const details = role === 'ta' ? [
+    {
+      label: "Track",
+      value: major || "AI",
+      icon: <Briefcase className="w-5 h-5 text-brand-text-primary" />
+    },
+    {
+      label: "Faculty",
+      value: university || "Computer Science",
+      icon: <GraduationCap className="w-5 h-5 text-brand-text-primary" />
+    },
+    {
+      label: "Rating",
+      value: `${rating || "4.6"}/5`,
+      icon: <Star className="w-5 h-5 text-black" fill="currentColor" />
+    },
+    ...(isOwnProfile ? [{
+      label: "Manage Teams",
+      value: <ChevronRight className="w-5 h-5 text-brand-text-secondary" />,
+      icon: <Users className="w-5 h-5 text-brand-text-primary" />,
+      link: "/manage-teams"
+    }] : [
+      {
+        label: "Teams",
+        value: <ChevronRight className="w-5 h-5 text-brand-text-secondary" />,
+        icon: <Users className="w-5 h-5 text-brand-text-primary" />,
+        link: `/bridge/${userId}/teams`
+      }
+    ])
+  ] : [
     {
       label: "Track",
       value: major || "UI/UX",
@@ -100,7 +134,7 @@ const ProfilePage = () => {
         </motion.div>
 
         {/* User Info Card */}
-        <div className=" lg:max-w-[80dvw] mx-auto">
+        <div className=" lg:w-[80dvw] max-w-5xl mx-auto">
           <motion.div
             initial={shouldReduceMotion ? {} : { opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -115,30 +149,24 @@ const ProfilePage = () => {
             <h2 className="text-xl font-bold text-brand-text-primary mb-1">
               {displayName}
             </h2>
-            <p className="text-brand-text-secondary text-sm mb-1">
-              {displayId}
-            </p>
-            <p className="text-brand-text-secondary text-sm mb-4">
-              {displayEmail}
-            </p>
-
-            {isOwnProfile && (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    to="/settings/profile"
-                    viewTransition
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-brand-pink/60 rounded-brand-card text-brand-text-primary text-sm font-semibold hover:bg-brand-pink/40 transition-colors focus-visible:ring-2 focus-visible:ring-brand-text-primary"
-                  >
-                    <Pencil className="w-4 h-4" />
-                    Edit Profile
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Update your profile information</p>
-                </TooltipContent>
-              </Tooltip>
+            {role === 'ta' ? (
+              <div className="text-brand-text-secondary text-sm mb-4 leading-tight flex flex-col items-center gap-0.5">
+                <p>Teaching Assistant @ {department || "CS"} dept</p>
+                <p>{academicTitle || (major ? `${major} Engineer` : "AI Engineer")}</p>
+                <p className="mt-0.5 select-none"><span className="text-brand-green font-medium">Availability</span> 4/{maxSlots || 6} Teams</p>
+              </div>
+            ) : (
+              <>
+                <p className="text-brand-text-secondary text-sm mb-1">
+                  {displayId}
+                </p>
+                <p className="text-brand-text-secondary text-sm mb-4">
+                  {displayEmail}
+                </p>
+              </>
             )}
+
+            {isOwnProfile && <EditProfileButton />}
           </motion.div>
 
           {/* Details Card */}
