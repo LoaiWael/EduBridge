@@ -4,17 +4,12 @@ import { Home, Library, Users, User } from "lucide-react";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
+import { useAuthStore } from "@/features/auth";
+import { useProfileStore } from "@/features/profile";
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
-
-const navItems = [
-  { id: "home", icon: Home, label: "Home", path: "/" },
-  { id: "idea-library", icon: Library, label: "Idea Library", path: "/ideas-lib" },
-  { id: "teams", icon: Users, label: "Teams", path: "/teams" },
-  { id: "profile", icon: User, label: "Profile", path: "/bridge/:userId" },
-];
 
 const shouldReduceMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -22,14 +17,24 @@ const NavBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const reduceMotion = useReducedMotion() || shouldReduceMotion;
+  const authId = useAuthStore(state => state.id);
+  const role = useProfileStore(state => state.role);
 
-  const isActive = (path: string) => {
-    if (path === "/") return location.pathname === "/";
+  const navItems = [
+    { id: "home", icon: Home, label: "Home", path: "/" },
+    { id: "idea-library", icon: Library, label: "Idea Library", path: "/ideas-lib" },
+    ...(role !== "ta" ? [{ id: "teams", icon: Users, label: "Teams", path: "/teams" }] : []),
+    { id: "profile", icon: User, label: "Profile", path: `/bridge/${authId}` },
+  ];
+
+  const isActive = (id: string, path: string) => {
+    if (id === "home") return location.pathname === "/";
+    if (id === "profile") return location.pathname.startsWith("/bridge");
     return location.pathname.startsWith(path);
   }
 
   const handleNavigation = (path: string, id: string) => {
-    if (!isActive(navItems.find((item) => item.id === id)?.path || "")) {
+    if (!isActive(id, path)) {
       navigate(path, { viewTransition: true });
     }
   };
@@ -40,7 +45,7 @@ const NavBar = () => {
         <nav className="relative mx-auto flex h-[72px] items-center justify-evenly rounded-t-2xl bg-brand-secondary shadow-brand-card">
           {navItems.map((item) => {
             const Icon = item.icon;
-            const active = isActive(item.path);
+            const active = isActive(item.id, item.path);
 
             return (
               <Tooltip key={item.id}>
