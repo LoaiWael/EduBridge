@@ -55,7 +55,7 @@ const ResetPassPage = () => {
   return (
     <>
       <title>EduBridge - Reset Password</title>
-      <div className="relative min-h-screen w-full flex flex-col items-center bg-[#EAF0FA] overflow-hidden">
+      <div className="relative min-h-screen w-full flex flex-col items-center bg-brand-primary/35 overflow-hidden">
 
         {/* Top Navigation */}
         <div className="absolute top-0 w-full px-6 py-8 z-10 flex items-center justify-between">
@@ -72,10 +72,10 @@ const ResetPassPage = () => {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="flex flex-col items-center space-y-3 mb-12 text-center"
           >
-            <h1 className="text-3xl font-bold text-[#000000]">
+            <h1 className="text-3xl font-bold text-brand-text-primary">
               Reset Password
             </h1>
-            <p className="text-[#333333] text-[15px] font-medium">
+            <p className="text-brand-text-secondary text-[15px] font-medium">
               Enter a new password
             </p>
           </motion.div>
@@ -102,12 +102,12 @@ const ResetPassPage = () => {
                     }
                   })}
                   autoComplete="new-password"
-                  className={`bg-white border ${errors.password ? 'border-brand-red' : 'border-0'} text-[#444444] placeholder:text-[#B0B0B0] text-base shadow-sm focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                  className={`bg-brand-card border ${errors.password ? 'border-brand-red' : 'border-0'} text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base shadow-sm focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-5 top-1/2 -translate-y-1/2 text-[#A0A0A0] hover:text-[#555555] transition-colors focus:outline-none rounded-full p-1 focus-visible:ring-2 focus-visible:ring-brand-text-primary/40"
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-brand-dark-grey hover:text-brand-text-primary transition-colors focus:outline-none rounded-full p-1 focus-visible:ring-2 focus-visible:ring-brand-text-primary/40"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <Eye className="w-[22px] h-[22px]" /> : <EyeOff className="w-[22px] h-[22px]" strokeWidth={1.5} />}
@@ -125,12 +125,12 @@ const ResetPassPage = () => {
                     validate: value => value === password || "Passwords do not match"
                   })}
                   autoComplete="new-password"
-                  className={`bg-white border ${errors.confirmPassword ? 'border-brand-red' : 'border-0'} text-[#444444] placeholder:text-[#B0B0B0] text-base shadow-sm focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                  className={`bg-brand-card border ${errors.confirmPassword ? 'border-brand-red' : 'border-0'} text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base shadow-sm focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-5 top-1/2 -translate-y-1/2 mt-0.5 text-[#A0A0A0] hover:text-[#555555] transition-colors focus:outline-none rounded-full p-1 focus-visible:ring-2 focus-visible:ring-brand-text-primary/40"
+                  className="absolute right-5 top-1/2 -translate-y-1/2 mt-0.5 text-brand-dark-grey hover:text-brand-text-primary transition-colors focus:outline-none rounded-full p-1 focus-visible:ring-2 focus-visible:ring-brand-text-primary/40"
                   aria-label={showConfirmPassword ? "Hide confirm password" : "Show confirm password"}
                 >
                   {showConfirmPassword ? <Eye className="w-[22px] h-[22px]" /> : <EyeOff className="w-[22px] h-[22px]" strokeWidth={1.5} />}
@@ -144,7 +144,7 @@ const ResetPassPage = () => {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-14 bg-[#94A9CD] hover:bg-[#8598B8] text-black font-semibold text-[17px] shadow-sm transition-all focus-visible:ring-4 focus-visible:ring-[#94A9CD]/40 focus-visible:ring-offset-0 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full h-14 bg-brand-primary hover:bg-brand-primary/80 text-brand-text-primary font-semibold text-[17px] shadow-sm transition-all focus-visible:ring-4 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-0 disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 <AnimatePresence mode="wait">
                   {isLoading ? (

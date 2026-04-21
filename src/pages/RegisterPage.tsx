@@ -77,7 +77,7 @@ const RegisterPage = () => {
           src={bgVector}
           alt=""
           aria-hidden="true"
-          className="absolute top-0 left-0 w-full object-cover pointer-events-none"
+          className="absolute top-0 left-0 w-full object-cover pointer-events-none mix-blend-multiply"
         />
 
         {/* Top Navigation */}
@@ -99,10 +99,10 @@ const RegisterPage = () => {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="relative z-10 px-8 mt-28 mb-10 flex flex-col space-y-3"
         >
-          <h1 className="text-[32px] font-bold text-[#444444]">
+          <h1 className="text-[32px] font-bold text-brand-text-secondary">
             Register
           </h1>
-          <p className="text-[#666666] text-sm leading-relaxed max-w-[280px]">
+          <p className="text-brand-text-secondary text-sm leading-relaxed max-w-[280px]">
             Create your account - enjoy our services with most updated features.
           </p>
         </motion.div>
@@ -130,7 +130,7 @@ const RegisterPage = () => {
                   placeholder="First Name"
                   {...register("firstName", { required: "First name is required" })}
                   autoComplete="given-name"
-                  className={`bg-[#F3F6FB]/80 border ${errors.firstName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                  className={`bg-brand-card/80 border ${errors.firstName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
                 />
                 {errors.firstName && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.firstName.message as string}</p>}
               </motion.div>
@@ -142,7 +142,7 @@ const RegisterPage = () => {
                   placeholder="Last Name"
                   {...register("lastName", { required: "Last name is required" })}
                   autoComplete="family-name"
-                  className={`bg-[#F3F6FB]/80 border ${errors.lastName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                  className={`bg-brand-card/80 border ${errors.lastName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
                 />
                 {errors.lastName && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.lastName.message as string}</p>}
               </motion.div>
@@ -155,7 +155,7 @@ const RegisterPage = () => {
                     placeholder="First Name"
                     {...register("firstName", { required: "First name is required" })}
                     autoComplete="given-name"
-                    className={`bg-[#F3F6FB]/80 border ${errors.firstName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                    className={`bg-brand-card/80 border ${errors.firstName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
                   />
                   {errors.firstName && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.firstName.message as string}</p>}
                 </div>
@@ -165,7 +165,7 @@ const RegisterPage = () => {
                     placeholder="Last Name"
                     {...register("lastName", { required: "Last name is required" })}
                     autoComplete="family-name"
-                    className={`bg-[#F3F6FB]/80 border ${errors.lastName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                    className={`bg-brand-card/80 border ${errors.lastName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
                   />
                   {errors.lastName && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.lastName.message as string}</p>}
                 </div>
@@ -183,7 +183,7 @@ const RegisterPage = () => {
                     }
                   })}
                   autoComplete="email"
-                  className={`bg-[#F3F6FB]/80 border ${errors.email ? 'border-brand-red' : 'border-0'} h-14 px-5 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                  className={`bg-brand-card/80 border ${errors.email ? 'border-brand-red' : 'border-0'} h-14 px-5 text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
                 />
                 {errors.email && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.email.message as string}</p>}
               </motion.div>
@@ -193,7 +193,7 @@ const RegisterPage = () => {
                   type="text"
                   placeholder="University name"
                   {...register("universityName", { required: "University name is required" })}
-                  className={`bg-[#F3F6FB]/80 border ${errors.universityName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                  className={`bg-brand-card/80 border ${errors.universityName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
                 />
                 {errors.universityName && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.universityName.message as string}</p>}
               </motion.div>
@@ -204,7 +204,7 @@ const RegisterPage = () => {
                     type="text"
                     placeholder="Department"
                     {...register("department", { required: "Department is required" })}
-                    className={`bg-[#F3F6FB]/80 border ${errors.department ? 'border-brand-red' : 'border-0'} h-14 px-5 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                    className={`bg-brand-card/80 border ${errors.department ? 'border-brand-red' : 'border-0'} h-14 px-5 text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
                   />
                   {errors.department && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.department.message as string}</p>}
                 </motion.div>
@@ -214,7 +214,7 @@ const RegisterPage = () => {
                     type="text"
                     placeholder="Student ID"
                     {...register("studentId", { required: "Student ID is required" })}
-                    className={`bg-[#F3F6FB]/80 border ${errors.studentId ? 'border-brand-red' : 'border-0'} h-14 px-5 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                    className={`bg-brand-card/80 border ${errors.studentId ? 'border-brand-red' : 'border-0'} h-14 px-5 text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
                   />
                   {errors.studentId && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.studentId.message as string}</p>}
                 </motion.div>
@@ -232,12 +232,12 @@ const RegisterPage = () => {
                     }
                   })}
                   autoComplete="new-password"
-                  className={`bg-[#F3F6FB]/80 border ${errors.password ? 'border-brand-red' : 'border-0'} h-14 pl-5 pr-12 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                  className={`bg-brand-card/80 border ${errors.password ? 'border-brand-red' : 'border-0'} h-14 pl-5 pr-12 text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#888888] hover:text-[#555555] transition-colors focus:outline-none rounded-full p-1 focus-visible:ring-2 focus-visible:ring-brand-text-primary/40"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-dark-grey hover:text-brand-text-primary transition-colors focus:outline-none rounded-full p-1 focus-visible:ring-2 focus-visible:ring-brand-text-primary/40"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <Eye className="w-[22px] h-[22px]" /> : <EyeOff className="w-[22px] h-[22px]" strokeWidth={1.5} />}
@@ -254,12 +254,12 @@ const RegisterPage = () => {
                     validate: (value) => value === watch('password') || "Passwords do not match"
                   })}
                   autoComplete="new-password"
-                  className={`bg-[#F3F6FB]/80 border ${errors.confirmPassword ? 'border-brand-red' : 'border-0'} h-14 pl-5 pr-12 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                  className={`bg-brand-card/80 border ${errors.confirmPassword ? 'border-brand-red' : 'border-0'} h-14 pl-5 pr-12 text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPasswordConfirmation(!showPasswordConfirmation)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#888888] hover:text-[#555555] transition-colors focus:outline-none rounded-full p-1 focus-visible:ring-2 focus-visible:ring-brand-text-primary/40"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-dark-grey hover:text-brand-text-primary transition-colors focus:outline-none rounded-full p-1 focus-visible:ring-2 focus-visible:ring-brand-text-primary/40"
                   aria-label={showPasswordConfirmation ? "Hide password" : "Show password"}
                 >
                   {showPasswordConfirmation ? <Eye className="w-[22px] h-[22px]" /> : <EyeOff className="w-[22px] h-[22px]" strokeWidth={1.5} />}
@@ -279,7 +279,7 @@ const RegisterPage = () => {
                       id="rememberMe"
                       checked={field.value}
                       onCheckedChange={field.onChange}
-                      className="border-[#8899BA] data-[state=checked]:bg-brand-secondary data-[state=checked]:text-white rounded-sm w-[18px] h-[18px]"
+                      className="border-brand-grey data-[state=checked]:bg-brand-secondary data-[state=checked]:text-white rounded-sm w-[18px] h-[18px]"
                     />
                   )}
                 />
@@ -303,7 +303,7 @@ const RegisterPage = () => {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-14 bg-white hover:bg-[#F3F6FB] text-[#444444] font-bold text-[17px] shadow-md transition-all focus-visible:ring-4 focus-visible:ring-white/40 focus-visible:ring-offset-0 focus-visible:ring-offset-transparent disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full h-14 bg-brand-background hover:bg-brand-card text-brand-text-primary border border-brand-grey/20 font-bold text-[17px] shadow-md transition-all focus-visible:ring-4 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-0 focus-visible:ring-offset-transparent disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 <AnimatePresence mode="wait">
                   {isLoading ? (

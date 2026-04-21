@@ -60,7 +60,7 @@ const LoginPage = () => {
           src={bgVector}
           alt=""
           aria-hidden="true"
-          className="absolute top-0 left-0 w-full object-cover pointer-events-none"
+          className="absolute top-0 left-0 w-full object-cover pointer-events-none mix-blend-multiply"
         />
 
         {/* Top Navigation */}
@@ -82,10 +82,10 @@ const LoginPage = () => {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="relative z-10 px-8 mt-28 mb-10 flex flex-col space-y-3"
         >
-          <h1 className="text-[32px] font-bold text-[#444444]">
+          <h1 className="text-[32px] font-bold text-brand-text-secondary">
             Welcome Back
           </h1>
-          <p className="text-[#666666] text-sm leading-relaxed max-w-[260px]">
+          <p className="text-brand-text-secondary text-sm leading-relaxed max-w-[260px]">
             Login your account - enjoy exclusive features and many more.
           </p>
         </motion.div>
@@ -118,7 +118,7 @@ const LoginPage = () => {
                     }
                   })}
                   autoComplete="email"
-                  className={`bg-[#F3F6FB]/80 border ${errors.email ? 'border-brand-red' : 'border-0'} h-14 px-5 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                  className={`bg-brand-card/80 border ${errors.email ? 'border-brand-red' : 'border-brand-grey/50'} h-14 px-5 text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
                 />
                 {errors.email && <p className="text-brand-red text-xs mt-1 ml-2">{errors.email.message as string}</p>}
               </motion.div>
@@ -135,12 +135,12 @@ const LoginPage = () => {
                     }
                   })}
                   autoComplete="current-password"
-                  className={`bg-[#F3F6FB]/80 border ${errors.password ? 'border-brand-red' : 'border-0'} h-14 pl-5 pr-12 text-[#444444] placeholder:text-[#999999] text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                  className={`bg-brand-card/80 border ${errors.password ? 'border-brand-red' : 'border-brand-grey/50'} h-14 pl-5 pr-12 text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#888888] hover:text-[#555555] transition-colors focus:outline-none rounded-full p-1 focus-visible:ring-2 focus-visible:ring-brand-text-primary/40"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-brand-dark-grey hover:text-brand-text-primary transition-colors focus:outline-none rounded-full p-1 focus-visible:ring-2 focus-visible:ring-brand-text-primary/40"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <Eye className="w-[22px] h-[22px]" /> : <EyeOff className="w-[22px] h-[22px]" strokeWidth={1.5} />}
@@ -160,7 +160,7 @@ const LoginPage = () => {
                       id="rememberMe"
                       checked={field.value}
                       onCheckedChange={field.onChange}
-                      className="border-[#8899BA] data-[state=checked]:bg-brand-secondary data-[state=checked]:text-white rounded-sm w-[18px] h-[18px]"
+                      className="border-brand-grey data-[state=checked]:bg-brand-secondary data-[state=checked]:text-white rounded-sm w-[18px] h-[18px]"
                     />
                   )}
                 />
@@ -184,7 +184,7 @@ const LoginPage = () => {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-14 bg-white hover:bg-[#F3F6FB] text-[#444444] font-bold text-[17px] shadow-md transition-all focus-visible:ring-4 focus-visible:ring-white/40 focus-visible:ring-offset-0 focus-visible:ring-offset-transparent disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full h-14 bg-brand-background hover:bg-brand-card text-brand-text-primary border border-brand-grey/20 font-bold text-[17px] shadow-md transition-all focus-visible:ring-4 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-0 focus-visible:ring-offset-transparent disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 <AnimatePresence mode="wait">
                   {isLoading ? (

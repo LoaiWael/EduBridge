@@ -22,7 +22,7 @@ const ForgetPassPage = () => {
     await new Promise((resolve) => setTimeout(resolve, 800));
     setIsLoading(false);
     // Usually navigates to verification code page or reset password depending on flow
-    navigate('/reset-password', { viewTransition: true });
+    navigate('/', { viewTransition: true });
   };
 
   const formVariants: Variants = {
@@ -52,7 +52,7 @@ const ForgetPassPage = () => {
   return (
     <>
       <title>EduBridge - Forgot Password</title>
-      <div className="relative min-h-screen w-full flex flex-col items-center bg-[#EAF0FA] overflow-hidden">
+      <div className="relative min-h-screen w-full flex flex-col items-center bg-brand-primary/35 overflow-hidden">
 
         {/* Top Navigation */}
         <div className="absolute top-0 w-full px-6 py-8 z-10 flex items-center justify-between">
@@ -69,10 +69,10 @@ const ForgetPassPage = () => {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="flex flex-col items-center space-y-3 mb-10 text-center"
           >
-            <h1 className="text-3xl font-bold text-[#000000]">
+            <h1 className="text-3xl font-bold text-brand-text-primary">
               Forgot Password
             </h1>
-            <p className="text-[#333333] text-brand-body-sm font-medium max-w-[280px] leading-relaxed">
+            <p className="text-brand-text-secondary text-brand-body-sm font-medium max-w-[280px] leading-relaxed">
               We need your registration email to send you password reset code
             </p>
           </motion.div>
@@ -99,7 +99,7 @@ const ForgetPassPage = () => {
                     }
                   })}
                   autoComplete="email"
-                  className={`bg-white border ${errors.email ? 'border-brand-red' : 'border-0'} text-[#444444] placeholder:text-[#B0B0B0] text-base shadow-sm focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
+                  className={`bg-white border ${errors.email ? 'border-brand-red' : 'border-0'} text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base shadow-sm focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
                 />
                 {errors.email && <p className="text-brand-red text-xs mt-1 ml-4 absolute -bottom-5 left-0">{errors.email.message as string}</p>}
               </motion.div>
@@ -110,7 +110,7 @@ const ForgetPassPage = () => {
               <Button
                 type="submit"
                 disabled={isLoading}
-                className="w-full h-14 bg-[#94A9CD] hover:bg-[#8598B8] text-black font-semibold text-[17px] shadow-sm transition-all focus-visible:ring-4 focus-visible:ring-[#94A9CD]/40 focus-visible:ring-offset-0 disabled:opacity-70 disabled:cursor-not-allowed"
+                className="w-full h-14 bg-brand-primary hover:bg-brand-primary/80 text-brand-text-primary font-semibold text-[17px] shadow-sm transition-all focus-visible:ring-4 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-0 disabled:opacity-70 disabled:cursor-not-allowed"
               >
                 <AnimatePresence mode="wait">
                   {isLoading ? (

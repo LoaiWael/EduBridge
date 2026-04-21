@@ -57,11 +57,11 @@
    */
   --brand-primary: #000F2A;
   /* L: 92% -> L: 8% */
-  --brand-secondary: #CCC9DD;
+  --brand-secondary: hsl(250, 27%, 20%);
   /* L: 17% -> L: 83% */
-  --brand-background: #000000;
+  --brand-background: hsl(0, 0%, 12%);
   /* L: 100% -> L: 0% */
-  --brand-card: #000000;
+  --brand-card: hsl(0, 0%, 16%);
   /* L: 100% -> L: 0% */
   --brand-text-primary: #FFFFFF;
   /* L: 0% -> L: 100% */
@@ -77,7 +77,7 @@
   /* L: 37% -> L: 63% */
   --brand-pink: #762975;
   /* L: 69% -> L: 31% */
-  --brand-gradient-start: #0F1940;
+  --brand-gradient-start: hsl(228, 52%, 18%);
   /* L: 84% -> L: 16% */
 }
 
@@ -152,7 +152,7 @@
   }
 
   :root::selection {
-    @apply bg-brand-secondary/20
+    @apply bg-brand-dark-grey/25
   }
 
   body {

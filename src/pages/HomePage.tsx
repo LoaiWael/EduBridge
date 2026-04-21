@@ -77,7 +77,7 @@ const HomePage = () => {
   return (
     <>
       <TooltipProvider delayDuration={300}>
-        <div className="w-full bg-[#F5F7FB]">
+        <div className="w-full bg-brand-background">
           <div className="min-h-screen lg:max-w-4/5 mx-auto pb-28 relative overflow-x-hidden">
 
             {/* Top Header Section */}
@@ -85,7 +85,7 @@ const HomePage = () => {
               variants={headerVariants}
               initial="hidden"
               animate="visible"
-              className="bg-brand-secondary rounded-b-[40px] px-6 pt-12 pb-10 relative overflow-hidden shadow-md"
+              className="bg-brand-secondary text-white rounded-b-[40px] px-6 pt-12 pb-10 relative overflow-hidden shadow-md"
             >
 
               {/* Top App Bar */}
@@ -98,7 +98,7 @@ const HomePage = () => {
                   <TooltipTrigger asChild>
                     <button
                       onClick={() => navigate("/settings", { viewTransition: true })}
-                      className="text-white hover:bg-white/10 p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                      className=" hover:bg-white/10 p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
                     >
                       <SlidersHorizontal className="w-[28px] h-[28px]" strokeWidth={1.5} />
                     </button>
@@ -111,7 +111,7 @@ const HomePage = () => {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button
-                        className="text-white hover:bg-white/10 p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                        className=" hover:bg-white/10 p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
                       >
                         <Bell className="w-7 h-7" strokeWidth={1.5} />
                       </button>
@@ -143,12 +143,12 @@ const HomePage = () => {
                 className="mt-7 relative z-10 hover:opacity-90 transition-opacity"
               >
                 <div className="relative flex items-center">
-                  <Search className="absolute left-4 w-[22px] h-[22px] text-[#444444]" strokeWidth={1.5} />
+                  <Search className="absolute left-4 w-[22px] h-[22px] text-brand-text-secondary" strokeWidth={1.5} />
                   <input
                     type="text"
                     title="Search application"
                     placeholder="Search"
-                    className="w-full h-14 bg-[#F2F4F7] text-[#444444] rounded-brand-input pl-12 pr-6 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/50 text-base"
+                    className="w-full h-14 bg-brand-card text-brand-text-secondary rounded-brand-input pl-12 pr-6 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/50 text-base"
                   />
                 </div>
               </motion.div>
@@ -162,7 +162,7 @@ const HomePage = () => {
                 <div
                   className="lg:max-w-[30%] z-20"
                 >
-                  <h1 className="font-brand-teams text-white text-[32px] leading-[1.1] tracking-wide mb-2 uppercase max-w-[14ch]">
+                  <h1 className="font-brand-teams  text-[32px] leading-[1.1] tracking-wide mb-2 uppercase max-w-[14ch]">
                     {role === 'ta' ? <>MANAGE YOUR <br /> TEAMS</> : "Your Team, One Tap Away!"}
                   </h1>
 
@@ -172,7 +172,7 @@ const HomePage = () => {
                   <Link
                     to={role === 'ta' ? "/manage-teams" : "/teams"}
                     viewTransition
-                    className="cursor-pointer bg-linear-to-b from-brand-primary to-brand-pink text-brand-secondary font-bold text-[15px] px-5 py-2.5 rounded-brand-button hover:bg-opacity-90 hover:scale-[1.02] active:scale-95 shadow-sm transition-all whitespace-nowrap focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 inline-block text-center"
+                    className="cursor-pointer text-brand-text-primary bg-linear-to-b from-brand-primary to-brand-pink text-brand-text font-bold text-[15px] px-5 py-2.5 rounded-brand-button hover:bg-opacity-90 hover:scale-[1.02] active:scale-95 shadow-sm transition-all whitespace-nowrap focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 inline-block text-center"
                   >
                     {role === 'ta' ? "Start managing" : "Explore Teams"}
                   </Link>
@@ -212,7 +212,7 @@ const HomePage = () => {
                         to="/supervision-requests"
                         viewTransition
                         title="Supervision Requests"
-                        className="bg-brand-primary rounded-brand-input shadow-brand-card p-4 pt-10 flex flex-col justify-end items-start relative overflow-visible h-[140px] group transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
+                        className="bg-brand-gradient-start rounded-brand-input shadow-brand-card p-4 pt-10 flex flex-col justify-end items-start relative overflow-visible h-[140px] group transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
                       >
                         <img
                           src={supervisionRequestsSvg}
@@ -231,7 +231,7 @@ const HomePage = () => {
                         to="/manage-teams"
                         viewTransition
                         title="Track Teams"
-                        className="bg-[#AEA0FD] rounded-brand-input shadow-brand-card p-4 flex flex-col justify-end items-start relative overflow-visible h-[140px] group transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
+                        className="bg-brand-pink rounded-brand-input shadow-brand-card p-4 flex flex-col justify-end items-start relative overflow-visible h-[140px] group transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
                       >
                         <div className="absolute top-4 right-1 flex items-end justify-end flex-col">
                           <img
@@ -254,14 +254,14 @@ const HomePage = () => {
                         to="/my-teams"
                         viewTransition
                         title="View Your Teams"
-                        className="bg-brand-card rounded-brand-input shadow-brand-card p-4 pt-10 flex flex-col justify-end items-start relative overflow-visible h-[140px] group transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
+                        className="bg-brand-card dark:bg-brand-secondary rounded-brand-input shadow-brand-card p-4 pt-10 flex flex-col justify-end items-start relative overflow-visible h-[140px] group transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
                       >
                         <img
                           src={yourTeamsSvg}
                           alt=""
                           className="absolute top-[-10px] right-2 w-[120px] object-contain group-hover:-translate-y-1 transition-transform"
                         />
-                        <span className="font-bold text-[#000000] text-left leading-tight text-base mt-2 z-10">
+                        <span className="font-bold text-brand-text-primary text-left leading-tight text-base mt-2 z-10">
                           Your <br /> Teams
                         </span>
                       </Link>
@@ -273,14 +273,14 @@ const HomePage = () => {
                         to="/library"
                         viewTransition
                         title="Visit Community"
-                        className="bg-brand-card rounded-brand-input shadow-brand-card p-4 flex flex-col justify-end items-start relative overflow-visible h-[140px] group transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
+                        className="bg-brand-card dark:bg-brand-secondary rounded-brand-input shadow-brand-card p-4 flex flex-col justify-end items-start relative overflow-visible h-[140px] group transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
                       >
                         <img
                           src={communitySvg}
                           alt=""
                           className="absolute -top-3 right-0 w-[130px] object-contain group-hover:-translate-y-1 transition-transform"
                         />
-                        <span className="font-bold text-[#000000] text-left leading-tight text-base z-10 mt-auto">
+                        <span className="font-bold text-brand-text-primary text-left leading-tight text-base z-10 mt-auto">
                           Community
                         </span>
                       </Link>
@@ -292,7 +292,7 @@ const HomePage = () => {
                         to="/teams"
                         viewTransition
                         title="Explore Recommended Teams"
-                        className="bg-brand-card rounded-brand-input shadow-brand-card p-4 flex flex-col justify-end items-start relative overflow-visible h-[140px] group transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
+                        className="bg-brand-card dark:bg-brand-secondary rounded-brand-input shadow-brand-card p-4 flex flex-col justify-end items-start relative overflow-visible h-[140px] group transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
                       >
                         <div className="absolute -top-6 left-1/2 right-2 flex items-end justify-end flex-col">
                           <img
@@ -301,7 +301,7 @@ const HomePage = () => {
                             className="w-[85px] h-[85px] object-contain group-hover:-translate-y-1 transition-transform"
                           />
                         </div>
-                        <span className="font-bold text-[#000000] text-left leading-tight text-base mt-auto">
+                        <span className="font-bold text-brand-text-primary text-left leading-tight text-base mt-auto">
                           Recommended <br /> teams
                         </span>
                       </Link>
@@ -313,14 +313,14 @@ const HomePage = () => {
                         to="/teams?create=true"
                         viewTransition
                         title="Create a New Team"
-                        className="bg-brand-card rounded-brand-input shadow-brand-card p-4 flex flex-col justify-end items-start relative overflow-visible h-[140px] group transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
+                        className="bg-brand-card dark:bg-brand-secondary rounded-brand-input shadow-brand-card p-4 flex flex-col justify-end items-start relative overflow-visible h-[140px] group transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
                       >
                         <img
                           src={createTeamSvg}
                           alt=""
                           className="absolute -top-4 right-3 w-[65px] h-[65px] object-contain group-hover:-translate-y-1 transition-transform"
                         />
-                        <span className="font-bold text-[#000000] text-left leading-tight text-base mt-auto">
+                        <span className="font-bold text-brand-text-primary text-left leading-tight text-base mt-auto">
                           Create a new <br /> team
                         </span>
                       </Link>
@@ -351,10 +351,10 @@ const HomePage = () => {
                     <motion.div
                       key={team.id}
                       variants={itemVariants}
-                      className="bg-white rounded-brand-input p-5 shadow-brand-card flex flex-col relative z-10 border border-brand-grey/20 w-full"
+                      className="bg-brand-card rounded-brand-input p-5 shadow-brand-card flex flex-col relative z-10 border border-brand-grey/20 w-full"
                     >
                       <h3 className="text-lg font-bold text-brand-text-primary mb-2">{team.name}</h3>
-                      <div className="flex flex-col gap-1 text-sm text-[#444444] mb-4 grow">
+                      <div className="flex flex-col gap-1 text-sm text-brand-text-secondary mb-4 grow">
                         <p>Team leader : <span className="font-semibold text-brand-text-primary">{team.leader}</span></p>
                         <p>Subject : <span className="font-semibold text-brand-text-primary">{team.subject}</span></p>
                         <p>Number of members : <span className="font-semibold text-brand-text-primary">{team.members}</span></p>

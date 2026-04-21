@@ -50,7 +50,7 @@ const RoleSelectionPage = () => {
           initial={{ scale: 1.05 }}
           animate={{ scale: 1 }}
           transition={{ duration: shouldReduceMotion ? 0 : 20, ease: easeOut }}
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+          className="absolute inset-0 w-full h-full object-cover pointer-events-none mix-blend-multiply"
         />
 
         {/* Top Navigation */}
@@ -94,7 +94,7 @@ const RoleSelectionPage = () => {
               }}
               whileTap={{ scale: shouldReduceMotion ? 1 : 0.97 }}
               onClick={() => handleRoleSelect("student")}
-              className="w-full py-4 px-6 rounded-brand-input bg-brand-secondary text-brand-background font-medium text-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-3 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-secondary/50 focus-visible:ring-offset-2"
+              className="w-full py-4 px-6 rounded-brand-input bg-brand-secondary text-brand-background dark:text-brand-text-primary font-medium text-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-3 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-secondary/50 focus-visible:ring-offset-2"
               aria-label="Select Student role"
             >
               <span>Student</span>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router-dom"
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import { useIdeasStore } from "@/features/ideas"
 import { ChatbotButton } from "@/features/chatbot"
 import BackButton from "@/components/BackButton"
@@ -44,7 +44,6 @@ const MOCK_IDEAS = [
 ];
 
 const IdeasLibPage = () => {
-  const shouldReduceMotion = useReducedMotion()
   const role = useProfileStore(state => state.role)
   const ideas = useIdeasStore(state => state.ideas)
   const setIdeas = useIdeasStore(state => state.setIdeas)
@@ -131,7 +130,7 @@ const IdeasLibPage = () => {
                     <motion.div
                       key={`skeleton-${i}`}
                       variants={skeletonItemVariants}
-                      className="w-full bg-white rounded-3xl p-5 shadow-brand-card flex flex-col"
+                      className="w-full bg-brand-card rounded-3xl p-5 shadow-brand-card flex flex-col"
                     >
                       <Skeleton className="h-7 w-3/4 mb-2" />
                       <Skeleton className="h-4 w-full mb-2" />
@@ -151,16 +150,16 @@ const IdeasLibPage = () => {
                     key={idea.id}
                     custom={index}
                     variants={listItemVariants}
-                    initial={shouldReduceMotion ? "visible" : "hidden"}
+                    initial="hidden"
                     animate="visible"
                     layout
-                    className="w-full bg-white rounded-3xl p-5 shadow-brand-card flex flex-col"
+                    className="w-full bg-brand-card rounded-3xl p-5 shadow-brand-card flex flex-col"
                   >
                     <h2 className="text-xl font-bold text-brand-text-primary mb-1">
                       {idea.title}
                     </h2>
                     <div className="grow">
-                      <p className="text-[#444444] text-sm mb-3">
+                      <p className="text-brand-text-secondary text-sm mb-3">
                         {idea.description}
                       </p>
                     </div>
@@ -171,7 +170,7 @@ const IdeasLibPage = () => {
                           <Link
                             to={`/library/${idea.id}`}
                             viewTransition
-                            className="bg-linear-to-b from-brand-primary to-brand-pink text-brand-secondary text-sm font-semibold px-4 py-2 flex items-center justify-center rounded-brand-card hover:opacity-90 active:scale-95 shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
+                            className="bg-linear-to-b from-brand-primary to-brand-pink text-brand-text-primary text-sm font-semibold px-4 py-2 flex items-center justify-center rounded-brand-card hover:opacity-90 active:scale-95 shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
                             aria-label={`View details for ${idea.title}`}
                           >
                             View details

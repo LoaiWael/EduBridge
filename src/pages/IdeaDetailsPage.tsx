@@ -1,13 +1,13 @@
 import { useEffect } from "react"
 import { useParams, Link } from "react-router-dom"
-import { motion, useReducedMotion } from "framer-motion"
+import { motion } from "framer-motion"
 import { useIdeasStore } from "@/features/ideas"
 import { useTeamStore, type Team } from "@/features/teams"
-import { useProfileStore } from "@/features/profile"
+import { useProfileStore, ProfileAvatar } from "@/features/profile"
 import { ChatbotButton } from "@/features/chatbot"
 import BackButton from "@/components/BackButton"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import { FileText, Network, GraduationCap, Calendar, User, File, FileCheck, Download, ExternalLink } from "lucide-react"
+import { FileText, Network, GraduationCap, Calendar, File, FileCheck, Download, ExternalLink } from "lucide-react"
 
 // Mock documents for demo purposes
 const MOCK_DOCUMENTS = [
@@ -57,6 +57,8 @@ const MOCK_TEAMS: Team[] = [
           lastName: "Brown",
           email: "olivia@example.com",
           role: "student",
+          major: "Computer Science",
+          university: "MIT",
         }
       },
       {
@@ -71,6 +73,8 @@ const MOCK_TEAMS: Team[] = [
           lastName: "Smith",
           email: "james@example.com",
           role: "student",
+          major: "Software Engineering",
+          university: "Stanford",
         }
       }
     ]
@@ -79,7 +83,6 @@ const MOCK_TEAMS: Team[] = [
 
 const IdeaDetailsPage = () => {
   const { id: ideaId } = useParams()
-  const shouldReduceMotion = useReducedMotion()
   const role = useProfileStore(state => state.role)
 
   const ideas = useIdeasStore(state => state.ideas)
@@ -138,11 +141,11 @@ const IdeaDetailsPage = () => {
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="min-h-screen w-full bg-[#F5F7FB] pb-24 relative overflow-x-hidden pt-6">
+      <div className="min-h-screen w-full bg-linear-to-b from-brand-primary/20 via-brand-background to-brand-primary/10 pb-24 relative overflow-x-hidden pt-6">
 
         {/* Top Header - Just Left Back Button */}
         <motion.div
-          initial={shouldReduceMotion ? {} : { opacity: 0, x: -10 }}
+          initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           className="px-6 pb-4"
         >
@@ -165,12 +168,12 @@ const IdeaDetailsPage = () => {
               <h1 className="text-3xl font-bold mb-2">
                 {idea.title}
               </h1>
-              <p className="text-[#333333] text-base mb-16">
+              <p className="text-brand-text-secondary text-base mb-16">
                 {idea.description}
               </p>
 
               {/* Bottom Row Tags */}
-              <div className="flex flex-wrap items-center gap-6 mt-16 text-[#000000] text-[11px] font-bold">
+              <div className="flex flex-wrap items-center gap-6 mt-16 text-[11px] font-bold">
                 {TAG_ICONS.map((tag, idx) => (
                   <div key={idx} className="flex items-center gap-2 opacity-80 mix-blend-multiply">
                     {tag.icon}
@@ -192,20 +195,38 @@ const IdeaDetailsPage = () => {
               {associatedTeam ? associatedTeam.members.map(member => (
                 <div
                   key={member.id}
-                  className="min-w-[240px] max-w-[280px] w-[280px] bg-white rounded-[24px] p-4 flex gap-4 shadow-[0_2px_12px_rgba(0,0,0,0.04)] border border-brand-grey/20 snap-start shrink-0 items-center justify-between"
+                  className="min-w-[240px] max-w-[280px] w-[280px] bg-brand-card rounded-[24px] p-4 shadow-[0_2px_12px_rgba(0,0,0,0.04)] border border-brand-grey/20 snap-start shrink-0"
                 >
-                  <div className="flex items-center gap-3">
-                    <div className="w-[60px] h-[60px] bg-[#E8E8E8] rounded-xl flex items-center justify-center shrink-0">
-                      <User size={30} className="text-[#A2A2A2]" strokeWidth={1.5} />
+                  <div className="flex items-start gap-3">
+                    <ProfileAvatar
+                      name={member.user?.firstName}
+                      imageUrl={member.user?.profileImageUrl}
+                      className="w-[56px] h-[56px] rounded-xl bg-brand-grey shadow-none"
+                    />
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-brand-text-primary text-sm truncate">
+                        {member.user?.firstName} {member.user?.lastName}
+                      </h3>
+                      <p className="text-xs text-brand-pink font-medium mt-0.5 truncate">
+                        {member.user?.major || 'Computer Science'}
+                      </p>
+                      <p className="text-xs text-brand-text-secondary mt-0.5 truncate">
+                        {member.user?.university || 'University'}
+                      </p>
                     </div>
                   </div>
 
-                  <Link
-                    to={`/bridge/${member.userId}`}
-                    className="shrink-0 bg-brand-primary text-brand-text-primary font-bold text-[10px] px-4 py-2 rounded-brand-button hover:bg-brand-primary/60 transition-colors uppercase tracking-wide opacity-80"
-                  >
-                    View Profile
-                  </Link>
+                  <div className="flex items-center justify-between mt-4 pt-3 border-t border-brand-grey/20">
+                    <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full ${member.role === 'Leader' ? 'bg-brand-pink/20 text-brand-pink' : 'bg-brand-grey/20 text-brand-text-secondary'}`}>
+                      {member.role}
+                    </span>
+                    <Link
+                      to={`/bridge/${member.userId}`}
+                      className="shrink-0 bg-brand-primary text-brand-text-primary font-bold text-[10px] px-3 py-1.5 rounded-brand-button hover:bg-brand-primary/60 transition-colors uppercase tracking-wide"
+                    >
+                      View
+                    </Link>
+                  </div>
                 </div>
               )) : (
                 <p className="text-sm text-brand-dark-grey italic">No team is currently pursuing this idea.</p>
@@ -225,7 +246,7 @@ const IdeaDetailsPage = () => {
                 {MOCK_DOCUMENTS.map(doc => (
                   <div
                     key={doc.id}
-                    className="bg-white rounded-brand-input p-4 shadow-[0_2px_12px_rgba(0,0,0,0.04)] border border-brand-grey/20"
+                    className="bg-brand-card rounded-brand-input p-4 shadow-[0_2px_12px_rgba(0,0,0,0.04)] border border-brand-grey/20"
                   >
                     <div className="flex items-start gap-3">
                       <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 ${doc.type === 'pdf' ? 'bg-red-100' :

@@ -97,7 +97,7 @@ const VerificationPage = () => {
   return (
     <>
       <title>EduBridge - Verification</title>
-      <div className="relative min-h-screen w-full flex flex-col items-center bg-[#EAF0FA] overflow-hidden">
+      <div className="relative min-h-screen w-full flex flex-col items-center bg-brand-primary/35 overflow-hidden">
 
         {/* Top Navigation */}
         <div className="absolute top-0 w-full px-6 py-8 z-10 flex items-center justify-between">
@@ -114,10 +114,10 @@ const VerificationPage = () => {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="flex flex-col items-center space-y-4 mb-10 text-center"
           >
-            <h1 className="text-[32px] font-bold text-[#000000]">
+            <h1 className="text-[32px] font-bold text-brand-text-primary">
               Verification code
             </h1>
-            <p className="text-[#000000] text-sm font-semibold max-w-[280px] leading-relaxed">
+            <p className="text-brand-text-primary text-sm font-semibold max-w-[280px] leading-relaxed">
               We just send your authentication code via email to {maskedEmail} Didn't receive the email? Check your spam or junk folder.
             </p>
           </motion.div>
@@ -143,14 +143,14 @@ const VerificationPage = () => {
                   ref={(el) => { inputRefs.current[index] = el; }}
                   onChange={(e) => handleChange(index, e.target.value)}
                   onKeyDown={(e) => handleKeyDown(index, e)}
-                  className="w-[60px] h-[60px] bg-white rounded-2xl shadow-sm text-center text-2xl font-bold text-[#444444] focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-text-primary/40 focus:border-transparent transition-all"
+                  className="w-[60px] h-[60px] bg-brand-card rounded-2xl shadow-sm text-center text-2xl font-bold text-brand-text-secondary focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-text-primary/40 focus:border-transparent transition-all"
                 />
               ))}
             </motion.div>
 
             {/* Resend Code Link */}
             <motion.div variants={itemVariants} className="mb-12 text-center mt-2">
-              <span className="text-[#000000] text-[13px] font-bold mr-1">
+              <span className="text-brand-text-primary text-[13px] font-bold mr-1">
                 Didn't receive code?
               </span>
               <button
@@ -167,11 +167,11 @@ const VerificationPage = () => {
                 id="dontAsk"
                 checked={dontAsk}
                 onCheckedChange={(checked) => setDontAsk(checked as boolean)}
-                className="border-[#000000] border-2 data-[state=checked]:bg-[#000000] data-[state=checked]:text-white rounded-sm w-[20px] h-[20px] shadow-sm"
+                className="border-brand-text-primary border-2 data-[state=checked]:bg-brand-secondary data-[state=checked]:text-white rounded-sm w-[20px] h-[20px] shadow-sm"
               />
               <Label
                 htmlFor="dontAsk"
-                className="text-brand-body-sm font-bold text-[#000000] cursor-pointer"
+                className="text-brand-body-sm font-bold text-brand-text-primary cursor-pointer"
               >
                 Don't ask again on this device
               </Label>
@@ -182,7 +182,7 @@ const VerificationPage = () => {
               <Button
                 type="submit"
                 disabled={isLoading || otp.join("").length < 4}
-                className="w-full h-14 bg-[#94A9CD] hover:bg-[#8598B8] text-black font-semibold text-[17px] shadow-sm transition-all focus-visible:ring-4 focus-visible:ring-[#94A9CD]/40 focus-visible:ring-offset-0 disabled:opacity-70 disabled:cursor-not-allowed rounded-[30px]"
+                className="w-full h-14 bg-brand-primary hover:bg-brand-primary/80 text-brand-text-primary font-semibold text-[17px] shadow-sm transition-all focus-visible:ring-4 focus-visible:ring-brand-primary/40 focus-visible:ring-offset-0 disabled:opacity-70 disabled:cursor-not-allowed rounded-[30px]"
               >
                 <AnimatePresence mode="wait">
                   {isLoading ? (

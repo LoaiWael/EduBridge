@@ -14,7 +14,7 @@ const BackButton = () => {
       whileTap={{ scale: 0.95 }}
       transition={{ duration: shouldReduceMotion ? 0 : 0.4, ease: 'easeInOut' }}
       onClick={() => navigate('..', { viewTransition: true })}
-      className="p-2 -ml-2 rounded-full hover:bg-black/5 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-text-primary"
+      className="p-2 -ml-2 rounded-full hover:bg-brand-text-secondary/16 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-text-primary"
       aria-label="Go back to previous page"
     >
       <ArrowLeft className="w-7 h-7 text-brand-text-primary/80" />

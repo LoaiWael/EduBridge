@@ -29,7 +29,7 @@ const NavBar = () => {
 
   const isActive = (id: string, path: string) => {
     if (id === "home") return location.pathname === "/";
-    if (id === "profile") return location.pathname.startsWith("/bridge");
+    if (id === "profile") return location.pathname === `/bridge/${authId}`;
     return location.pathname.startsWith(path);
   }
 
@@ -78,8 +78,8 @@ const NavBar = () => {
                       className={cn(
                         "relative z-10 transition-all duration-300",
                         active
-                          ? "h-7 w-7 text-brand-background -translate-y-3"
-                          : "h-[22px] w-[22px] text-brand-background/70 group-hover:text-brand-background group-hover:-translate-y-1"
+                          ? "h-7 w-7 text-white -translate-y-3"
+                          : "h-[22px] w-[22px] text-white/70 group-hover:text-white group-hover:-translate-y-1"
                       )}
                       strokeWidth={active ? 2 : 1.5}
                     />
@@ -88,7 +88,8 @@ const NavBar = () => {
                 <TooltipContent
                   side="top"
                   sideOffset={16}
-                  className="bg-brand-secondary text-brand-background border border-brand-background/20 rounded-xl px-3 py-1.5 shadow-brand-card font-semibold animate-in zoom-in-95 data-[state=closed]:zoom-out-95"
+                  className="bg-brand-secondary text-white border border-white/20 rounded-xl px-3 py-1.5 shadow-brand-card font-semibold animate-in zoom-in-95 data-[state=closed]:zoom-out-95"
+                  arrowClassName="bg-brand-secondary fill-brand-secondary"
                 >
                   {item.label}
                 </TooltipContent>

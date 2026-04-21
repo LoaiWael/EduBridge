@@ -75,7 +75,7 @@ const ProfilePage = () => {
     {
       label: "Rating",
       value: `${rating || "4.6"}/5`,
-      icon: <Star className="w-5 h-5 text-black" fill="currentColor" />
+      icon: <Star className="w-5 h-5 text-brand-text-primary" fill="currentColor" />
     },
     ...(isOwnProfile ? [{
       label: "Manage Teams",
@@ -116,7 +116,7 @@ const ProfilePage = () => {
 
   return (
     <TooltipProvider delayDuration={300}>
-      <div className="min-h-screen w-full bg-linear-to-b from-[#EFE9FF] via-white to-[#F8F5FF] pb-24 relative overflow-x-hidden">
+      <div className="min-h-screen w-full bg-linear-to-b from-brand-primary/20 via-brand-background to-brand-primary/10 pb-24 relative overflow-x-hidden">
 
         {/* Header */}
         <motion.div
@@ -139,7 +139,7 @@ const ProfilePage = () => {
             initial={shouldReduceMotion ? {} : { opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mx-6 bg-white rounded-3xl p-6 shadow-brand-card flex flex-col items-center text-center relative z-10"
+            className="mx-6 bg-brand-card rounded-3xl p-6 shadow-brand-card flex flex-col items-center text-center relative z-10"
           >
             {/* Profile Avatar overridden with inline style to be larger like UI */}
             <div className="mb-3">
@@ -174,7 +174,7 @@ const ProfilePage = () => {
             initial={shouldReduceMotion ? {} : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="mx-6 mt-6 bg-white rounded-3xl overflow-hidden shadow-brand-card flex flex-col relative z-10"
+            className="mx-6 mt-6 bg-brand-card rounded-3xl overflow-hidden shadow-brand-card flex flex-col relative z-10"
           >
             {details.map((item, index) => {
               const content = (
