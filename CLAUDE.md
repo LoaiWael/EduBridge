@@ -66,5 +66,11 @@ Current features: `auth`, `profile`, `ideas`, `teams`, `notifications`, `supervi
 - Use `shadcn/tailwind.css` for component styles
 - `tw-animate-css` for animations
 
+**Additional Stores:**
+- `usePreferencesStore` in `src/store/usePreferencesStore.ts` - theme and animations settings
+
+**Global Types:**
+- `src/types/index.ts` - shared type definitions (Role, UserSkill, etc.)
+
 ## Rules
 ALWAYS before making any change. Search on the web for the newest documentation. And only implement if you are 100% sure it will work.
