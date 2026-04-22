@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { SlidersHorizontal, Bell, Search } from "lucide-react";
+import { SlidersHorizontal, Search } from "lucide-react";
 import { ProfileAvatar } from "@/features/profile";
 import { useProfileStore } from "@/features/profile";
 import { ChatbotButton } from "@/features/chatbot";
+import { NotificationDropdown } from "@/features/notifications";
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import interactionSvg from "@/assets/imgs/svg/Interaction-between-members-of-team.svg";
 import yourTeamsSvg from "@/assets/imgs/svg/your-teams.svg";
@@ -108,18 +109,10 @@ const HomePage = () => {
                   </TooltipContent>
                 </Tooltip>
                 <div className="flex items-center space-x-4">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button
-                        className=" hover:bg-white/10 p-2 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary"
-                      >
-                        <Bell className="w-7 h-7" strokeWidth={1.5} />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent side="bottom" sideOffset={8}>
-                      <p>Notifications</p>
-                    </TooltipContent>
-                  </Tooltip>
+                  <NotificationDropdown
+                    iconClassName="w-7 h-7 text-white"
+                    buttonClassName="hover:bg-white/10 rounded-full"
+                  />
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion, type Variants } from "framer-motion";
 import { User, Lock, Bell, Sun, Moon, Monitor, FileText, Shield, ChevronRight, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -6,6 +6,7 @@ import { useProfileStore } from "@/features/profile";
 import { ProfileAvatar } from "@/features/profile/";
 import { usePreferencesStore } from "@/store/usePreferencesStore";
 import BackButton from "@/components/BackButton";
+import TermsAndConditions from "@/components/TermsAndConditions";
 import type { ThemeMode } from "@/types";
 
 const containerVariants: Variants = {
@@ -39,6 +40,8 @@ const SettingsPage = () => {
   const setTheme = usePreferencesStore(state => state.setTheme);
   const animationsEnabled = usePreferencesStore(state => state.animationsEnabled);
   const setAnimationsEnabled = usePreferencesStore(state => state.setAnimationsEnabled);
+
+  const [showTerms, setShowTerms] = useState(false);
 
   useEffect(() => {
     document.title = "EduBridge - Settings";
@@ -146,21 +149,21 @@ const SettingsPage = () => {
                   aria-pressed={theme === 'system'}
                   className={`flex-1 flex items-center justify-center gap-2 z-10 transition-colors text-[13px] font-medium rounded-[12px] ${theme === 'system' ? 'text-brand-background' : 'text-brand-text-secondary hover:text-brand-text-primary/70'} focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-inset`}
                 >
-                  <Monitor size={16} aria-hidden="true" /> System
+                  <Monitor size={16} aria-hidden="true" /> <span className="sm:inline hidden">System</span>
                 </button>
                 <button
                   onClick={() => handleThemeChange('light')}
                   aria-pressed={theme === 'light'}
                   className={`flex-1 flex items-center justify-center gap-2 z-10 transition-colors text-[13px] font-medium rounded-[12px] ${theme === 'light' ? 'text-brand-background' : 'text-brand-text-secondary hover:text-brand-text-primary/70'} focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-inset`}
                 >
-                  <Sun size={16} aria-hidden="true" /> Light
+                  <Sun size={16} aria-hidden="true" /> <span className="sm:inline hidden">Light</span>
                 </button>
                 <button
                   onClick={() => handleThemeChange('dark')}
                   aria-pressed={theme === 'dark'}
                   className={`flex-1 flex items-center justify-center gap-2 z-10 transition-colors text-[13px] font-medium rounded-[12px] ${theme === 'dark' ? 'text-brand-background' : 'text-brand-text-secondary hover:text-brand-text-primary/70'} focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-inset`}
                 >
-                  <Moon size={16} aria-hidden="true" /> Dark
+                  <Moon size={16} aria-hidden="true" /> <span className="sm:inline hidden">Dark</span>
                 </button>
               </div>
             </div>
@@ -191,14 +194,17 @@ const SettingsPage = () => {
               </button>
             </div>
 
-            <button className="flex items-center justify-between p-4 px-5 hover:bg-brand-secondary/5 transition-colors active:bg-brand-secondary/10 text-left w-full focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-inset">
+            <Link to="/about-us" className="flex items-center justify-between p-4 px-5 hover:bg-brand-secondary/5 transition-colors active:bg-brand-secondary/10 text-left w-full focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-inset cursor-pointer">
               <div className="flex items-center gap-4">
                 <FileText size={20} className="text-brand-text-primary" />
                 <span className="text-[15px] font-medium text-brand-text-primary">About Us</span>
               </div>
               <ChevronRight size={18} className="text-brand-text-secondary" aria-hidden="true" />
-            </button>
-            <button className="flex items-center justify-between p-4 px-5 hover:bg-brand-secondary/5 transition-colors active:bg-brand-secondary/10 text-left w-full focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-inset">
+            </Link>
+            <button
+              onClick={() => setShowTerms(true)}
+              className="flex items-center cursor-pointer justify-between p-4 px-5 hover:bg-brand-secondary/5 transition-colors active:bg-brand-secondary/10 text-left w-full focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-inset"
+            >
               <div className="flex items-center gap-4">
                 <Shield size={20} className="text-brand-text-primary" />
                 <span className="text-[15px] font-medium text-brand-text-primary">Terms & Conditions</span>
@@ -209,6 +215,8 @@ const SettingsPage = () => {
         </motion.div>
 
       </div>
+
+      <TermsAndConditions isOpen={showTerms} onClose={() => setShowTerms(false)} />
     </motion.div>
   );
 };

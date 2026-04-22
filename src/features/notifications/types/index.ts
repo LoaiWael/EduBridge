@@ -1,7 +1,30 @@
-/**
- * Notification types
- */
-export type NotificationType = 'email' | 'push' | 'in_app'
+export type NotificationType =
+  | 'JoinRequestReceived'
+  | 'JoinRequestAccepted'
+  | 'JoinRequestRejected'
+  | 'TaRequestReceived'
+  | 'TaRequestAccepted'
+  | 'TaRequestRejected'
+  | 'TeamMemberJoined'
+  | 'RatingReceived'
+  | 'DoctorRequestReceived';
+
+export interface AppNotification {
+  id: string;
+  userId: string;
+  message: string;
+  isRead: boolean;
+  type: NotificationType;
+  relatedEntityId?: string;
+
+  // UI Specific helper fields for the mock rendering
+  createdAt: Date;
+  sender?: {
+    id: string;
+    name: string;
+    imageUrl?: string;
+  };
+}
 
 /**
  * User notification preferences

@@ -82,10 +82,10 @@ const LoginPage = () => {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="relative z-10 px-8 mt-28 mb-10 flex flex-col space-y-3"
         >
-          <h1 className="text-[32px] font-bold text-brand-text-secondary">
+          <h1 className="text-[32px] font-bold text-brand-text-primary/70">
             Welcome Back
           </h1>
-          <p className="text-brand-text-secondary text-sm leading-relaxed max-w-[260px]">
+          <p className="text-brand-text-primary/70 text-sm leading-relaxed max-w-[260px]">
             Login your account - enjoy exclusive features and many more.
           </p>
         </motion.div>

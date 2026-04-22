@@ -1,4 +1,5 @@
-import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom'
+import { createBrowserRouter, createRoutesFromElements, Route, useLocation, Outlet } from 'react-router-dom'
+import { useEffect } from 'react'
 import ProtectedRoutes from './ProtectedRoutes'
 import LoginPage from '../pages/LoginPage'
 import RegisterPage from '../pages/RegisterPage'
@@ -28,10 +29,22 @@ import WithoutNavLayout from '@/layouts/WithoutNavLayout'
 import RootLayout from '@/layouts/RootLayout'
 import ManageTeamsPage from '@/pages/ManageTeamsPage'
 import TaTeamsPage from '@/pages/TaTeamsPage'
+import AboutUsPage from '@/pages/AboutUsPage'
+
+const GlobalLayout = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [pathname]);
+
+  return <Outlet />;
+};
 
 const routes = createRoutesFromElements(
-  <>
+  <Route element={<GlobalLayout />}>
     {/* Public auth routes */}
+    <Route path="/about-us" element={<AboutUsPage />} />
     <Route element={<AuthRoutes />}>
       <Route path="/role-selection" element={<RoleSelectionPage />} />
       <Route path="/login" element={<LoginPage />} />
@@ -85,7 +98,7 @@ const routes = createRoutesFromElements(
 
     {/* 404 fallback */}
     <Route path="*" element={<NotFoundPage />} />
-  </>
+  </Route>
 )
 
 export default createBrowserRouter(routes, { future: { v7_useViewTransition: true } })

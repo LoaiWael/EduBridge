@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { usePreferencesStore } from '@/store/usePreferencesStore';
+import { Toaster } from '@/components/ui/sonner';
 import router from './router';
 
 function App() {
@@ -10,6 +11,8 @@ function App() {
 
   useEffect(() => {
     const root = document.documentElement;
+    root.style.colorScheme = theme === 'system' ? 'light dark' : theme;
+
     if (theme === 'system') {
       const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
       root.classList.toggle('dark', systemTheme === 'dark');
@@ -32,6 +35,7 @@ function App() {
   return (
     <MotionConfig reducedMotion={animationsEnabled ? "never" : "always"}>
       <RouterProvider router={router} />
+      <Toaster position="top-center" />
     </MotionConfig>
   );
 }

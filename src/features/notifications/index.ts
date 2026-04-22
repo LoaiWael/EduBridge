@@ -1,1 +1,2 @@
-export type { NotificationPreferences, NotificationType } from "./types";
+export type { NotificationPreferences, NotificationType, AppNotification } from "./types";
+export { NotificationDropdown } from "./components/NotificationDropdown";

@@ -1,11 +1,18 @@
 import { useProfileStore } from "@/features/profile";
-import { Navigate, Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const StudentRoutes = () => {
   const role = useProfileStore(state => state.role);
+  const navigate = useNavigate();
 
-  if (role === 'student') return <Outlet />
-  else return <Navigate to={'/'} replace />
+  useEffect(() => {
+    if (role !== 'student') {
+      navigate("/", { replace: true, viewTransition: true });
+    }
+  }, [role, navigate]);
+
+  return role === 'student' ? <Outlet /> : null;
 }
 
 export default StudentRoutes

@@ -2,11 +2,11 @@ import { useEffect } from "react"
 import { Link, useParams } from "react-router-dom"
 import { motion, useReducedMotion } from "framer-motion"
 import { Briefcase, GraduationCap, Bookmark, ChevronRight, Network, Star, Users } from "lucide-react"
-import { toast } from "sonner"
 import { useProfileStore } from "@/features/profile/store/useProfileStore"
 import { useAuthStore } from "@/features/auth"
 import ProfileAvatar from "@/features/profile/components/ProfileAvatar"
 import EditProfileButton from "@/features/profile/components/EditProfileButton"
+import { LogoutButton } from "@/features/auth"
 import BackButton from "@/components/BackButton"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { maskEmail } from "@/utils"
@@ -14,6 +14,7 @@ import { maskEmail } from "@/utils"
 const ProfilePage = () => {
   const shouldReduceMotion = useReducedMotion()
   const { userId } = useParams()
+
   const firstName = useProfileStore(state => state.firstName);
   const lastName = useProfileStore(state => state.lastName);
   const email = useProfileStore(state => state.email);
@@ -31,12 +32,6 @@ const ProfilePage = () => {
   const displayName = firstName && lastName ? `${firstName} ${lastName}` : "Olivia Brown"
   const displayId = userId || (authId ? (authId.toString().startsWith("ID") ? authId : `ID${authId}`) : "ID1000274875")
   const displayEmail = maskEmail(email)
-
-  const handleSavedTeamsClick = () => {
-    toast.info("Navigating to your saved teams", {
-      description: "Here you can view and manage your bookmarked teams"
-    })
-  }
 
   // Stagger variants for list items
   const listItemVariants = {
@@ -125,11 +120,14 @@ const ProfilePage = () => {
           transition={{ duration: 0.5 }}
           className="px-6 pb-12 pt-6 flex flex-col gap-4"
         >
-          <div className="flex items-center gap-5">
-            <BackButton />
-            <h1 className="text-[32px] font-bold text-brand-text-primary">
-              Profile
-            </h1>
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-5">
+              <BackButton />
+              <h1 className="text-[32px] font-bold text-brand-text-primary">
+                Profile
+              </h1>
+            </div>
+            {isOwnProfile && <LogoutButton />}
           </div>
         </motion.div>
 
@@ -200,7 +198,6 @@ const ProfilePage = () => {
                   to={item.link}
                   viewTransition
                   key={item.label}
-                  onClick={handleSavedTeamsClick}
                   className="focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-text-primary focus-visible:z-10 relative"
                 >
                   {content}

@@ -99,10 +99,10 @@ const RegisterPage = () => {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="relative z-10 px-8 mt-28 mb-10 flex flex-col space-y-3"
         >
-          <h1 className="text-[32px] font-bold text-brand-text-secondary">
+          <h1 className="text-[32px] font-bold text-brand-text-primary/70">
             Register
           </h1>
-          <p className="text-brand-text-secondary text-sm leading-relaxed max-w-[280px]">
+          <p className="text-brand-text-primary/70 text-sm leading-relaxed max-w-[280px]">
             Create your account - enjoy our services with most updated features.
           </p>
         </motion.div>
