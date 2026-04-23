@@ -1,0 +1,198 @@
+[
+  {
+    "id": "team-harmony-1",
+    "name": "Harmony",
+    "description": "A comprehensive project uniting different modules under one ecosystem to simplify tracking.",
+    "leaderId": "usr-01",
+    "ideaId": "idea-harmony",
+    "status": "Open",
+    "maxMembers": 5,
+    "members": [
+      {
+        "id": "mbr-01",
+        "userId": "usr-01",
+        "teamId": "team-harmony-1",
+        "role": "Leader",
+        "joinedAt": "2026-04-20T10:00:00Z"
+      }
+    ],
+    "createdAt": "2026-04-20T10:00:00Z",
+    "updatedAt": "2026-04-20T10:00:00Z",
+    "isBookmarked": true
+  },
+  {
+    "id": "team-edubridge-1",
+    "name": "EduBridge",
+    "description": "Developing the core features and UI for the new student-teacher coordination platform.",
+    "leaderId": "usr-02",
+    "ideaId": "idea-edubridge-platform",
+    "status": "Partial",
+    "maxMembers": 5,
+    "members": [
+      {
+        "id": "mbr-02",
+        "userId": "usr-02",
+        "teamId": "team-edubridge-1",
+        "role": "Leader",
+        "joinedAt": "2026-04-21T09:00:00Z"
+      }
+    ],
+    "createdAt": "2026-04-21T09:00:00Z",
+    "updatedAt": "2026-04-22T11:00:00Z",
+    "isBookmarked": true
+  },
+  {
+    "id": "team-edubridge-2",
+    "name": "EduBridge Data Core",
+    "description": "Backend architecture and database logic implementation following domain-driven design.",
+    "leaderId": "usr-03",
+    "ideaId": "idea-smart-attendance",
+    "status": "Full",
+    "maxMembers": 5,
+    "members": [
+      {
+        "id": "mbr-03",
+        "userId": "usr-03",
+        "teamId": "team-edubridge-2",
+        "role": "Leader",
+        "joinedAt": "2026-04-22T08:00:00Z"
+      }
+    ],
+    "createdAt": "2026-04-22T08:00:00Z",
+    "updatedAt": "2026-04-22T08:00:00Z",
+    "isBookmarked": false
+  },
+  {
+    "id": "team-peerpulse-1",
+    "name": "PeerPulse",
+    "description": "Building a peer-feedback dashboard that helps students evaluate sprint progress with lightweight analytics.",
+    "leaderId": "usr-04",
+    "ideaId": "idea-peerpulse",
+    "status": "Open",
+    "maxMembers": 5,
+    "members": [
+      {
+        "id": "mbr-04",
+        "userId": "usr-04",
+        "teamId": "team-peerpulse-1",
+        "role": "Leader",
+        "joinedAt": "2026-04-19T14:10:00Z"
+      }
+    ],
+    "createdAt": "2026-04-19T14:10:00Z",
+    "updatedAt": "2026-04-22T09:30:00Z",
+    "isBookmarked": false
+  },
+  {
+    "id": "team-lablink-1",
+    "name": "LabLink",
+    "description": "Creating a lab reservation assistant that reduces booking conflicts for shared university equipment.",
+    "leaderId": "usr-05",
+    "ideaId": "idea-lablink",
+    "status": "Partial",
+    "maxMembers": 5,
+    "members": [
+      {
+        "id": "mbr-05",
+        "userId": "usr-05",
+        "teamId": "team-lablink-1",
+        "role": "Leader",
+        "joinedAt": "2026-04-18T12:00:00Z"
+      },
+      {
+        "id": "mbr-06",
+        "userId": "usr-06",
+        "teamId": "team-lablink-1",
+        "role": "Member",
+        "joinedAt": "2026-04-20T16:45:00Z"
+      }
+    ],
+    "createdAt": "2026-04-18T12:00:00Z",
+    "updatedAt": "2026-04-22T07:20:00Z",
+    "isBookmarked": true
+  },
+  {
+    "id": "team-campuscart-1",
+    "name": "CampusCart",
+    "description": "Designing a campus marketplace for course materials, second-hand devices, and student-to-student exchanges.",
+    "leaderId": "usr-07",
+    "ideaId": "idea-campuscart",
+    "status": "Open",
+    "maxMembers": 5,
+    "members": [
+      {
+        "id": "mbr-07",
+        "userId": "usr-07",
+        "teamId": "team-campuscart-1",
+        "role": "Leader",
+        "joinedAt": "2026-04-17T11:25:00Z"
+      }
+    ],
+    "createdAt": "2026-04-17T11:25:00Z",
+    "updatedAt": "2026-04-21T13:55:00Z",
+    "isBookmarked": false
+  },
+  {
+    "id": "team-mentormesh-1",
+    "name": "MentorMesh",
+    "description": "Matching students with mentors based on skills, academic goals, and shared project interests.",
+    "leaderId": "usr-08",
+    "ideaId": "idea-mentormesh",
+    "status": "Partial",
+    "maxMembers": 5,
+    "members": [
+      {
+        "id": "mbr-08",
+        "userId": "usr-08",
+        "teamId": "team-mentormesh-1",
+        "role": "Leader",
+        "joinedAt": "2026-04-16T08:40:00Z"
+      },
+      {
+        "id": "mbr-09",
+        "userId": "usr-09",
+        "teamId": "team-mentormesh-1",
+        "role": "Member",
+        "joinedAt": "2026-04-21T10:15:00Z"
+      }
+    ],
+    "createdAt": "2026-04-16T08:40:00Z",
+    "updatedAt": "2026-04-23T00:10:00Z",
+    "isBookmarked": true
+  },
+  {
+    "id": "team-greenroute-1",
+    "name": "GreenRoute",
+    "description": "Planning an eco-friendly campus navigation app that favors shaded paths, bike lanes, and accessibility routes.",
+    "leaderId": "usr-10",
+    "ideaId": "idea-greenroute",
+    "status": "Full",
+    "maxMembers": 5,
+    "members": [
+      {
+        "id": "mbr-10",
+        "userId": "usr-10",
+        "teamId": "team-greenroute-1",
+        "role": "Leader",
+        "joinedAt": "2026-04-15T09:00:00Z"
+      },
+      {
+        "id": "mbr-11",
+        "userId": "usr-11",
+        "teamId": "team-greenroute-1",
+        "role": "Member",
+        "joinedAt": "2026-04-16T13:20:00Z"
+      },
+      {
+        "id": "mbr-12",
+        "userId": "usr-12",
+        "teamId": "team-greenroute-1",
+        "role": "Member",
+        "joinedAt": "2026-04-17T10:05:00Z"
+      }
+    ],
+    "createdAt": "2026-04-15T09:00:00Z",
+    "updatedAt": "2026-04-22T18:00:00Z",
+    "isBookmarked": false
+  }
+]
