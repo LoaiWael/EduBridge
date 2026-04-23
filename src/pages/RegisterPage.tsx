@@ -44,8 +44,33 @@ const RegisterPage = () => {
     // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 800));
 
-    // Authenticate and race the navigation to /boarding
-    setId(data.studentId || crypto.randomUUID());
+    // Construct user object for central store
+    const userId = data.studentId || crypto.randomUUID();
+    const newUser: any = {
+      id: userId,
+      email: data.email,
+      role: currentRole,
+      savedIdeaIds: [],
+      teams: [],
+      joinRequests: [],
+      notifications: [],
+      profile: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        university: data.universityName,
+        department: data.department,
+        role: currentRole,
+        // other fields default to empty
+      }
+    };
+
+    // Authenticate and register
+    const { register: registerUser, setRememberMe } = useAuthStore.getState();
+    setRememberMe(!!data.rememberMe);
+    registerUser(newUser);
+
+    setId(userId);
     setIsAuthenticated(true);
     setIsLoading(false);
     setTimeout(() => {

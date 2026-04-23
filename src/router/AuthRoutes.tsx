@@ -9,7 +9,7 @@ const AuthRoutes = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate(`/bridge/${authId}`, { replace: true, viewTransition: true });
+      navigate(`/`, { replace: true, viewTransition: true });
     }
   }, [isAuthenticated, authId, navigate]);
 

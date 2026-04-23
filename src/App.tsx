@@ -3,6 +3,7 @@ import { RouterProvider } from 'react-router-dom';
 import { MotionConfig } from 'framer-motion';
 import { usePreferencesStore } from '@/store/usePreferencesStore';
 import { Toaster } from '@/components/ui/sonner';
+import { UserSessionProvider } from '@/features/auth';
 import router from './router';
 
 function App() {
@@ -34,8 +35,10 @@ function App() {
 
   return (
     <MotionConfig reducedMotion={animationsEnabled ? "never" : "always"}>
-      <RouterProvider router={router} />
-      <Toaster position="top-center" />
+      <UserSessionProvider>
+        <RouterProvider router={router} />
+        <Toaster position="top-center" />
+      </UserSessionProvider>
     </MotionConfig>
   );
 }

@@ -9,6 +9,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
+import { useAuthStore } from "@/features/auth";
+import { toast } from "sonner";
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -17,14 +19,31 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { register, handleSubmit, control, formState: { errors } } = useForm();
 
+  const { users, login, setRememberMe } = useAuthStore();
+  const [loginError, setLoginError] = useState<string | null>(null);
+
   const onSubmit = async (data: any) => {
     setIsLoading(true);
-    // Use data.email, data.password, data.rememberMe
-    console.log("Login submitted", data);
-    // Simulate login delay for perceived performance
+    setLoginError(null);
+
+    // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsLoading(false);
-    navigate('/', { viewTransition: true })
+
+    // Find user in registered list
+    const user = users.find((u: any) => u.email.toLowerCase() === data.email.toLowerCase());
+
+    if (user) {
+      setRememberMe(data.rememberMe);
+      login(user.id);
+      setIsLoading(false);
+      toast.success(`Welcome back, ${user.profile.firstName}!`, {
+        description: "It's good to see you again.",
+      });
+      navigate('/', { viewTransition: true });
+    } else {
+      setLoginError("No account found with this email. Please register first.");
+      setIsLoading(false);
+    }
   };
 
   const formVariants: Variants = {
@@ -104,6 +123,15 @@ const LoginPage = () => {
             onSubmit={handleSubmit(onSubmit)}
             className="w-full max-w-xl mx-auto flex flex-col space-y-5 mt-4"
           >
+            {loginError && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                className="bg-brand-red/10 border border-brand-red/30 text-brand-red text-sm py-3 px-4 rounded-xl text-center"
+              >
+                {loginError}
+              </motion.div>
+            )}
 
             <div className="space-y-4">
               <motion.div variants={itemVariants}>
