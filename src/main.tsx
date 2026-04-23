@@ -5,7 +5,7 @@ import './index.css'
 import App from './App.tsx'
 
 // Register the service worker
-const updateSW = registerSW({
+const { updateSW } = registerSW({
   onNeedRefresh() {
     // Prompt the user to update
     if (confirm("New content available. Reload to update?")) {

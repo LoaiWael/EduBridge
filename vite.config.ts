@@ -12,7 +12,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['/imgs/favicon/eduBridge-logo.png'], // Assets in your public folder
+      includeAssets: ['/favicon/eduBridge-logo.png'], // Assets in your public folder
       manifest: {
         name: 'EduBridge Platform',
         short_name: 'EduBridge',
@@ -22,13 +22,13 @@ export default defineConfig({
         display: 'standalone',
         icons: [
           {
-            src: '/imgs/favicon/eduBridge-logo.png',
+            src: '/favicon/eduBridge-logo.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any maskable'
           },
           {
-            src: '/imgs/favicon/eduBridge-logo.png',
+            src: '/favicon/eduBridge-logo.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any maskable'
