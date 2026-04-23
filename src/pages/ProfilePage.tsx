@@ -1,7 +1,7 @@
-import { useEffect } from "react"
+import { useEffect, type JSX } from "react"
 import { Link, useParams } from "react-router-dom"
 import { motion, useReducedMotion } from "framer-motion"
-import { Briefcase, GraduationCap, Bookmark, ChevronRight, Network, Star, Users } from "lucide-react"
+import { Briefcase, GraduationCap, Bookmark, ChevronRight, Star, Users, Mail, BadgeCheck, MapPin, Github, Linkedin } from "lucide-react"
 import { useProfileStore } from "@/features/profile/store/useProfileStore"
 import { useAuthStore } from "@/features/auth"
 import ProfileAvatar from "@/features/profile/components/ProfileAvatar"
@@ -9,7 +9,13 @@ import EditProfileButton from "@/features/profile/components/EditProfileButton"
 import { LogoutButton } from "@/features/auth"
 import BackButton from "@/components/BackButton"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import { maskEmail } from "@/utils"
+
+interface DetailRow {
+  label: string;
+  value: string | JSX.Element;
+  icon: JSX.Element;
+  link?: string;
+}
 
 const ProfilePage = () => {
   const shouldReduceMotion = useReducedMotion()
@@ -18,11 +24,18 @@ const ProfilePage = () => {
   const firstName = useProfileStore(state => state.firstName);
   const lastName = useProfileStore(state => state.lastName);
   const email = useProfileStore(state => state.email);
+  const bio = useProfileStore(state => state.bio);
   const major = useProfileStore(state => state.major);
   const university = useProfileStore(state => state.university);
+  const profileImageUrl = useProfileStore(state => state.profileImageUrl);
+  const githubUrl = useProfileStore(state => state.githubUrl);
+  const linkedInUrl = useProfileStore(state => state.linkedInUrl);
+  const isDisabled = useProfileStore(state => state.isDisabled);
+  const skills = useProfileStore(state => state.skills);
   const department = useProfileStore(state => state.department);
   const role = useProfileStore(state => state.role);
   const academicTitle = useProfileStore(state => state.academicTitle);
+  const officeLocation = useProfileStore(state => state.officeLocation);
   const rating = useProfileStore(state => state.rating);
   const maxSlots = useProfileStore(state => state.maxSlots);
   const authId = useAuthStore(state => state.id)
@@ -31,7 +44,15 @@ const ProfilePage = () => {
 
   const displayName = firstName && lastName ? `${firstName} ${lastName}` : "Olivia Brown"
   const displayId = userId || (authId ? (authId.toString().startsWith("ID") ? authId : `ID${authId}`) : "ID1000274875")
-  const displayEmail = maskEmail(email)
+  const displayBio = bio || "Add a short bio to help teammates and supervisors understand your background and interests."
+  const displaySkills = skills.length > 0 ? skills : [
+    { id: "skill-1", name: role === "ta" ? "Mentorship" : "UI/UX" },
+    { id: "skill-2", name: role === "ta" ? "Project Review" : "Teamwork" },
+    { id: "skill-3", name: role === "ta" ? "Research" : "Problem Solving" },
+  ]
+  const officeLocationLabel = typeof officeLocation === "string" && officeLocation.trim()
+    ? officeLocation
+    : "Not specified"
 
   // Stagger variants for list items
   const listItemVariants = {
@@ -55,10 +76,9 @@ const ProfilePage = () => {
     }
   }, [displayName])
 
-  // Fallbacks for missing store details in the mocked UI
-  const details = role === 'ta' ? [
+  const detailRows: DetailRow[] = (role === 'ta' ? [
     {
-      label: "Track",
+      label: "Major",
       value: major || "AI",
       icon: <Briefcase className="w-5 h-5 text-brand-text-primary" />
     },
@@ -68,9 +88,24 @@ const ProfilePage = () => {
       icon: <GraduationCap className="w-5 h-5 text-brand-text-primary" />
     },
     {
+      label: "Email",
+      value: email || 'oliviabrown@gmail.com',
+      icon: <Mail className="w-5 h-5 text-brand-text-primary" />
+    },
+    {
+      label: "Office",
+      value: officeLocationLabel,
+      icon: <MapPin className="w-5 h-5 text-brand-text-primary" />
+    },
+    {
       label: "Rating",
       value: `${rating || "4.6"}/5`,
       icon: <Star className="w-5 h-5 text-brand-text-primary" fill="currentColor" />
+    },
+    {
+      label: "Account Status",
+      value: isDisabled ? "Disabled" : "Active",
+      icon: <BadgeCheck className="w-5 h-5 text-brand-text-primary" />
     },
     ...(isOwnProfile ? [{
       label: "Manage Teams",
@@ -87,7 +122,7 @@ const ProfilePage = () => {
     ])
   ] : [
     {
-      label: "Track",
+      label: "Major",
       value: major || "UI/UX",
       icon: <Briefcase className="w-5 h-5 text-brand-text-primary" />
     },
@@ -96,18 +131,36 @@ const ProfilePage = () => {
       value: university || "Computer Science",
       icon: <GraduationCap className="w-5 h-5 text-brand-text-primary" />
     },
+    {
+      label: "Email",
+      value: email || 'oliviabrown@gmail.com',
+      icon: <Mail className="w-5 h-5 text-brand-text-primary" />
+    },
     ...(isOwnProfile ? [{
-      label: "Saved Teams",
+      label: "Saved Ideas",
       value: <ChevronRight className="w-5 h-5 text-brand-text-secondary" />,
       icon: <Bookmark className="w-5 h-5 text-brand-text-primary" />,
-      link: "/my-teams"
+      link: "/library" // Assuming library handles saved ideas or is the place to see them
     }] : []),
     {
-      label: "Department",
-      value: department || "CS",
-      icon: <Network className="w-5 h-5 text-brand-text-primary" />
+      label: "Account Status",
+      value: isDisabled ? "Disabled" : "Active",
+      icon: <BadgeCheck className="w-5 h-5 text-brand-text-primary" />
     }
-  ]
+  ]) as DetailRow[];
+
+  const profileLinks = [
+    githubUrl ? {
+      href: githubUrl,
+      label: "GitHub",
+      icon: <Github className="w-4 h-4" />
+    } : null,
+    linkedInUrl ? {
+      href: linkedInUrl,
+      label: "LinkedIn",
+      icon: <Linkedin className="w-4 h-4" />
+    } : null,
+  ].filter(Boolean) as { href: string; label: string; icon: JSX.Element }[]
 
   return (
     <TooltipProvider delayDuration={300}>
@@ -141,7 +194,11 @@ const ProfilePage = () => {
           >
             {/* Profile Avatar overridden with inline style to be larger like UI */}
             <div className="mb-3">
-              <ProfileAvatar style={{ width: '96px', height: '96px', fontSize: '32px' }} />
+              <ProfileAvatar
+                imageUrl={profileImageUrl}
+                name={displayName}
+                style={{ width: '96px', height: '96px', fontSize: '32px' }}
+              />
             </div>
 
             <h2 className="text-xl font-bold text-brand-text-primary mb-1">
@@ -151,17 +208,46 @@ const ProfilePage = () => {
               <div className="text-brand-text-secondary text-sm mb-4 leading-tight flex flex-col items-center gap-0.5">
                 <p>Teaching Assistant @ {department || "CS"} dept</p>
                 <p>{academicTitle || (major ? `${major} Engineer` : "AI Engineer")}</p>
-                <p className="mt-0.5 select-none"><span className="text-brand-green font-medium">Availability</span> 4/{maxSlots || 6} Teams</p>
+                <p className="mt-0.5 select-none"><span className="text-brand-green font-medium">Capacity</span> Up to {maxSlots || 6} teams</p>
               </div>
             ) : (
               <>
                 <p className="text-brand-text-secondary text-sm mb-1">
                   {displayId}
                 </p>
-                <p className="text-brand-text-secondary text-sm mb-4">
-                  {displayEmail}
-                </p>
               </>
+            )}
+
+            <p className="max-w-2xl text-sm text-brand-text-secondary leading-6 mb-4">
+              {displayBio}
+            </p>
+
+            <div className="flex flex-wrap justify-center gap-2 mb-4">
+              {displaySkills.map((skill) => (
+                <span
+                  key={skill.id}
+                  className="rounded-full bg-brand-primary/60 px-3 py-1 text-xs font-medium text-brand-text-primary"
+                >
+                  {skill.name}
+                </span>
+              ))}
+            </div>
+
+            {profileLinks.length > 0 && (
+              <div className="flex flex-wrap justify-center gap-3 mb-4">
+                {profileLinks.map((item) => (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-brand-card bg-brand-background px-3 py-2 text-sm font-medium text-brand-text-primary shadow-sm transition-colors hover:bg-brand-primary/40"
+                  >
+                    {item.icon}
+                    {item.label}
+                  </a>
+                ))}
+              </div>
             )}
 
             {isOwnProfile && <EditProfileButton />}
@@ -174,20 +260,20 @@ const ProfilePage = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mx-6 mt-6 bg-brand-card rounded-3xl overflow-hidden shadow-brand-card flex flex-col relative z-10"
           >
-            {details.map((item, index) => {
+            {detailRows.map((item, index) => {
               const content = (
                 <motion.div
                   custom={index}
                   variants={listItemVariants}
                   initial={shouldReduceMotion ? "visible" : "hidden"}
                   animate="visible"
-                  className={`flex flex-row items-center justify-between p-4 ${index !== details.length - 1 ? 'border-b border-brand-grey/50' : ''} ${item.link ? 'hover:bg-black/5 transition-colors cursor-pointer' : ''}`}
+                  className={`flex flex-row items-center justify-between gap-4 p-4 ${index !== detailRows.length - 1 ? 'border-b border-brand-grey/50' : ''} ${item.link ? 'hover:bg-black/5 transition-colors cursor-pointer' : ''}`}
                 >
                   <div className="flex items-center gap-3">
                     {item.icon}
                     <span className="text-brand-text-primary font-medium">{item.label}</span>
                   </div>
-                  <div className="text-brand-text-secondary text-sm">
+                  <div className="text-brand-text-secondary text-sm text-right wrap-break-words">
                     {item.value}
                   </div>
                 </motion.div>

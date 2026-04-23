@@ -15,14 +15,26 @@ const LogoutButton = () => {
   const clearRole = useProfileStore(state => state.setRole)
 
   const handleLogout = () => {
-    clearAuth(false)
-    clearAuthId('')
-    clearProfile('')
-    clearLastName('')
-    clearEmail('')
-    clearRole('student')
-    toast.success("Logged out successfully")
-    navigate('/login', { viewTransition: true })
+    toast.warning("Are you sure you want to log out?", {
+      action: {
+        label: "Log out",
+        onClick: () => {
+          clearAuth(false)
+          clearAuthId('')
+          clearProfile('')
+          clearLastName('')
+          clearEmail('')
+          clearRole('student')
+          toast.success("Logged out successfully")
+          navigate('/login', { viewTransition: true })
+        },
+      },
+      cancel: {
+        label: "Cancel",
+        onClick: () => { },
+      },
+      duration: 5000,
+    })
   }
 
   return (
