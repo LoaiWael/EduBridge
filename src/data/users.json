@@ -1,0 +1,346 @@
+[
+  {
+    "id": "usr-01",
+    "firstName": "Loai",
+    "lastName": "Wael",
+    "email": "loai.wael@example.edu",
+    "role": "student",
+    "bio": "Full-stack developer passionate about building educational tools.",
+    "major": "Software Engineering",
+    "university": "Cairo University",
+    "profileImageUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sara",
+    "githubUrl": "https://github.com/LoaiWael",
+    "linkedInUrl": "https://linkedin.com/in/loai-wael-cs",
+    "isDisabled": false,
+    "skills": [
+      {
+        "id": "react",
+        "name": "React"
+      },
+      {
+        "id": "typescript",
+        "name": "TypeScript"
+      },
+      {
+        "id": "node",
+        "name": "Node.js"
+      }
+    ]
+  },
+  {
+    "id": "usr-02",
+    "firstName": "Ahmed",
+    "lastName": "Hassan",
+    "email": "ahmed.h@example.edu",
+    "role": "student",
+    "bio": "UX/UI Designer focused on creating seamless academic experiences.",
+    "major": "Computer Science",
+    "university": "Ain Shams University",
+    "profileImageUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Ahmed",
+    "githubUrl": "https://github.com/ahmedh",
+    "isDisabled": false,
+    "skills": [
+      {
+        "id": "figma",
+        "name": "Figma"
+      },
+      {
+        "id": "ux-design",
+        "name": "UX Design"
+      }
+    ]
+  },
+  {
+    "id": "usr-03",
+    "firstName": "Sara",
+    "lastName": "Mostafa",
+    "email": "sara.m@example.edu",
+    "role": "student",
+    "bio": "Backend specialist with a love for complex data architectures.",
+    "major": "Information Technology",
+    "university": "Alexandria University",
+    "profileImageUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Loai",
+    "githubUrl": "https://github.com/saram",
+    "isDisabled": false,
+    "skills": [
+      {
+        "id": "postgresql",
+        "name": "PostgreSQL"
+      },
+      {
+        "id": "python",
+        "name": "Python"
+      },
+      {
+        "id": "django",
+        "name": "Django"
+      }
+    ]
+  },
+  {
+    "id": "usr-04",
+    "firstName": "Omar",
+    "lastName": "Zaid",
+    "email": "omar.z@example.edu",
+    "role": "student",
+    "bio": "Project manager and frontend developer who loves clean code.",
+    "major": "Software Engineering",
+    "university": "Cairo University",
+    "profileImageUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Omar",
+    "githubUrl": "https://github.com/omarz",
+    "isDisabled": false,
+    "skills": [
+      {
+        "id": "react",
+        "name": "React"
+      },
+      {
+        "id": "tailwind",
+        "name": "Tailwind CSS"
+      }
+    ]
+  },
+  {
+    "id": "usr-05",
+    "firstName": "Laila",
+    "lastName": "Karim",
+    "email": "laila.k@example.edu",
+    "role": "student",
+    "bio": "Embedded systems enthusiast building the future of lab automation.",
+    "major": "Computer Engineering",
+    "university": "Giza Institute",
+    "profileImageUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Laila",
+    "isDisabled": false,
+    "skills": [
+      {
+        "id": "c-plus-plus",
+        "name": "C++"
+      },
+      {
+        "id": "arduino",
+        "name": "Arduino"
+      }
+    ]
+  },
+  {
+    "id": "usr-06",
+    "firstName": "Youssef",
+    "lastName": "Ali",
+    "email": "youssef.a@example.edu",
+    "role": "student",
+    "bio": "Frontend developer who loves animations and motion design.",
+    "major": "Computer Science",
+    "university": "Cairo University",
+    "profileImageUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Youssef",
+    "isDisabled": false,
+    "skills": [
+      {
+        "id": "framer-motion",
+        "name": "Framer Motion"
+      },
+      {
+        "id": "javascript",
+        "name": "JavaScript"
+      }
+    ]
+  },
+  {
+    "id": "usr-07",
+    "firstName": "Nour",
+    "lastName": "Eldin",
+    "email": "nour.e@example.edu",
+    "role": "student",
+    "bio": "Mobile developer focused on Flutter and cross-platform apps.",
+    "major": "Information Systems",
+    "university": "Helwan University",
+    "profileImageUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Nour",
+    "isDisabled": false,
+    "skills": [
+      {
+        "id": "flutter",
+        "name": "Flutter"
+      },
+      {
+        "id": "dart",
+        "name": "Dart"
+      }
+    ]
+  },
+  {
+    "id": "usr-08",
+    "firstName": "Mariam",
+    "lastName": "Khalil",
+    "email": "mariam.k@example.edu",
+    "role": "student",
+    "bio": "Data Scientist working on community-driven education sets.",
+    "major": "Data Science",
+    "university": "AUC",
+    "profileImageUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Mariam",
+    "isDisabled": false,
+    "skills": [
+      {
+        "id": "pandas",
+        "name": "Pandas"
+      },
+      {
+        "id": "machine-learning",
+        "name": "Machine Learning"
+      }
+    ]
+  },
+  {
+    "id": "usr-09",
+    "firstName": "Hassan",
+    "lastName": "Tarek",
+    "email": "hassan.t@example.edu",
+    "role": "student",
+    "bio": "Fullstack junior explorer.",
+    "major": "Computer Science",
+    "university": "GUC",
+    "profileImageUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Hassan",
+    "isDisabled": false,
+    "skills": [
+      {
+        "id": "react",
+        "name": "React"
+      },
+      {
+        "id": "node",
+        "name": "Node.js"
+      }
+    ]
+  },
+  {
+    "id": "usr-10",
+    "firstName": "Zainab",
+    "lastName": "Abbas",
+    "email": "zainab.a@example.edu",
+    "role": "student",
+    "bio": "Sustainability advocate and software developer.",
+    "major": "Civil Engineering",
+    "university": "Cairo University",
+    "profileImageUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Zainab",
+    "isDisabled": false,
+    "skills": [
+      {
+        "id": "gis",
+        "name": "GIS"
+      },
+      {
+        "id": "python",
+        "name": "Python"
+      }
+    ]
+  },
+  {
+    "id": "usr-11",
+    "firstName": "Karim",
+    "lastName": "Fahmy",
+    "email": "karim.f@example.edu",
+    "role": "student",
+    "bio": "Passionate about maps and accessibility.",
+    "major": "Computer Science",
+    "university": "Mansoura University",
+    "profileImageUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Karim",
+    "isDisabled": false,
+    "skills": [
+      {
+        "id": "react-native",
+        "name": "React Native"
+      }
+    ]
+  },
+  {
+    "id": "usr-12",
+    "firstName": "Dina",
+    "lastName": "Emad",
+    "email": "dina.e@example.edu",
+    "role": "student",
+    "bio": "Looking for shaded paths and clean code.",
+    "major": "Environmental Science",
+    "university": "Cairo University",
+    "profileImageUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Dina",
+    "isDisabled": false,
+    "skills": [
+      {
+        "id": "research",
+        "name": "Research"
+      }
+    ]
+  },
+  {
+    "id": "usr-ta-01",
+    "firstName": "Dr. Sarah",
+    "lastName": "Ghanem",
+    "email": "sarah.g@faculty.edu",
+    "role": "ta",
+    "bio": "Teaching Assistant with 5 years of experience in Software Architecture.",
+    "department": "Software Engineering",
+    "academicTitle": "Senior Teaching Assistant",
+    "university": "Cairo University",
+    "profileImageUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah",
+    "isDisabled": false,
+    "maxSlots": 5,
+    "rating": 4.8,
+    "skills": [
+      {
+        "id": "architecture",
+        "name": "Software Architecture"
+      },
+      {
+        "id": "agile",
+        "name": "Agile Methodology"
+      }
+    ]
+  },
+  {
+    "id": "usr-ta-02",
+    "firstName": "Eng. Mahmoud",
+    "lastName": "Reda",
+    "email": "mahmoud.r@faculty.edu",
+    "role": "ta",
+    "bio": "Machine Learning researcher and mentor.",
+    "department": "Artificial Intelligence",
+    "academicTitle": "Research Assistant",
+    "university": "AUC",
+    "profileImageUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Mahmoud",
+    "isDisabled": false,
+    "maxSlots": 3,
+    "rating": 4.5,
+    "skills": [
+      {
+        "id": "ml",
+        "name": "Machine Learning"
+      },
+      {
+        "id": "deep-learning",
+        "name": "Deep Learning"
+      }
+    ]
+  },
+  {
+    "id": "usr-ta-03",
+    "firstName": "Dr. Emily",
+    "lastName": "Chen",
+    "email": "emily.c@faculty.edu",
+    "role": "ta",
+    "bio": "Expert in Human-Computer Interaction and modern frontend frameworks.",
+    "department": "Computer Science",
+    "academicTitle": "Visting Professor",
+    "university": "Stanford (Partner)",
+    "profileImageUrl": "https://api.dicebear.com/7.x/avataaars/svg?seed=Emily",
+    "isDisabled": false,
+    "maxSlots": 10,
+    "rating": 5.0,
+    "skills": [
+      {
+        "id": "hci",
+        "name": "HCI"
+      },
+      {
+        "id": "react",
+        "name": "React"
+      }
+    ]
+  }
+]
