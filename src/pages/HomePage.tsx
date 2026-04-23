@@ -14,11 +14,13 @@ import recommendedTeamsSvg from "@/assets/imgs/svg/recommended-teams.svg";
 import createTeamSvg from "@/assets/imgs/svg/create-new-team.svg";
 import supervisionRequestsSvg from "@/assets/imgs/svg/supervision-requests.svg";
 import trackTeamsSvg from "@/assets/imgs/svg/track-teams.svg";
+import { useAuthStore } from "@/features/auth";
 
 const HomePage = () => {
   const shouldReduceMotion = useReducedMotion();
   const navigate = useNavigate();
   const role = useProfileStore(state => state.role);
+  const userId = useAuthStore(state => state.id);
 
   useEffect(() => {
     document.title = "EduBridge";
@@ -116,7 +118,7 @@ const HomePage = () => {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <button
-                        onClick={() => navigate("/bridge/:userId", { viewTransition: true })}
+                        onClick={() => navigate(`/bridge/${userId}`, { viewTransition: true })}
                         className="cursor-pointer hover:ring-2 hover:ring-brand-pink transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2 rounded-full"
                       >
                         <ProfileAvatar />
