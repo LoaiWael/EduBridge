@@ -8,6 +8,7 @@ import BackButton from "@/components/BackButton";
 const RoleSelectionPage = () => {
   const navigate = useNavigate();
   const setSelectedRole = useProfileStore((state) => state.setRole);
+  const currentRole = useProfileStore((state) => state.role);
   const shouldReduceMotion = useReducedMotion();
 
   const handleRoleSelect = (role: Role) => {
@@ -94,7 +95,7 @@ const RoleSelectionPage = () => {
               }}
               whileTap={{ scale: shouldReduceMotion ? 1 : 0.97 }}
               onClick={() => handleRoleSelect("student")}
-              className="w-full py-4 px-6 rounded-brand-input bg-brand-secondary text-brand-background dark:text-brand-text-primary font-medium text-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-3 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-secondary/50 focus-visible:ring-offset-2"
+              className={`w-full py-4 px-6 rounded-brand-input bg-brand-secondary text-brand-background dark:text-brand-text-primary font-medium text-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-3 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-secondary/50 focus-visible:ring-offset-2 ${currentRole === 'student' ? 'ring-4 ring-brand-secondary ring-offset-2' : ''}`}
               aria-label="Select Student role"
             >
               <span>Student</span>
@@ -108,7 +109,7 @@ const RoleSelectionPage = () => {
               }}
               whileTap={{ scale: shouldReduceMotion ? 1 : 0.97 }}
               onClick={() => handleRoleSelect("ta")}
-              className="w-full py-4 px-6 rounded-brand-input bg-brand-primary text-brand-text-primary font-medium text-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-3 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/50 focus-visible:ring-offset-2"
+              className={`w-full py-4 px-6 rounded-brand-input bg-brand-primary text-brand-text-primary font-medium text-lg shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-3 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/50 focus-visible:ring-offset-2 ${currentRole === 'ta' ? 'ring-4 ring-brand-primary ring-offset-2' : ''}`}
               aria-label="Select Teaching Assistant role"
             >
               <span>Teaching Assistant</span>

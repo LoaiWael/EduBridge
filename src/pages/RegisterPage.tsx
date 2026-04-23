@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import BackButton from "@/components/BackButton";
 import { useProfileStore } from "@/features/profile";
+import { useAuthStore } from "@/features/auth";
 import type { RegisterFormData } from "@/features/auth";
 
 const RegisterPage = () => {
@@ -28,6 +29,7 @@ const RegisterPage = () => {
   // Protect against users visiting register directly without selecting a role.
   // We can just default to 'student' if null, or ideally redirect back to /role-selection
   const currentRole = role || 'student';
+  const { setId, setIsAuthenticated } = useAuthStore();
 
   const onSubmit = async (data: RegisterFormData) => {
     setIsLoading(true);
@@ -38,10 +40,17 @@ const RegisterPage = () => {
     setLastName(data.lastName);
     setUniversity(data.universityName ?? "");
     setEmail(data.email);
+
     // Simulate API delay
     await new Promise((resolve) => setTimeout(resolve, 800));
+
+    // Authenticate and race the navigation to /boarding
+    setId(data.studentId || crypto.randomUUID());
+    setIsAuthenticated(true);
     setIsLoading(false);
-    navigate('/verification', { viewTransition: true })
+    setTimeout(() => {
+      navigate('/boarding', { replace: true, viewTransition: true });
+    }, 10);
   };
 
   const formVariants: Variants = {

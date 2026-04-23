@@ -61,8 +61,8 @@ const BoardingPage = () => {
   }, [currentStep])
 
   const handleFinish = () => {
-    toast.success('Welcome to EduBridge!', { description: 'Let\'s build great teams together.' })
-    navigate('/', { viewTransition: true })
+    toast.success('Welcome to EduBridge!', { description: 'Let\'s complete your profile.' })
+    navigate('/settings/profile', { viewTransition: true })
   }
 
   // Keyboard navigation handler

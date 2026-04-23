@@ -22,7 +22,7 @@ const ForgetPassPage = () => {
     await new Promise((resolve) => setTimeout(resolve, 800));
     setIsLoading(false);
     // Usually navigates to verification code page or reset password depending on flow
-    navigate('/', { viewTransition: true });
+    navigate('/verification', { viewTransition: true });
   };
 
   const formVariants: Variants = {

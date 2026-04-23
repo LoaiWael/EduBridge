@@ -45,7 +45,7 @@ const ChatBotPage = () => {
       const botTimestamp = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }).toLowerCase();
       addMessage({
         id: (Date.now() + 1).toString(),
-        text: "I'am sorry, I'am still under mentainance i can't help you right now.",
+        text: "I'm sorry, I'm still under mentainance i can't help you right now.",
         isBot: true,
         timestamp: botTimestamp,
         senderName: "EduBridge"

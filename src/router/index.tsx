@@ -45,11 +45,11 @@ const routes = createRoutesFromElements(
   <Route element={<GlobalLayout />}>
     {/* Public auth routes */}
     <Route path="/about-us" element={<AboutUsPage />} />
+    <Route path="/forget-password" element={<ForgetPassPage />} />
     <Route element={<AuthRoutes />}>
       <Route path="/role-selection" element={<RoleSelectionPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
-      <Route path="/forget-password" element={<ForgetPassPage />} />
       <Route path="/reset-password" element={<ResetPassPage />} />
       <Route path="/verification" element={<VerificationPage />} />
     </Route>
