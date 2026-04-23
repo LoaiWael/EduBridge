@@ -3,8 +3,6 @@ import type {
   Team,
   JoinRequest,
   TeamStatus,
-  CreateTeamPayload,
-  UpdateTeamPayload,
   JoinRequestStatus
 } from '../types';
 
@@ -108,20 +106,20 @@ export const useTeamStore = create<TeamsState>((set) => ({
       const updatedTeams = state.teams.map((t) =>
         t.id === teamId
           ? {
-              ...t,
-              members: t.members.map((m) =>
-                m.id === memberId ? { ...m, role } : m
-              )
-            }
+            ...t,
+            members: t.members.map((m) =>
+              m.id === memberId ? { ...m, role } : m
+            )
+          }
           : t
       );
       const updatedCurrentTeam = state.currentTeam?.id === teamId
         ? {
-            ...state.currentTeam,
-            members: state.currentTeam.members.map((m) =>
-              m.id === memberId ? { ...m, role } : m
-            )
-          }
+          ...state.currentTeam,
+          members: state.currentTeam.members.map((m) =>
+            m.id === memberId ? { ...m, role } : m
+          )
+        }
         : state.currentTeam;
       return { teams: updatedTeams, currentTeam: updatedCurrentTeam };
     }),
