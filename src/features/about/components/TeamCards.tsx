@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 const teamMembers = [
   { name: 'Loai Wael', role: 'Front-End Developer', img: 'https://avatars.githubusercontent.com/u/181674898?v=4', linkedin: 'https://www.linkedin.com/in/loai-wael-cs/', bg: 'var(--color-brand-primary)' },
   { name: 'Mohamed Ebrahim', role: 'Back-End Developer', img: 'https://avatars.githubusercontent.com/u/158595996?v=4', linkedin: 'https://www.linkedin.com/in/mohamedsoultann/', bg: 'var(--color-brand-primary)' },
-  { name: 'Louay Mohamed', role: 'Data Scientist & AI Engineer', img: 'https://avatars.githubusercontent.com/u/204197386?v=4', linkedin: 'https://www.linkedin.com/in/ACoAAEzah3sBZIj8whx1Eb0wWIpgVoVjAwCswUU?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3BXLpBF63HTIqf89HiwxGAGA%3D%3D', bg: 'var(--color-brand-gradient-start)' },
   { name: 'Mohamed Salama', role: 'Data Scientist & AI Engineer', img: 'https://avatars.githubusercontent.com/u/159030624?v=4', linkedin: 'https://www.linkedin.com/in/mohammed-salamaa/', bg: 'var(--color-brand-gradient-start)' },
+  { name: 'Louay Mohamed', role: 'Data Scientist & AI Engineer', img: 'https://avatars.githubusercontent.com/u/204197386?v=4', linkedin: 'https://www.linkedin.com/in/ACoAAEzah3sBZIj8whx1Eb0wWIpgVoVjAwCswUU?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3BXLpBF63HTIqf89HiwxGAGA%3D%3D', bg: 'var(--color-brand-gradient-start)' },
   { name: 'Lamaa Diaa', role: 'UI & UX Designer', linkedin: 'https://www.linkedin.com/in/lama-diaa/', bg: 'var(--color-brand-pink)' },
 ];
 
