@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
 import type { Idea, IdeaCategory, IdeaTag } from '../types';
 
 interface IdeasState {
@@ -18,10 +17,10 @@ interface IdeasState {
   loading: boolean;
   error: string | null;
 
-  // Actions - Ideas
   setIdeas: (ideas: Idea[]) => void;
   setSelectedIdea: (id: string | null) => void;
   toggleSaveIdea: (id: string) => void;
+  setSavedIdeaIds: (ids: string[]) => void;
 
   // Actions - Categories
   setCategories: (categories: IdeaCategory[]) => void;
@@ -47,70 +46,65 @@ interface IdeasState {
 }
 
 export const useIdeasStore = create<IdeasState>()(
-  persist(
-    (set, get) => ({
-      // Initial Data
-      ideas: [],
-      categories: [],
-      tags: [],
-      savedIdeaIds: [],
+  (set, get) => ({
+    // Initial Data
+    ideas: [],
+    categories: [],
+    tags: [],
+    savedIdeaIds: [],
 
-      // Initial Filters
-      selectedCategoryId: null,
-      selectedTagId: null,
-      selectedIdeaId: null,
+    // Initial Filters
+    selectedCategoryId: null,
+    selectedTagId: null,
+    selectedIdeaId: null,
 
-      // Initial UI State
-      loading: false,
-      error: null,
+    // Initial UI State
+    loading: false,
+    error: null,
 
-      // Ideas Actions
-      setIdeas: (ideas) => set({ ideas }),
-      setSelectedIdea: (selectedIdeaId) => set({ selectedIdeaId }),
-      toggleSaveIdea: (id) => set((state) => ({
-        savedIdeaIds: state.savedIdeaIds.includes(id)
-          ? state.savedIdeaIds.filter(savedId => savedId !== id)
-          : [...state.savedIdeaIds, id]
-      })),
+    // Ideas Actions
+    setIdeas: (ideas) => set({ ideas }),
+    setSelectedIdea: (selectedIdeaId) => set({ selectedIdeaId }),
+    toggleSaveIdea: (id) => set((state) => ({
+      savedIdeaIds: state.savedIdeaIds.includes(id)
+        ? state.savedIdeaIds.filter(savedId => savedId !== id)
+        : [...state.savedIdeaIds, id]
+    })),
+    setSavedIdeaIds: (savedIdeaIds) => set({ savedIdeaIds }),
 
-      // Categories Actions
-      setCategories: (categories) => set({ categories }),
-      addCategory: (category) =>
-        set((state) => ({ categories: [...state.categories, category] })),
-      setSelectedCategory: (selectedCategoryId) =>
-        set({ selectedCategoryId, selectedTagId: null }),
+    // Categories Actions
+    setCategories: (categories) => set({ categories }),
+    addCategory: (category) =>
+      set((state) => ({ categories: [...state.categories, category] })),
+    setSelectedCategory: (selectedCategoryId) =>
+      set({ selectedCategoryId, selectedTagId: null }),
 
-      // Tags Actions
-      setTags: (tags) => set({ tags }),
-      addTag: (tag) => set((state) => ({ tags: [...state.tags, tag] })),
-      updateTag: (id, updates) =>
-        set((state) => ({
-          tags: state.tags.map((tag) =>
-            tag.id === id ? { ...tag, ...updates } : tag
-          ),
-        })),
-      removeTag: (id) =>
-        set((state) => ({ tags: state.tags.filter((tag) => tag.id !== id) })),
-      setSelectedTag: (selectedTagId) => set({ selectedTagId }),
-
-      // UI Actions
-      setLoading: (loading) => set({ loading }),
-      setError: (error) => set({ error }),
-
-      // Getters
-      getIdeasByCategory: (categoryId) =>
-        get().ideas.filter((idea) => idea.categoryId === categoryId),
-      getIdeasByTag: (tagId) =>
-        get().ideas.filter((idea) =>
-          idea.tags.some((tag) => tag.id === tagId)
+    // Tags Actions
+    setTags: (tags) => set({ tags }),
+    addTag: (tag) => set((state) => ({ tags: [...state.tags, tag] })),
+    updateTag: (id, updates) =>
+      set((state) => ({
+        tags: state.tags.map((tag) =>
+          tag.id === id ? { ...tag, ...updates } : tag
         ),
-      getTagsByCategory: (categoryId) =>
-        get().tags.filter((tag) => tag.categoryId === categoryId),
-      isIdeaSaved: (id) => get().savedIdeaIds.includes(id),
-    }),
-    {
-      name: 'edubridge-ideas-storage',
-      storage: createJSONStorage(() => localStorage),
-    }
-  )
+      })),
+    removeTag: (id) =>
+      set((state) => ({ tags: state.tags.filter((tag) => tag.id !== id) })),
+    setSelectedTag: (selectedTagId) => set({ selectedTagId }),
+
+    // UI Actions
+    setLoading: (loading) => set({ loading }),
+    setError: (error) => set({ error }),
+
+    // Getters
+    getIdeasByCategory: (categoryId) =>
+      get().ideas.filter((idea) => idea.categoryId === categoryId),
+    getIdeasByTag: (tagId) =>
+      get().ideas.filter((idea) =>
+        idea.tags.some((tag) => tag.id === tagId)
+      ),
+    getTagsByCategory: (categoryId) =>
+      get().tags.filter((tag) => tag.categoryId === categoryId),
+    isIdeaSaved: (id) => get().savedIdeaIds.includes(id),
+  })
 );
