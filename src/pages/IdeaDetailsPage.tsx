@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { toast } from "sonner"
 import { useParams, Link } from "react-router-dom"
 import { motion } from "framer-motion"
@@ -11,6 +11,7 @@ import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/comp
 import { FileText, Network, GraduationCap, Calendar, File, FileCheck, Download, ExternalLink, Bookmark } from "lucide-react"
 import teamsData from "@/data/teams.json"
 import ideasData from "@/data/ideas.json"
+import usersData from "@/data/users.json"
 
 // Mock documents for demo purposes
 const MOCK_DOCUMENTS = [
@@ -50,10 +51,20 @@ const IdeaDetailsPage = () => {
   const teams = useTeamStore(state => state.teams)
   const setTeams = useTeamStore(state => state.setTeams)
 
-  const [isBookmarked, setIsBookmarked] = useState(false)
+  const isBookmarked = useIdeasStore(state => state.savedIdeaIds.includes(ideaId || ""))
+  const toggleSaveIdea = useIdeasStore(state => state.toggleSaveIdea)
 
-  // Find the team currently assigned to this idea
-  const associatedTeam = teams.find(t => t.ideaId === ideaId)
+  // Find the team currently assigned to this idea and hydrate with user info
+  const rawTeam = teams.find(t => t.ideaId === ideaId)
+  const associatedTeam = rawTeam ? {
+    ...rawTeam,
+    members: rawTeam.members.map(member => ({
+      ...member,
+      user: usersData.find(u => u.id === member.userId)
+    })),
+    // @ts-ignore - for demo purposes
+    ta: usersData.find(u => u.id === rawTeam.taId)
+  } : null
 
   useEffect(() => {
     if (ideas.length === 0) {
@@ -116,7 +127,7 @@ const IdeaDetailsPage = () => {
   const metadataItems = [
     { icon: <FileText size={16} />, label: formatLabel(idea.categoryId) },
     { icon: <Network size={16} />, label: `${idea.tags.length} tag${idea.tags.length === 1 ? "" : "s"}` },
-    { icon: <GraduationCap size={16} />, label: associatedTeam?.name || "Unassigned team" },
+    { icon: <GraduationCap size={16} />, label: associatedTeam?.ta ? `TA: ${associatedTeam.ta.firstName} ${associatedTeam.ta.lastName}` : (associatedTeam?.name || "Unassigned team") },
     { icon: <Calendar size={16} />, label: formatDate(idea.updatedAt) ? `Updated ${formatDate(idea.updatedAt)}` : "Draft idea" }
   ]
 
@@ -164,15 +175,15 @@ const IdeaDetailsPage = () => {
                 <h1 className="text-3xl font-bold">
                   {idea.title}
                 </h1>
-                <Tooltip>
+                {role !== 'ta' && <Tooltip>
                   <TooltipTrigger asChild>
                     <button
                       onClick={(e) => {
                         e.preventDefault();
-                        const newStatus = !isBookmarked;
-                        setIsBookmarked(newStatus);
-                        toast.success(newStatus ? "Idea saved to your library!" : "Idea removed from library", {
-                          description: newStatus ? `You've successfully saved "${idea.title}".` : `"${idea.title}" has been removed from your saved list.`,
+                        const wasBookmarked = isBookmarked;
+                        toggleSaveIdea(idea.id);
+                        toast.success(!wasBookmarked ? "Idea saved to your library!" : "Idea removed from library", {
+                          description: !wasBookmarked ? `You've successfully saved "${idea.title}".` : `"${idea.title}" has been removed from your saved list.`,
                           duration: 2000,
                         });
                       }}
@@ -185,7 +196,7 @@ const IdeaDetailsPage = () => {
                   <TooltipContent>
                     <p>{isBookmarked ? "Saved" : "Save Idea"}</p>
                   </TooltipContent>
-                </Tooltip>
+                </Tooltip>}
               </div>
               <p className="text-brand-text-secondary text-base mb-6 max-w-3xl">
                 {idea.description}

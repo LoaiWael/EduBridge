@@ -6,3 +6,4 @@ export { useIdeasStore } from './store/useIdeasStore';
 
 // Components
 export { IdeaCard } from './components/IdeaCard';
+export { SavedIdeasDialog } from './components/SavedIdeasDialog';

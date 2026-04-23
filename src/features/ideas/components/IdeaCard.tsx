@@ -3,8 +3,9 @@ import { Bookmark } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import type { Idea } from '../types';
-import { useState } from 'react';
 import { toast } from 'sonner';
+import { useProfileStore } from '@/features/profile';
+import { useIdeasStore } from '../store/useIdeasStore';
 
 export interface IdeaCardProps {
   idea: Idea;
@@ -13,7 +14,9 @@ export interface IdeaCardProps {
 }
 
 export function IdeaCard({ idea, index = 0, variants }: IdeaCardProps) {
-  const [isBookmarked, setIsBookmarked] = useState(false);
+  const role = useProfileStore(state => state.role)
+  const isBookmarked = useIdeasStore(state => state.savedIdeaIds.includes(idea.id));
+  const toggleSaveIdea = useIdeasStore(state => state.toggleSaveIdea);
 
   return (
     <motion.div
@@ -29,15 +32,15 @@ export function IdeaCard({ idea, index = 0, variants }: IdeaCardProps) {
         <h2 className="text-xl font-bold text-brand-text-primary mr-8">
           {idea.title}
         </h2>
-        <Tooltip>
+        {role !== 'ta' && <Tooltip>
           <TooltipTrigger asChild>
             <button
               onClick={(e) => {
                 e.preventDefault();
-                const newStatus = !isBookmarked;
-                setIsBookmarked(newStatus);
-                toast.success(newStatus ? "Idea saved to your library!" : "Idea removed from library", {
-                  description: newStatus ? `You can now find "${idea.title}" in your saved ideas.` : `"${idea.title}" has been removed.`,
+                const wasBookmarked = isBookmarked;
+                toggleSaveIdea(idea.id);
+                toast.success(!wasBookmarked ? "Idea saved to your library!" : "Idea removed from library", {
+                  description: !wasBookmarked ? `You can now find "${idea.title}" in your saved ideas.` : `"${idea.title}" has been removed.`,
                   duration: 2000,
                 });
               }}
@@ -50,7 +53,7 @@ export function IdeaCard({ idea, index = 0, variants }: IdeaCardProps) {
           <TooltipContent>
             <p>{isBookmarked ? "Saved" : "Save Idea"}</p>
           </TooltipContent>
-        </Tooltip>
+        </Tooltip>}
       </div>
 
       <div className="grow">
