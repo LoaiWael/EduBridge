@@ -27,6 +27,7 @@ const ProfileAvatar = forwardRef<HTMLDivElement, ProfileAvatarProps>(({ imageUrl
           src={displayImageUrl}
           alt={displayName ? `${displayName}'s Profile` : "User Profile"}
           className="w-full h-full object-cover"
+          draggable='false'
         />
       ) : (
         <span className="text-brand-dark-grey text-lg font-semibold leading-none">{initial}</span>

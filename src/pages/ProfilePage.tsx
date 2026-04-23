@@ -9,38 +9,77 @@ import EditProfileButton from "@/features/profile/components/EditProfileButton"
 import { LogoutButton } from "@/features/auth"
 import BackButton from "@/components/BackButton"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { useIdeasStore, SavedIdeasDialog } from "@/features/ideas"
+import { useState } from "react"
+import usersData from "@/data/users.json"
 
 interface DetailRow {
   label: string;
   value: string | JSX.Element;
   icon: JSX.Element;
   link?: string;
+  onClick?: () => void;
 }
 
 const ProfilePage = () => {
   const shouldReduceMotion = useReducedMotion()
   const { userId } = useParams()
+  const [isSavedIdeasOpen, setIsSavedIdeasOpen] = useState(false)
 
-  const firstName = useProfileStore(state => state.firstName);
-  const lastName = useProfileStore(state => state.lastName);
-  const email = useProfileStore(state => state.email);
-  const bio = useProfileStore(state => state.bio);
-  const major = useProfileStore(state => state.major);
-  const university = useProfileStore(state => state.university);
-  const profileImageUrl = useProfileStore(state => state.profileImageUrl);
-  const githubUrl = useProfileStore(state => state.githubUrl);
-  const linkedInUrl = useProfileStore(state => state.linkedInUrl);
-  const isDisabled = useProfileStore(state => state.isDisabled);
-  const skills = useProfileStore(state => state.skills);
-  const department = useProfileStore(state => state.department);
-  const role = useProfileStore(state => state.role);
-  const academicTitle = useProfileStore(state => state.academicTitle);
-  const officeLocation = useProfileStore(state => state.officeLocation);
-  const rating = useProfileStore(state => state.rating);
-  const maxSlots = useProfileStore(state => state.maxSlots);
   const authId = useAuthStore(state => state.id)
+  const savedIdeasCount = useIdeasStore(state => state.savedIdeaIds.length)
 
-  const isOwnProfile = userId === authId || (userId && authId && userId.replace(/^ID/, '') === authId.replace(/^ID/, ''))
+  const isOwnProfile = !userId || userId === authId || (userId && authId && userId.replace(/^ID/, '') === authId.replace(/^ID/, ''))
+
+  // Find user data from JSON if not own profile
+  const otherUser = !isOwnProfile ? usersData.find(u => u.id === userId) : null
+
+  // Helper to fallback to store if own profile, else use otherUser data
+  const userData = isOwnProfile ? {
+    firstName: useProfileStore(state => state.firstName),
+    lastName: useProfileStore(state => state.lastName),
+    email: useProfileStore(state => state.email),
+    bio: useProfileStore(state => state.bio),
+    major: useProfileStore(state => state.major),
+    university: useProfileStore(state => state.university),
+    profileImageUrl: useProfileStore(state => state.profileImageUrl),
+    githubUrl: useProfileStore(state => state.githubUrl),
+    linkedInUrl: useProfileStore(state => state.linkedInUrl),
+    isDisabled: useProfileStore(state => state.isDisabled),
+    skills: useProfileStore(state => state.skills),
+    department: useProfileStore(state => state.department),
+    role: useProfileStore(state => state.role),
+    academicTitle: useProfileStore(state => state.academicTitle),
+    officeLocation: useProfileStore(state => state.officeLocation),
+    rating: useProfileStore(state => state.rating),
+    maxSlots: useProfileStore(state => state.maxSlots),
+  } : {
+    firstName: otherUser?.firstName || "",
+    lastName: otherUser?.lastName || "",
+    email: otherUser?.email || "",
+    bio: otherUser?.bio || "",
+    major: otherUser?.major || "",
+    university: otherUser?.university || "",
+    profileImageUrl: otherUser?.profileImageUrl || "",
+    githubUrl: otherUser?.githubUrl || "",
+    linkedInUrl: otherUser?.linkedInUrl || "",
+    isDisabled: otherUser?.isDisabled || false,
+    skills: otherUser?.skills || [],
+    // @ts-ignore
+    department: otherUser?.department || "",
+    // @ts-ignore
+    role: otherUser?.role || "student",
+    // @ts-ignore
+    academicTitle: otherUser?.academicTitle || "",
+    // @ts-ignore
+    officeLocation: otherUser?.officeLocation || "",
+    // @ts-ignore
+    rating: otherUser?.rating || 0,
+    // @ts-ignore
+    maxSlots: otherUser?.maxSlots || 0,
+  }
+
+  const { firstName, lastName, email, bio, major, university, profileImageUrl, githubUrl, linkedInUrl, isDisabled, skills, department, role, academicTitle, officeLocation, rating, maxSlots } = userData;
 
   const displayName = firstName && lastName ? `${firstName} ${lastName}` : "Olivia Brown"
   const displayId = userId || (authId ? (authId.toString().startsWith("ID") ? authId : `ID${authId}`) : "ID1000274875")
@@ -138,9 +177,14 @@ const ProfilePage = () => {
     },
     ...(isOwnProfile ? [{
       label: "Saved Ideas",
-      value: <ChevronRight className="w-5 h-5 text-brand-text-secondary" />,
+      value: (
+        <div className="flex items-center gap-2">
+          <span className="text-brand-pink font-bold">{savedIdeasCount}</span>
+          <ChevronRight className="w-5 h-5 text-brand-text-secondary" />
+        </div>
+      ),
       icon: <Bookmark className="w-5 h-5 text-brand-text-primary" />,
-      link: "/library" // Assuming library handles saved ideas or is the place to see them
+      onClick: () => setIsSavedIdeasOpen(true)
     }] : []),
     {
       label: "Account Status",
@@ -267,7 +311,7 @@ const ProfilePage = () => {
                   variants={listItemVariants}
                   initial={shouldReduceMotion ? "visible" : "hidden"}
                   animate="visible"
-                  className={`flex flex-row items-center justify-between gap-4 p-4 ${index !== detailRows.length - 1 ? 'border-b border-brand-grey/50' : ''} ${item.link ? 'hover:bg-black/5 transition-colors cursor-pointer' : ''}`}
+                  className={`flex flex-row items-center justify-between gap-4 p-4 ${index !== detailRows.length - 1 ? 'border-b border-brand-grey/50' : ''} ${(item.link || item.onClick) ? 'hover:bg-black/5 transition-colors cursor-pointer' : ''}`}
                 >
                   <div className="flex items-center gap-3">
                     {item.icon}
@@ -279,24 +323,45 @@ const ProfilePage = () => {
                 </motion.div>
               );
 
-              return item.link ? (
-                <Link
-                  to={item.link}
-                  viewTransition
-                  key={item.label}
-                  className="focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-text-primary focus-visible:z-10 relative"
-                >
-                  {content}
-                </Link>
-              ) : (
+              if (item.link) {
+                return (
+                  <Link
+                    to={item.link}
+                    viewTransition
+                    key={item.label}
+                    className="focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-text-primary focus-visible:z-10 relative"
+                  >
+                    {content}
+                  </Link>
+                );
+              }
+
+              if (item.onClick) {
+                return (
+                  <button
+                    onClick={item.onClick}
+                    key={item.label}
+                    className="w-full text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-text-primary focus-visible:z-10 relative cursor-pointer"
+                  >
+                    {content}
+                  </button>
+                );
+              }
+
+              return (
                 <div key={item.label}>
                   {content}
                 </div>
-              )
+              );
             })}
           </motion.div>
         </div>
       </div>
+
+      <SavedIdeasDialog
+        isOpen={isSavedIdeasOpen}
+        onClose={() => setIsSavedIdeasOpen(false)}
+      />
     </TooltipProvider>
   )
 }
