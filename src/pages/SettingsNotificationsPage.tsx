@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import BackButton from "@/components/BackButton";
 import { useNotificationStore } from "@/features/notifications/store/useNotificationStore";
+import { useEffect } from "react";
 
 const sectionVariants: Variants = {
   hidden: { opacity: 0, y: 16 },
@@ -26,6 +27,10 @@ const sectionVariants: Variants = {
 const SettingsNotificationsPage = () => {
   const preferences = useNotificationStore(state => state.preferences);
   const updatePreferences = useNotificationStore(state => state.updatePreferences);
+
+  useEffect(() => {
+    document.title = "EduBridge - Notification Settings";
+  }, []);
 
   const CustomToggle = ({ label, icon: Icon, checked, onChange, description }: any) => (
     <div className="flex items-center justify-between p-4 px-5 hover:bg-brand-secondary/5 transition-colors">

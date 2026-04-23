@@ -1,9 +1,9 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { X, Plus } from "lucide-react";
 import { type UserSkill } from "@/features/profile/types";
 import { useNavigate } from "react-router-dom";
-import { useProfileStore } from "@/features/profile";
+import { useProfileStore, AvatarPicker } from "@/features/profile";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -139,6 +139,10 @@ const SettingsProfilePage = () => {
     await promise;
   };
 
+  useEffect(() => {
+    document.title = "EduBridge - Profile Managment";
+  }, []);
+
   return (
     <motion.div
       className="min-h-screen w-full bg-brand-background pb-24 relative overflow-x-hidden pt-6"
@@ -158,6 +162,9 @@ const SettingsProfilePage = () => {
       </div>
 
       <div className="px-6 pb-6 w-full max-w-4xl mx-auto flex flex-col gap-6">
+        {/* Avatar Section */}
+        <AvatarPicker />
+
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-brand-card border border-brand-grey/20 p-6 sm:p-8 rounded-brand-card shadow-[0_2px_16px_rgba(0,0,0,0.06)]">
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -353,6 +360,7 @@ const SettingsProfilePage = () => {
                   <Input
                     id="maxSlots"
                     type="number"
+                    min='0'
                     {...register("maxSlots", {
                       valueAsNumber: true,
                       min: { value: 1, message: "Must be at least 1" }
