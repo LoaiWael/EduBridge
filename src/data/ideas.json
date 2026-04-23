@@ -1,0 +1,178 @@
+[
+  {
+    "id": "idea-harmony",
+    "title": "Harmony",
+    "description": "A unified academic workspace for tasks, milestones, and team communication across semester-long projects.",
+    "repositoryUrl": "https://github.com/LoaiWael/EduBridge",
+    "categoryId": "productivity",
+    "tags": [
+      {
+        "id": "tag-web-app",
+        "name": "Web App",
+        "categoryId": "platform"
+      },
+      {
+        "id": "tag-collaboration",
+        "name": "Collaboration",
+        "categoryId": "domain"
+      }
+    ],
+    "teamId": "team-harmony-1",
+    "createdAt": "2026-04-20T10:00:00Z",
+    "updatedAt": "2026-04-22T09:30:00Z"
+  },
+  {
+    "id": "idea-edubridge-platform",
+    "title": "EduBridge Platform",
+    "description": "A student-teacher coordination platform for announcements, submissions, team management, and academic workflow visibility.",
+    "repositoryUrl": "https://github.com/LoaiWael/EduBridge",
+    "categoryId": "education",
+    "tags": [
+      {
+        "id": "tag-education",
+        "name": "Education",
+        "categoryId": "domain"
+      },
+      {
+        "id": "tag-react",
+        "name": "React",
+        "categoryId": "stack"
+      }
+    ],
+    "teamId": "team-edubridge-1",
+    "createdAt": "2026-04-21T09:00:00Z",
+    "updatedAt": "2026-04-22T11:00:00Z"
+  },
+  {
+    "id": "idea-smart-attendance",
+    "title": "Smart Attendance Insight",
+    "description": "An attendance analytics dashboard that detects risky patterns early and helps instructors intervene before students fall behind.",
+    "repositoryUrl": "https://github.com/LoaiWael/EduBridge",
+    "categoryId": "analytics",
+    "tags": [
+      {
+        "id": "tag-analytics",
+        "name": "Analytics",
+        "categoryId": "domain"
+      },
+      {
+        "id": "tag-dashboard",
+        "name": "Dashboard",
+        "categoryId": "platform"
+      }
+    ],
+    "teamId": "team-edubridge-2",
+    "createdAt": "2026-04-22T08:00:00Z",
+    "updatedAt": "2026-04-22T12:20:00Z"
+  },
+  {
+    "id": "idea-peerpulse",
+    "title": "PeerPulse",
+    "description": "A peer review tool that turns sprint feedback into clear progress signals for teammates and supervisors.",
+    "repositoryUrl": "https://github.com/LoaiWael/EduBridge",
+    "categoryId": "collaboration",
+    "tags": [
+      {
+        "id": "tag-feedback",
+        "name": "Feedback",
+        "categoryId": "domain"
+      },
+      {
+        "id": "tag-zustand",
+        "name": "Zustand",
+        "categoryId": "stack"
+      }
+    ],
+    "teamId": "team-peerpulse-1",
+    "createdAt": "2026-04-19T14:10:00Z",
+    "updatedAt": "2026-04-22T09:30:00Z"
+  },
+  {
+    "id": "idea-lablink",
+    "title": "LabLink",
+    "description": "A lab equipment booking assistant with waitlists, conflict detection, and access windows for shared campus resources.",
+    "repositoryUrl": "https://github.com/LoaiWael/EduBridge",
+    "categoryId": "operations",
+    "tags": [
+      {
+        "id": "tag-booking",
+        "name": "Booking",
+        "categoryId": "domain"
+      },
+      {
+        "id": "tag-pwa",
+        "name": "PWA",
+        "categoryId": "stack"
+      }
+    ],
+    "teamId": "team-lablink-1",
+    "createdAt": "2026-04-18T12:00:00Z",
+    "updatedAt": "2026-04-22T07:20:00Z"
+  },
+  {
+    "id": "idea-campuscart",
+    "title": "CampusCart",
+    "description": "A marketplace for textbooks, devices, and project materials that helps students buy, sell, or exchange locally.",
+    "repositoryUrl": "https://github.com/LoaiWael/EduBridge",
+    "categoryId": "marketplace",
+    "tags": [
+      {
+        "id": "tag-marketplace",
+        "name": "Marketplace",
+        "categoryId": "domain"
+      },
+      {
+        "id": "tag-mobile-first",
+        "name": "Mobile First",
+        "categoryId": "platform"
+      }
+    ],
+    "teamId": "team-campuscart-1",
+    "createdAt": "2026-04-17T11:25:00Z",
+    "updatedAt": "2026-04-21T13:55:00Z"
+  },
+  {
+    "id": "idea-mentormesh",
+    "title": "MentorMesh",
+    "description": "A mentoring network that matches students with seniors and alumni by goals, interests, and track record.",
+    "repositoryUrl": "https://github.com/LoaiWael/EduBridge",
+    "categoryId": "community",
+    "tags": [
+      {
+        "id": "tag-mentoring",
+        "name": "Mentoring",
+        "categoryId": "domain"
+      },
+      {
+        "id": "tag-matching",
+        "name": "Matching",
+        "categoryId": "feature"
+      }
+    ],
+    "teamId": "team-mentormesh-1",
+    "createdAt": "2026-04-16T08:40:00Z",
+    "updatedAt": "2026-04-23T00:10:00Z"
+  },
+  {
+    "id": "idea-greenroute",
+    "title": "GreenRoute",
+    "description": "A campus navigation app that recommends accessible and eco-friendly routes based on time, terrain, and weather.",
+    "repositoryUrl": "https://github.com/LoaiWael/EduBridge",
+    "categoryId": "mobility",
+    "tags": [
+      {
+        "id": "tag-navigation",
+        "name": "Navigation",
+        "categoryId": "domain"
+      },
+      {
+        "id": "tag-accessibility",
+        "name": "Accessibility",
+        "categoryId": "feature"
+      }
+    ],
+    "teamId": "team-greenroute-1",
+    "createdAt": "2026-04-15T09:00:00Z",
+    "updatedAt": "2026-04-22T18:00:00Z"
+  }
+]

@@ -3,3 +3,6 @@ export type { Idea, IdeaCategory, IdeaTag, IdeaCategoriesResponse, IdeasResponse
 
 // Store
 export { useIdeasStore } from './store/useIdeasStore';
+
+// Components
+export { IdeaCard } from './components/IdeaCard';

@@ -1,47 +1,12 @@
 import { useEffect, useState } from "react"
-import { Link } from "react-router-dom"
 import { motion, AnimatePresence } from "framer-motion"
-import { useIdeasStore } from "@/features/ideas"
+import { useIdeasStore, IdeaCard } from "@/features/ideas"
 import { ChatbotButton } from "@/features/chatbot"
 import BackButton from "@/components/BackButton"
-import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import { Skeleton } from "@/components/ui/skeleton"
 import { useProfileStore } from "@/features/profile"
-
-const MOCK_IDEAS = [
-  {
-    id: "1",
-    title: "Harmony",
-    description: "Project description",
-    categoryId: "c1",
-    tags: [],
-    teamId: "t1"
-  },
-  {
-    id: "2",
-    title: "EduBridge",
-    description: "Project description",
-    categoryId: "c2",
-    tags: [],
-    teamId: "t2"
-  },
-  {
-    id: "3",
-    title: "EduBridge",
-    description: "Project description",
-    categoryId: "c2",
-    tags: [],
-    teamId: "t3"
-  },
-  {
-    id: "4",
-    title: "EduBridge",
-    description: "Project description",
-    categoryId: "c2",
-    tags: [],
-    teamId: "t4"
-  }
-];
+import ideasData from "@/data/ideas.json"
 
 const IdeasLibPage = () => {
   const role = useProfileStore(state => state.role)
@@ -54,10 +19,10 @@ const IdeasLibPage = () => {
     const loadData = async () => {
       setIsLoading(true)
       // Simulate network delay for perceived performance
-      await new Promise(resolve => setTimeout(resolve, 500))
+      await new Promise(resolve => setTimeout(resolve, 800))
 
       if (ideas.length === 0) {
-        setIdeas(MOCK_IDEAS)
+        setIdeas(ideasData)
       }
       setIsLoading(false)
     }
@@ -146,42 +111,12 @@ const IdeasLibPage = () => {
               // Actual ideas list
               <div className="contents">
                 {ideas.map((idea, index) => (
-                  <motion.div
+                  <IdeaCard
                     key={idea.id}
-                    custom={index}
+                    idea={idea}
+                    index={index}
                     variants={listItemVariants}
-                    initial="hidden"
-                    animate="visible"
-                    layout
-                    className="w-full bg-brand-card rounded-3xl p-5 shadow-brand-card flex flex-col"
-                  >
-                    <h2 className="text-xl font-bold text-brand-text-primary mb-1">
-                      {idea.title}
-                    </h2>
-                    <div className="grow">
-                      <p className="text-brand-text-secondary text-sm mb-3">
-                        {idea.description}
-                      </p>
-                    </div>
-
-                    <div className="flex justify-end mt-auto">
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Link
-                            to={`/library/${idea.id}`}
-                            viewTransition
-                            className="bg-linear-to-b from-brand-primary to-brand-pink text-brand-text-primary text-sm font-semibold px-4 py-2 flex items-center justify-center rounded-brand-card hover:opacity-90 active:scale-95 shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
-                            aria-label={`View details for ${idea.title}`}
-                          >
-                            View details
-                          </Link>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Click to view project details</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
-                  </motion.div>
+                  />
                 ))}
               </div>
             )}

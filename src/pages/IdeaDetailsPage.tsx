@@ -1,4 +1,5 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import { toast } from "sonner"
 import { useParams, Link } from "react-router-dom"
 import { motion } from "framer-motion"
 import { useIdeasStore } from "@/features/ideas"
@@ -6,8 +7,10 @@ import { useTeamStore, type Team } from "@/features/teams"
 import { useProfileStore, ProfileAvatar } from "@/features/profile"
 import { ChatbotButton } from "@/features/chatbot"
 import BackButton from "@/components/BackButton"
-import { TooltipProvider } from "@/components/ui/tooltip"
-import { FileText, Network, GraduationCap, Calendar, File, FileCheck, Download, ExternalLink } from "lucide-react"
+import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip"
+import { FileText, Network, GraduationCap, Calendar, File, FileCheck, Download, ExternalLink, Bookmark } from "lucide-react"
+import teamsData from "@/data/teams.json"
+import ideasData from "@/data/ideas.json"
 
 // Mock documents for demo purposes
 const MOCK_DOCUMENTS = [
@@ -34,65 +37,29 @@ const MOCK_DOCUMENTS = [
   },
 ]
 
-const MOCK_TEAMS: Team[] = [
-  {
-    id: "t1",
-    name: "Harmony Team",
-    leaderId: "u1",
-    ideaId: "1",
-    status: "InProgress",
-    maxMembers: 5,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    members: [
-      {
-        id: "m1",
-        userId: "u1",
-        teamId: "t1",
-        role: "Leader",
-        joinedAt: new Date().toISOString(),
-        user: {
-          id: "u1",
-          firstName: "Olivia",
-          lastName: "Brown",
-          email: "olivia@example.com",
-          role: "student",
-          major: "Computer Science",
-          university: "MIT",
-        }
-      },
-      {
-        id: "m2",
-        userId: "u2",
-        teamId: "t1",
-        role: "Member",
-        joinedAt: new Date().toISOString(),
-        user: {
-          id: "u2",
-          firstName: "James",
-          lastName: "Smith",
-          email: "james@example.com",
-          role: "student",
-          major: "Software Engineering",
-          university: "Stanford",
-        }
-      }
-    ]
-  }
-];
+const MOCK_TEAMS = teamsData as Team[]
 
 const IdeaDetailsPage = () => {
   const { id: ideaId } = useParams()
   const role = useProfileStore(state => state.role)
 
   const ideas = useIdeasStore(state => state.ideas)
+  const setIdeas = useIdeasStore(state => state.setIdeas)
   const idea = ideas.find(i => i.id === ideaId)
 
   const teams = useTeamStore(state => state.teams)
   const setTeams = useTeamStore(state => state.setTeams)
 
+  const [isBookmarked, setIsBookmarked] = useState(false)
+
   // Find the team currently assigned to this idea
   const associatedTeam = teams.find(t => t.ideaId === ideaId)
+
+  useEffect(() => {
+    if (ideas.length === 0) {
+      setIdeas(ideasData)
+    }
+  }, [ideas.length, setIdeas])
 
   useEffect(() => {
     // Seed mock teams dynamically if not exists to visualize the "Team Members" panel
@@ -122,14 +89,6 @@ const IdeaDetailsPage = () => {
     visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
   }
 
-  // Pre-configured tag mapped metadata (as icons/types aren't strict in state)
-  const TAG_ICONS = [
-    { icon: <FileText size={16} />, label: "Software engineering" },
-    { icon: <Network size={16} />, label: "Computer Science" },
-    { icon: <GraduationCap size={16} />, label: "Level 3" },
-    { icon: <Calendar size={16} />, label: "2026" }
-  ]
-
   if (!idea) {
     return (
       <div className="min-h-screen w-full flex flex-col items-center justify-center bg-brand-background">
@@ -138,6 +97,28 @@ const IdeaDetailsPage = () => {
       </div>
     )
   }
+
+  const formatLabel = (value: string) =>
+    value
+      .split("-")
+      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" ")
+
+  const formatDate = (value?: string) => {
+    if (!value) return null
+    return new Intl.DateTimeFormat("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    }).format(new Date(value))
+  }
+
+  const metadataItems = [
+    { icon: <FileText size={16} />, label: formatLabel(idea.categoryId) },
+    { icon: <Network size={16} />, label: `${idea.tags.length} tag${idea.tags.length === 1 ? "" : "s"}` },
+    { icon: <GraduationCap size={16} />, label: associatedTeam?.name || "Unassigned team" },
+    { icon: <Calendar size={16} />, label: formatDate(idea.updatedAt) ? `Updated ${formatDate(idea.updatedAt)}` : "Draft idea" }
+  ]
 
   return (
     <TooltipProvider delayDuration={300}>
@@ -165,19 +146,76 @@ const IdeaDetailsPage = () => {
             className="w-full rounded-[30px] overflow-hidden p-8 bg-linear-to-b from-brand-primary/60 to-brand-pink/40 relative shadow-[0_4px_24px_rgba(0,0,0,0.08)]"
           >
             <div className="relative z-10 text-brand-text-primary">
-              <h1 className="text-3xl font-bold mb-2">
-                {idea.title}
-              </h1>
-              <p className="text-brand-text-secondary text-base mb-16">
+              <div className="flex flex-wrap items-center gap-2 mb-4">
+                <span className="rounded-full bg-brand-card/55 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-brand-text-primary backdrop-blur-sm">
+                  {formatLabel(idea.categoryId)}
+                </span>
+                {idea.tags.map((tag) => (
+                  <span
+                    key={tag.id}
+                    className="rounded-full bg-brand-background/55 px-3 py-1 text-xs font-medium text-brand-text-primary/85 backdrop-blur-sm"
+                  >
+                    {tag.name}
+                  </span>
+                ))}
+              </div>
+
+              <div className="flex justify-between items-start mb-2">
+                <h1 className="text-3xl font-bold">
+                  {idea.title}
+                </h1>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const newStatus = !isBookmarked;
+                        setIsBookmarked(newStatus);
+                        toast.success(newStatus ? "Idea saved to your library!" : "Idea removed from library", {
+                          description: newStatus ? `You've successfully saved "${idea.title}".` : `"${idea.title}" has been removed from your saved list.`,
+                          duration: 2000,
+                        });
+                      }}
+                      className="p-3 bg-brand-card/30 backdrop-blur-md rounded-2xl text-brand-text-primary hover:bg-brand-card/50 transition-all active:scale-90 shadow-sm border border-white/10"
+                      aria-label={isBookmarked ? "Remove bookmark" : "Bookmark idea"}
+                    >
+                      <Bookmark className="w-6 h-6" fill={isBookmarked ? 'currentColor' : 'transparent'} />
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>{isBookmarked ? "Saved" : "Save Idea"}</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+              <p className="text-brand-text-secondary text-base mb-6 max-w-3xl">
                 {idea.description}
               </p>
 
+              <div className="flex flex-wrap items-center gap-3 mb-10">
+                {idea.repositoryUrl && (
+                  <a
+                    href={idea.repositoryUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-2 rounded-brand-card bg-brand-pink px-4 py-2 text-sm font-semibold text-brand-text-primary transition-opacity hover:opacity-90"
+                  >
+                    <ExternalLink size={14} />
+                    Open repository
+                  </a>
+                )}
+                {formatDate(idea.createdAt) && (
+                  <span className="text-sm text-brand-text-secondary">
+                    Created {formatDate(idea.createdAt)}
+                  </span>
+                )}
+              </div>
+
               {/* Bottom Row Tags */}
-              <div className="flex flex-wrap items-center gap-6 mt-16 text-[11px] font-bold">
-                {TAG_ICONS.map((tag, idx) => (
-                  <div key={idx} className="flex items-center gap-2 opacity-80 mix-blend-multiply">
-                    {tag.icon}
-                    <span>{tag.label}</span>
+              <div className="flex flex-wrap items-center gap-6 mt-10 text-[11px] font-bold">
+                {metadataItems.map((item) => (
+                  <div key={item.label} className="flex items-center gap-2 opacity-80 mix-blend-multiply">
+                    {item.icon}
+                    <span>{item.label}</span>
                   </div>
                 ))}
               </div>
