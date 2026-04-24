@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, FilterX } from 'lucide-react';
 import communityBanner from '@/assets/imgs/svg/community.svg';
@@ -66,15 +66,13 @@ export function TeamsPage() {
     return () => clearTimeout(timer);
   }, []);
 
-  const filteredTeams = useMemo(() => {
-    return extendedTeams.filter(team => {
-      if (status && team.status !== status) return false;
-      if (subject && team.subject !== subject) return false;
-      if (year && team.year !== year) return false;
-      if (dept && team.department !== dept) return false;
-      return true;
-    });
-  }, [status, subject, year, dept]);
+  const filteredTeams = extendedTeams.filter(team => {
+    if (status && team.status !== status) return false;
+    if (subject && team.subject !== subject) return false;
+    if (year && team.year !== year) return false;
+    if (dept && team.department !== dept) return false;
+    return true;
+  });
 
   const hasFilters = status || subject || year || dept;
 

@@ -51,7 +51,7 @@ const RegisterPage = () => {
       email: data.email,
       role: currentRole,
       savedIdeaIds: [],
-      teams: [],
+      myTeams: [],
       joinRequests: [],
       notifications: [],
       profile: {

@@ -72,6 +72,15 @@ export interface TeamIdea {
   repositoryUrl?: string;
 }
 
+// Team Document
+export interface TeamDocument {
+  id: string;
+  name: string;
+  type: string;
+  size: string;
+  uploadedAt: string;
+}
+
 // Team entity
 export interface Team {
   id: string;
@@ -88,6 +97,12 @@ export interface Team {
   idea?: TeamIdea;
   status: TeamStatus;
   maxMembers: number; // Global setting, typically 4-5
+  // Persistent Metadata
+  subject?: string;
+  department?: string;
+  academicYear?: string;
+  documents?: TeamDocument[];
+  requiredMembers?: string[];
   createdAt: string;
   updatedAt: string;
 }

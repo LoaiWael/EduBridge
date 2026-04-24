@@ -7,6 +7,13 @@
     "ideaId": "idea-harmony",
     "status": "Open",
     "maxMembers": 5,
+    "subject": "Productivity Systems",
+    "department": "Software Engineering",
+    "academicYear": "3rd Year",
+    "requiredMembers": [
+      "Frontend Developer",
+      "UI Designer"
+    ],
     "members": [
       {
         "id": "mbr-01",
@@ -28,6 +35,29 @@
     "ideaId": "idea-edubridge-platform",
     "status": "Partial",
     "maxMembers": 5,
+    "subject": "Artificial Intelligence",
+    "department": "Computer Science",
+    "academicYear": "4th Year",
+    "documents": [
+      {
+        "id": "d1",
+        "name": "Project Proposal.pdf",
+        "type": "pdf",
+        "size": "2.4 MB",
+        "uploadedAt": "2026-03-15"
+      },
+      {
+        "id": "d2",
+        "name": "Technical Specification.docx",
+        "type": "doc",
+        "size": "1.1 MB",
+        "uploadedAt": "2026-03-20"
+      }
+    ],
+    "requiredMembers": [
+      "Backend Developer",
+      "AI Engineer"
+    ],
     "members": [
       {
         "id": "mbr-02",

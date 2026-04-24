@@ -20,7 +20,6 @@ export const UserSessionProvider = ({ children }: { children: React.ReactNode })
   // Store Data (Persistence)
   const savedIdeaIds = useIdeasStore(state => state.savedIdeaIds);
   const notifications = useNotificationStore(state => state.notifications);
-  const teams = useTeamStore(state => state.teams);
   const joinRequests = useTeamStore(state => state.joinRequests);
 
   // Profile capture - extracted as separate fields to avoid object reference loop
@@ -34,7 +33,6 @@ export const UserSessionProvider = ({ children }: { children: React.ReactNode })
   const p_dept = useProfileStore(state => state.department);
 
   const updateUserSavedIdeas = useAuthStore(state => state.updateUserSavedIdeas);
-  const updateUserTeams = useAuthStore(state => state.updateUserTeams);
   const updateUserJoinRequests = useAuthStore(state => state.updateUserJoinRequests);
   const updateUserNotifications = useAuthStore(state => state.updateUserNotifications);
   const updateUserProfile = useAuthStore(state => state.updateUserProfile);
@@ -61,7 +59,7 @@ export const UserSessionProvider = ({ children }: { children: React.ReactNode })
             email: mockProfile.email,
             role: mockProfile.role,
             savedIdeaIds: [],
-            teams: [],
+            myTeams: [],
             joinRequests: [],
             notifications: [],
             profile: mockProfile,
@@ -74,7 +72,7 @@ export const UserSessionProvider = ({ children }: { children: React.ReactNode })
 
         setSavedIdeaIds(activeUser.savedIdeaIds || []);
         setNotifications(activeUser.notifications || []);
-        setTeams(activeUser.teams || []);
+        setTeams(activeUser.myTeams || []);
         setJoinRequests(activeUser.joinRequests || []);
         if (activeUser.profile) {
           setProfile(activeUser.profile);
@@ -103,12 +101,6 @@ export const UserSessionProvider = ({ children }: { children: React.ReactNode })
       updateUserNotifications(currentUserId, notifications);
     }
   }, [notifications, currentUserId]);
-
-  useEffect(() => {
-    if (currentUserId && !isHydrating.current) {
-      updateUserTeams(currentUserId, teams);
-    }
-  }, [teams, currentUserId]);
 
   useEffect(() => {
     if (currentUserId && !isHydrating.current) {

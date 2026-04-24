@@ -10,7 +10,7 @@ export interface RegisteredUser {
   role: 'student' | 'ta';
   // User-specific data states - These are the source of truth
   savedIdeaIds: string[];
-  teams: Team[];
+  myTeams: Team[];
   joinRequests: JoinRequest[];
   notifications: AppNotification[];
   profile: UserProfile | TaProfile;
@@ -36,7 +36,7 @@ interface AuthState {
 
   // Data sync actions (called by other stores to persist per-user data)
   updateUserSavedIdeas: (userId: string, ideaIds: string[]) => void;
-  updateUserTeams: (userId: string, teams: Team[]) => void;
+  updateUserMyTeams: (userId: string, teams: Team[]) => void;
   updateUserJoinRequests: (userId: string, requests: JoinRequest[]) => void;
   updateUserNotifications: (userId: string, notifications: AppNotification[]) => void;
   updateUserProfile: (userId: string, profile: UserProfile | TaProfile) => void;
@@ -82,10 +82,10 @@ export const useAuthStore = create<AuthState>()(
         }));
       },
 
-      updateUserTeams: (userId, teams) => {
+      updateUserMyTeams: (userId, teams) => {
         set((state) => ({
           users: state.users.map(u =>
-            u.id === userId ? { ...u, teams: teams } : u
+            u.id === userId ? { ...u, myTeams: teams } : u
           )
         }));
       },

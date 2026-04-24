@@ -12,6 +12,7 @@ import { TooltipProvider } from "@/components/ui/tooltip"
 import { useIdeasStore, SavedIdeasDialog } from "@/features/ideas"
 import { useState } from "react"
 import usersData from "@/data/users.json"
+import { useShallow } from "zustand/react/shallow"
 
 interface DetailRow {
   label: string;
@@ -28,55 +29,51 @@ const ProfilePage = () => {
 
   const authId = useAuthStore(state => state.id)
   const savedIdeasCount = useIdeasStore(state => state.savedIdeaIds.length)
+  const profileData = useProfileStore(useShallow((state) => ({
+    firstName: state.firstName,
+    lastName: state.lastName,
+    email: state.email,
+    bio: state.bio,
+    major: state.major,
+    university: state.university,
+    profileImageUrl: state.profileImageUrl,
+    githubUrl: state.githubUrl,
+    linkedInUrl: state.linkedInUrl,
+    isDisabled: state.isDisabled,
+    skills: state.skills,
+    department: state.department,
+    role: state.role,
+    academicTitle: state.academicTitle,
+    officeLocation: state.officeLocation,
+    rating: state.rating,
+    maxSlots: state.maxSlots,
+  })))
 
   const isOwnProfile = !userId || userId === authId || (userId && authId && userId.replace(/^ID/, '') === authId.replace(/^ID/, ''))
 
   // Find user data from JSON if not own profile
   const otherUser = !isOwnProfile ? usersData.find(u => u.id === userId) : null
+  const otherUserData = otherUser as (Partial<typeof profileData> & { role?: "student" | "ta" }) | null
 
   // Helper to fallback to store if own profile, else use otherUser data
-  const userData = isOwnProfile ? {
-    firstName: useProfileStore(state => state.firstName),
-    lastName: useProfileStore(state => state.lastName),
-    email: useProfileStore(state => state.email),
-    bio: useProfileStore(state => state.bio),
-    major: useProfileStore(state => state.major),
-    university: useProfileStore(state => state.university),
-    profileImageUrl: useProfileStore(state => state.profileImageUrl),
-    githubUrl: useProfileStore(state => state.githubUrl),
-    linkedInUrl: useProfileStore(state => state.linkedInUrl),
-    isDisabled: useProfileStore(state => state.isDisabled),
-    skills: useProfileStore(state => state.skills),
-    department: useProfileStore(state => state.department),
-    role: useProfileStore(state => state.role),
-    academicTitle: useProfileStore(state => state.academicTitle),
-    officeLocation: useProfileStore(state => state.officeLocation),
-    rating: useProfileStore(state => state.rating),
-    maxSlots: useProfileStore(state => state.maxSlots),
-  } : {
-    firstName: otherUser?.firstName || "",
-    lastName: otherUser?.lastName || "",
-    email: otherUser?.email || "",
-    bio: otherUser?.bio || "",
-    major: otherUser?.major || "",
-    university: otherUser?.university || "",
-    profileImageUrl: otherUser?.profileImageUrl || "",
-    githubUrl: otherUser?.githubUrl || "",
-    linkedInUrl: otherUser?.linkedInUrl || "",
-    isDisabled: otherUser?.isDisabled || false,
-    skills: otherUser?.skills || [],
-    // @ts-ignore
-    department: otherUser?.department || "",
-    // @ts-ignore
-    role: otherUser?.role || "student",
-    // @ts-ignore
-    academicTitle: otherUser?.academicTitle || "",
-    // @ts-ignore
-    officeLocation: otherUser?.officeLocation || "",
-    // @ts-ignore
-    rating: otherUser?.rating || 0,
-    // @ts-ignore
-    maxSlots: otherUser?.maxSlots || 0,
+  const userData = isOwnProfile ? profileData : {
+    firstName: otherUserData?.firstName || "",
+    lastName: otherUserData?.lastName || "",
+    email: otherUserData?.email || "",
+    bio: otherUserData?.bio || "",
+    major: otherUserData?.major || "",
+    university: otherUserData?.university || "",
+    profileImageUrl: otherUserData?.profileImageUrl || "",
+    githubUrl: otherUserData?.githubUrl || "",
+    linkedInUrl: otherUserData?.linkedInUrl || "",
+    isDisabled: otherUserData?.isDisabled || false,
+    skills: otherUserData?.skills || [],
+    department: otherUserData?.department || "",
+    role: otherUserData?.role || "student",
+    academicTitle: otherUserData?.academicTitle || "",
+    officeLocation: otherUserData?.officeLocation || "",
+    rating: otherUserData?.rating || 0,
+    maxSlots: otherUserData?.maxSlots || 0,
   }
 
   const { firstName, lastName, email, bio, major, university, profileImageUrl, githubUrl, linkedInUrl, isDisabled, skills, department, role, academicTitle, officeLocation, rating, maxSlots } = userData;

@@ -305,7 +305,7 @@ const HomePage = () => {
                     {/* Create a new team Card */}
                     <motion.div variants={itemVariants}>
                       <Link
-                        to="/teams?create=true"
+                        to="/my-teams?create=true"
                         viewTransition
                         title="Create a New Team"
                         className="bg-brand-card dark:bg-brand-secondary rounded-brand-input shadow-brand-card p-4 flex flex-col justify-end items-start relative overflow-visible h-[140px] group transition-all focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
