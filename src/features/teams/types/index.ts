@@ -35,7 +35,7 @@ export interface TeamUser {
   lastName: string;
   email: string;
   profileImageUrl?: string;
-  role: 'student' | 'ta' | 'doctor';
+  role: 'student' | 'ta';
   major?: string;
   university?: string;
 }
@@ -91,8 +91,6 @@ export interface Team {
   members: TeamMember[];
   taId?: string;
   ta?: TeamUser;
-  doctorId?: string;
-  doctor?: TeamUser;
   ideaId?: string;
   idea?: TeamIdea;
   status: TeamStatus;

@@ -27,7 +27,10 @@ const ProfilePage = () => {
   const { userId } = useParams()
   const [isSavedIdeasOpen, setIsSavedIdeasOpen] = useState(false)
 
-  const authId = useAuthStore(state => state.id)
+  const { authId, registeredUsers } = useAuthStore(useShallow((state) => ({
+    authId: state.id,
+    registeredUsers: state.users,
+  })))
   const savedIdeasCount = useIdeasStore(state => state.savedIdeaIds.length)
   const profileData = useProfileStore(useShallow((state) => ({
     firstName: state.firstName,
@@ -51,9 +54,27 @@ const ProfilePage = () => {
 
   const isOwnProfile = !userId || userId === authId || (userId && authId && userId.replace(/^ID/, '') === authId.replace(/^ID/, ''))
 
-  // Find user data from JSON if not own profile
-  const otherUser = !isOwnProfile ? usersData.find(u => u.id === userId) : null
-  const otherUserData = otherUser as (Partial<typeof profileData> & { role?: "student" | "ta" }) | null
+  // Find user data from registered users or JSON if not own profile
+  const otherUserData = (() => {
+    if (isOwnProfile) return null;
+
+    // Search in registered users (from auth store)
+    const registeredUser = registeredUsers.find(u =>
+      u.id === userId || (userId && u.id.replace(/^ID/, '') === userId.replace(/^ID/, ''))
+    );
+
+    if (registeredUser) {
+      return {
+        ...registeredUser.profile,
+        role: registeredUser.role
+      };
+    }
+
+    // Fallback to static JSON data
+    return usersData.find(u =>
+      u.id === userId || (userId && u.id.replace(/^ID/, '') === userId.replace(/^ID/, ''))
+    ) as (Partial<typeof profileData> & { role?: "student" | "ta" }) | null;
+  })();
 
   // Helper to fallback to store if own profile, else use otherUser data
   const userData = isOwnProfile ? profileData : {

@@ -19,7 +19,7 @@ import {
   AlertCircle
 } from "lucide-react";
 
-import { useTeamStore, type Team, type JoinRequest } from "@/features/teams";
+import { useTeamStore, type Team, type JoinRequest, InviteMemberOverlay } from "@/features/teams";
 import { useIdeasStore } from "@/features/ideas";
 import { useAuthStore } from "@/features/auth";
 import { useProfileStore, ProfileAvatar } from "@/features/profile";
@@ -40,10 +40,11 @@ const TeamDetailsPage = () => {
   // Stores
   const { teams, setTeams, currentTeam, setCurrentTeam, removeTeam, removeMember } = useTeamStore();
   const { ideas, setIdeas } = useIdeasStore();
-  const { id: currentUserId, users: registeredUsers, updateUserJoinRequests } = useAuthStore();
+  const { id: currentUserId, users: registeredUsers, updateUserJoinRequests, updateUserMyTeams, updateUserNotifications } = useAuthStore();
   const { role: currentUserRole } = useProfileStore();
 
   const [isRequesting, setIsRequesting] = useState(false);
+  const [isInviteOverlayOpen, setIsInviteOverlayOpen] = useState(false);
 
   // Load initial data if stores are empty
   useEffect(() => {
@@ -104,48 +105,115 @@ const TeamDetailsPage = () => {
   const handleRequestToJoin = async () => {
     if (!currentUserId || !currentTeam || isTeamFull || hasPendingRequest) return;
 
-    setIsRequesting(true);
+    const requestProcess = new Promise((resolve, reject) => {
+      // Simulate network latency
+      setTimeout(() => {
+        try {
+          const newRequest: JoinRequest = {
+            id: `req-${Date.now()}`,
+            teamId: currentTeam.id,
+            studentId: currentUserId,
+            status: "Pending",
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          };
 
-    try {
-      const newRequest: JoinRequest = {
-        id: `req-${Date.now()}`,
-        teamId: currentTeam.id,
-        studentId: currentUserId,
-        status: "Pending",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-      };
+          const updatedRequests = [...(currentUser?.joinRequests || []), newRequest];
+          updateUserJoinRequests(currentUserId, updatedRequests);
 
-      const updatedRequests = [...(currentUser?.joinRequests || []), newRequest];
-      updateUserJoinRequests(currentUserId, updatedRequests);
+          // Notify Team Leader
+          const leader = registeredUsers.find(u => u.id === currentTeam.leaderId);
+          if (leader) {
+            const newNotification = {
+              id: `notif-${Date.now()}`,
+              userId: leader.id,
+              message: `${currentUser?.profile.firstName || 'A user'} has requested to join your team: ${currentTeam.name}`,
+              isRead: false,
+              type: 'JoinRequestReceived' as const,
+              relatedEntityId: currentTeam.id,
+              createdAt: new Date(),
+              sender: {
+                id: currentUserId,
+                name: `${currentUser?.profile.firstName} ${currentUser?.profile.lastName}`,
+                imageUrl: currentUser?.profile.profileImageUrl
+              }
+            };
+            const updatedLeaderNotifs = [...(leader.notifications || []), newNotification];
+            updateUserNotifications(leader.id, updatedLeaderNotifs);
+          }
+          resolve(true);
+        } catch (error) {
+          reject(error);
+        }
+      }, 1500);
+    });
 
-      toast.success(`Request to join ${currentTeam.name} sent!`, {
-        description: "The team leader will review your request."
-      });
-    } catch (error) {
-      toast.error("Failed to send request. Please try again.");
-    } finally {
-      setIsRequesting(false);
-    }
+    toast.promise(requestProcess, {
+      loading: "Transmitting your request...",
+      success: `Request to join ${currentTeam.name} sent!`,
+      error: "Transmission failed. Please try again."
+    });
   };
 
   const handleDisbandTeam = () => {
-    if (confirm("Are you sure you want to disband this team?")) {
-      removeTeam(currentTeam!.id);
-      toast.success("Team disbanded successfully");
-      navigate("/teams", { viewTransition: true });
-    }
+    toast.warning("Are you sure you want to disband this team?", {
+      description: "This action cannot be undone and all members will be removed.",
+      action: {
+        label: "Disband",
+        onClick: () => {
+          if (!currentTeam) return;
+
+          // Remove from global store
+          removeTeam(currentTeam.id);
+
+          // Sync with persistent AuthStore
+          if (currentUserId && currentUser) {
+            const updatedMyTeams = (currentUser.myTeams || []).filter(t => t.id !== currentTeam.id);
+            updateUserMyTeams(currentUserId, updatedMyTeams);
+          }
+
+          toast.success("Team disbanded successfully");
+          navigate("/teams", { viewTransition: true });
+        }
+      },
+      cancel: {
+        label: "Cancel",
+        onClick: () => { }
+      }
+    });
   };
 
   const handleLeaveTeam = () => {
-    if (confirm("Are you sure you want to leave this team?")) {
-      const member = currentTeam?.members.find(m => m.userId === currentUserId);
-      if (member) {
-        removeMember(currentTeam!.id, member.id);
-        toast.success("You have left the team");
-        navigate("/teams", { viewTransition: true });
+    toast.warning("Are you sure you want to leave this team?", {
+      description: "You will lose access to team resources.",
+      action: {
+        label: "Leave",
+        onClick: () => {
+          if (!currentTeam) return;
+          const member = currentTeam.members.find(m => m.userId === currentUserId);
+          if (member) {
+            // Remove from global store members
+            removeMember(currentTeam.id, member.id);
+
+            // Sync with persistent AuthStore
+            if (currentUserId && currentUser) {
+              const updatedMyTeams = (currentUser.myTeams || []).filter(t => t.id !== currentTeam.id);
+              updateUserMyTeams(currentUserId, updatedMyTeams);
+
+              const updatedRequests = (currentUser.joinRequests || []).filter(r => r.teamId !== currentTeam.id);
+              updateUserJoinRequests(currentUserId, updatedRequests);
+            }
+
+            toast.success("You have left the team");
+            navigate("/teams", { viewTransition: true });
+          }
+        }
+      },
+      cancel: {
+        label: "Cancel",
+        onClick: () => { }
       }
-    }
+    });
   };
 
   const staggerVariants: Variants = {
@@ -232,7 +300,11 @@ const TeamDetailsPage = () => {
                 </div>
               </div>
               {isLeader && (
-                <Button size="sm" className="bg-brand-primary text-brand-text-primary font-bold rounded-2xl gap-2 transition-opacity hover:opacity-80">
+                <Button
+                  size="sm"
+                  className="bg-brand-primary text-brand-text-primary font-bold rounded-2xl gap-2 transition-opacity hover:opacity-80"
+                  onClick={() => setIsInviteOverlayOpen(true)}
+                >
                   <Plus size={18} />
                   Invite
                 </Button>
@@ -416,10 +488,10 @@ const TeamDetailsPage = () => {
                 onClick={handleRequestToJoin}
                 disabled={isRequesting || hasPendingRequest || isTeamFull}
                 className={`w-full sm:w-auto px-10 font-black py-7 rounded-[24px] shadow-lg border-b-4 transition-all text-sm uppercase tracking-widest flex items-center gap-2 ${hasPendingRequest
-                    ? "bg-brand-green text-white border-brand-green/60"
-                    : isTeamFull
-                      ? "bg-brand-grey text-brand-text-secondary border-brand-grey/60 cursor-not-allowed"
-                      : "bg-brand-primary text-brand-text-primary border-brand-primary/60 hover:opacity-90 active:translate-y-0.5"
+                  ? "bg-brand-green text-white border-brand-green/60"
+                  : isTeamFull
+                    ? "bg-brand-grey text-brand-text-secondary border-brand-grey/60 cursor-not-allowed"
+                    : "bg-brand-primary text-brand-text-primary border-brand-primary/60 hover:opacity-90 active:translate-y-0.5"
                   }`}
               >
                 {hasPendingRequest ? (
@@ -470,6 +542,16 @@ const TeamDetailsPage = () => {
           <div className="fixed bottom-10 right-10 z-50">
             <ChatbotButton />
           </div>
+        )}
+
+        {/* Invite Member Overlay */}
+        {currentTeam && isLeader && (
+          <InviteMemberOverlay
+            isOpen={isInviteOverlayOpen}
+            onClose={() => setIsInviteOverlayOpen(false)}
+            teamId={currentTeam.id}
+            teamName={currentTeam.name}
+          />
         )}
       </div>
     </TooltipProvider>

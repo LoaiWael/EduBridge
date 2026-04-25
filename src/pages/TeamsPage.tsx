@@ -9,27 +9,18 @@ import BackButton from '@/components/BackButton';
 import ChatbotButton from '@/features/chatbot/components/ChatbotButton';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { useProfileStore } from '@/features/profile';
-
-interface ExtendedTeam extends Team {
-  isBookmarked?: boolean;
-  subject?: string;
-  year?: string;
-  department?: string;
-}
-
-const mockTeams = teamsData as unknown as ExtendedTeam[];
-
-const extendedTeams: ExtendedTeam[] = mockTeams.map((team, i) => ({
-  ...team,
-  subject: ['Computer Science', 'Mathematics', 'Physics', 'Data Science'][i % 4],
-  year: ['First Year', 'Second Year', 'Third Year', 'Fourth Year'][i % 4],
-  department: ['Engineering', 'Science', 'Arts'][i % 3],
-}));
+import { useTeamStore } from '@/features/teams';
+import { useAuthStore } from '@/features/auth';
 
 const statusOptions = ['Open', 'Partial', 'Full'];
-const subjectOptions = ['Computer Science', 'Mathematics', 'Physics', 'Data Science'];
-const yearOptions = ['First Year', 'Second Year', 'Third Year', 'Fourth Year'];
-const deptOptions = ['Engineering', 'Science', 'Arts'];
+const subjectOptions = ['Computer Science', 'Mathematics', 'Physics', 'Data Science', 'Software Engineering'];
+const yearOptions = ['First Year', 'Second Year', 'Third Year', 'Fourth Year', 'Final Year'];
+const deptOptions = ['Engineering', 'Science', 'Arts', 'Computer Science'];
+type TeamWithRequiredMetadata = Team & {
+  subject: string;
+  academicYear: string;
+  department: string;
+};
 
 function TeamCardSkeleton() {
   return (
@@ -52,24 +43,70 @@ function TeamCardSkeleton() {
 
 export function TeamsPage() {
   const role = useProfileStore(state => state.role);
+  const { teams, setTeams } = useTeamStore();
+  const registeredUsers = useAuthStore(state => state.users);
+
   const [status, setStatus] = useState('');
   const [subject, setSubject] = useState('');
   const [year, setYear] = useState('');
   const [dept, setDept] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
+  const normalizeTeam = (team: Team, index: number): TeamWithRequiredMetadata => ({
+    ...team,
+    subject: team.subject ?? subjectOptions[index % subjectOptions.length],
+    academicYear: team.academicYear ?? yearOptions[index % yearOptions.length],
+    department: team.department ?? deptOptions[index % deptOptions.length]
+  });
+
+  // Collect all teams created by any registered user - React Compiler will handle memoization
+  const userTeams: Team[] = [];
+  registeredUsers.forEach(user => {
+    if (user.myTeams && Array.isArray(user.myTeams)) {
+      user.myTeams.forEach(team => {
+        if (!userTeams.find(t => t.id === team.id)) {
+          userTeams.push(team);
+        }
+      });
+    }
+  });
+
+  // Seed store with combined data
+  useEffect(() => {
+    const getCombinedTeams = () => {
+      // Normalize mock data so filter fields are always present.
+      const mock = (teamsData as Team[]).map(normalizeTeam);
+
+      // Merge with ALL user created teams from local storage
+      const finalTeams: TeamWithRequiredMetadata[] = [...mock];
+      userTeams.forEach((uTeam, index) => {
+        if (!finalTeams.find(t => t.id === uTeam.id)) {
+          finalTeams.push(normalizeTeam(uTeam, mock.length + index));
+        }
+      });
+
+      return finalTeams;
+    };
+
+    // Always keep store in sync with persistent data if available
+    const combined = getCombinedTeams();
+    if (teams.length < combined.length) {
+      setTeams(combined);
+    }
+  }, [userTeams, setTeams, teams.length]);
+
   useEffect(() => {
     document.title = "EduBridge - Teams Community";
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1200);
+    }, 800);
     return () => clearTimeout(timer);
   }, []);
 
-  const filteredTeams = extendedTeams.filter(team => {
+  const filteredTeams = teams.filter(team => {
     if (status && team.status !== status) return false;
     if (subject && team.subject !== subject) return false;
-    if (year && team.year !== year) return false;
+    if (year && team.academicYear !== year) return false;
     if (dept && team.department !== dept) return false;
     return true;
   });
@@ -105,9 +142,7 @@ export function TeamsPage() {
       <div className="min-h-screen w-full bg-linear-to-b from-brand-primary/20 via-brand-background to-brand-primary/10 pb-24 relative overflow-x-hidden pt-6">
 
         {/* Top Header - Just Left Back Button */}
-        <div
-          className="px-6 pb-4"
-        >
+        <div className="px-6 pb-4">
           <BackButton />
         </div>
 

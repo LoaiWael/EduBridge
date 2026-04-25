@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 import { Plus, Users } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
-import { useTeamStore, type Team } from "@/features/teams";
+import { useTeamStore, type Team, CreateTeamModal, type CreateTeamFormData } from "@/features/teams";
 import { useAuthStore } from "@/features/auth";
 import { useProfileStore } from "@/features/profile";
 import BackButton from "@/components/BackButton";
@@ -21,14 +21,29 @@ import teamsData from "@/data/teams.json";
 
 const MyTeamsPage = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const role = useProfileStore(state => state.role);
   const currentUserId = useAuthStore(state => state.id);
-  const { teams, setTeams } = useTeamStore();
+  const registeredUsers = useAuthStore(state => state.users);
+  const updateUserMyTeams = useAuthStore(state => state.updateUserMyTeams);
+  const { teams, setTeams, addTeam } = useTeamStore();
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const isCreateModalOpen = searchParams.get("create") === "true";
+
+  const allUsersTeams = registeredUsers.reduce((acc, user) => {
+    return [...acc, ...(user.myTeams || [])];
+  }, [] as Team[]);
+
+  // Create a unique map of all teams (favoring user-created ones over mock data with same IDs)
+  const seededTeams = teamsData as Team[];
+  const uniqueTeamsMap = new Map<string, Team>();
+  [...seededTeams, ...allUsersTeams].forEach(team => uniqueTeamsMap.set(team.id, team));
+  const allAvailableTeams = Array.from(uniqueTeamsMap.values());
+
   // Filter teams where user is member or leader
-  const userTeams = teams.filter(team =>
+  const userTeams = allAvailableTeams.filter(team =>
     team.leaderId === currentUserId ||
     team.members.some(member => member.userId === currentUserId)
   );
@@ -52,6 +67,55 @@ const MyTeamsPage = () => {
   useEffect(() => {
     document.title = "EduBridge - Your Teams";
   }, []);
+
+  const handleCreateTeamSubmit = (data: CreateTeamFormData) => {
+    if (!currentUserId) return;
+
+    const currentUser = registeredUsers.find(u => u.id === currentUserId);
+    const teamId = `team-${Date.now()}`;
+
+    const newTeam: Team = {
+      id: teamId,
+      name: data.name,
+      description: data.description,
+      subject: data.subject,
+      department: data.department,
+      academicYear: data.academicYear,
+      requiredMembers: data.requiredRoles,
+      leaderId: currentUserId,
+      status: "Open",
+      maxMembers: data.maxMembers || 5,
+      members: [
+        {
+          id: `mbr-${Date.now()}`,
+          userId: currentUserId,
+          teamId: teamId,
+          role: "Leader",
+          joinedAt: new Date().toISOString()
+        }
+      ],
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
+    };
+
+    // Add to global store
+    addTeam(newTeam);
+
+    // Update user persistent store (Auth) using the USER'S specified field 'myTeams' and action 'updateUserMyTeams'
+    const existingUserTeams = currentUser?.myTeams || [];
+    updateUserMyTeams(currentUserId, [...existingUserTeams, newTeam]);
+
+    // Cleanup URL
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete("create");
+    setSearchParams(newParams);
+  };
+
+  const closeCreateModal = () => {
+    const newParams = new URLSearchParams(searchParams);
+    newParams.delete("create");
+    setSearchParams(newParams);
+  };
 
   const listItemVariants: Variants = {
     hidden: { opacity: 0, y: 15 },
@@ -78,25 +142,11 @@ const MyTeamsPage = () => {
     visible: { opacity: 1, y: 0, transition: { duration: 0.3 } }
   };
 
-  const fabVariants: Variants = {
-    initial: { scale: 1, opacity: 1 },
-    animate: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 260,
-        damping: 20,
-        delay: 0.5
-      }
-    }
-  };
-
   return (
     <TooltipProvider delayDuration={300}>
       <div className="min-h-screen w-full bg-linear-to-b from-brand-primary/20 via-brand-background to-brand-primary/10 pb-24 relative overflow-x-hidden pt-6">
 
-        {/* Header - EXACT MATCH to IdeasLibPage */}
+        {/* Header */}
         <motion.div
           variants={listItemVariants}
           initial="hidden"
@@ -113,7 +163,7 @@ const MyTeamsPage = () => {
           </div>
         </motion.div>
 
-        {/* Teams List Content - Grid MATCH to IdeasLibPage */}
+        {/* Teams List Content */}
         <div className="lg:w-[80dvw] max-w-7xl mx-auto px-6 flex flex-col items-center gap-4 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-6 lg:items-stretch lg:px-10 pb-[100px]">
           <AnimatePresence mode="wait">
             {isLoading ? (
@@ -159,7 +209,7 @@ const MyTeamsPage = () => {
                       </h2>
                       <Badge variant="secondary" className={`text-[10px] font-bold uppercase tracking-widest rounded-lg px-2 ${team.status === 'Open' ? 'text-brand-green bg-brand-green/10 border border-brand-green/20' :
                         team.status === 'Full' ? 'text-brand-pink bg-brand-pink/10 border border-brand-pink/20' :
-                          'text-brand-secondary bg-brand-secondary/10 border border-brand-secondary/20'
+                          'text-brand-text-secondary bg-brand-text-secondary/10 border border-brand-text-secondary/20'
                         }`}>
                         {team.status}
                       </Badge>
@@ -213,18 +263,22 @@ const MyTeamsPage = () => {
           </AnimatePresence>
         </div>
 
+        {/* Create Team Modal */}
+        <CreateTeamModal
+          isOpen={isCreateModalOpen}
+          onClose={closeCreateModal}
+          onSubmit={handleCreateTeamSubmit}
+        />
+
         {/* Premium FAB - Create Team */}
         {role === 'student' && (
           <div className="fixed bottom-10 right-10 z-50">
             <Tooltip>
               <TooltipTrigger asChild>
                 <motion.button
-                  variants={fabVariants}
-                  initial="initial"
-                  animate="animate"
                   whileTap={{ scale: 0.95 }}
                   onClick={() => navigate('/my-teams?create=true', { viewTransition: true })}
-                  className="bg-linear-to-tr from-brand-secondary to-brand-pink p-5 rounded-3xl text-white shadow-[0_15px_30px_rgba(0,0,0,0.2)] hover:opacity-90 transition-all flex items-center gap-3 active:translate-y-1 group"
+                  className="bg-linear-to-tr from-brand-secondary to-brand-pink p-5 rounded-full text-white shadow-[0_15px_30px_rgba(0,0,0,0.2)] hover:opacity-90 transition-all flex items-center gap-3 active:translate-y-1 group"
                 >
                   <Plus className="w-6 h-6 group-hover:rotate-90 transition-transform duration-300" strokeWidth={3} />
                   <span className="font-bold uppercase tracking-widest text-xs pr-2">Create New Team</span>
