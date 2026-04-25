@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Bell, ChevronLeft, CheckCircle2 } from 'lucide-react';
-import { useNotificationStore } from '../store/useNotificationStore';
+import { useAuthStore } from '@/features/auth/store/useAuthStore';
 import { NotificationItem } from './NotificationItem';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
@@ -19,13 +19,19 @@ export const NotificationDropdown = ({
 }: NotificationDropdownProps) => {
   const [open, setOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const { notifications, markAllAsRead } = useNotificationStore();
+
+  const currentUserId = useAuthStore(state => state.id);
+  const registeredUsers = useAuthStore(state => state.users);
+  const updateUserNotifications = useAuthStore(state => state.updateUserNotifications);
+
+  const currentUser = registeredUsers.find(u => u.id === currentUserId);
+  const notifications = currentUser?.notifications || [];
 
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth < 768);
     handleResize();
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    return () => removeEventListener('resize', handleResize);
   }, []);
 
   const unreadCount = notifications.filter(n => !n.isRead).length;
@@ -39,10 +45,16 @@ export const NotificationDropdown = ({
   const thisWeek = new Date(today);
   thisWeek.setDate(thisWeek.getDate() - 7);
 
-  const todayNotifs = notifications.filter(n => n.createdAt >= today);
-  const yesterdayNotifs = notifications.filter(n => n.createdAt >= yesterday && n.createdAt < today);
-  const weekNotifs = notifications.filter(n => n.createdAt >= thisWeek && n.createdAt < yesterday);
-  const olderNotifs = notifications.filter(n => n.createdAt < thisWeek);
+  const todayNotifs = notifications.filter(n => new Date(n.createdAt) >= today);
+  const yesterdayNotifs = notifications.filter(n => new Date(n.createdAt) >= yesterday && new Date(n.createdAt) < today);
+  const weekNotifs = notifications.filter(n => new Date(n.createdAt) >= thisWeek && new Date(n.createdAt) < yesterday);
+  const olderNotifs = notifications.filter(n => new Date(n.createdAt) < thisWeek);
+
+  const handleMarkAllRead = () => {
+    if (!currentUserId) return;
+    const updatedNotifs = notifications.map(n => ({ ...n, isRead: true }));
+    updateUserNotifications(currentUserId, updatedNotifs);
+  };
 
   const Content = () => (
     <div className={`${isMobile ? 'flex flex-col h-full w-full bg-brand-background' : 'flex flex-col w-[380px] bg-brand-background/80 backdrop-blur-3xl rounded-xl border border-brand-grey/20 shadow-2xl overflow-hidden'}`}>
@@ -60,7 +72,7 @@ export const NotificationDropdown = ({
         </div>
         {unreadCount > 0 && (
           <button
-            onClick={() => markAllAsRead()}
+            onClick={handleMarkAllRead}
             className="text-xs font-bold text-brand-text-secondary hover:text-brand-text-primary transition-colors flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-brand-secondary/20"
           >
             <CheckCircle2 size={14} />
