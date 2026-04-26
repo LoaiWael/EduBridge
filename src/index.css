@@ -156,7 +156,7 @@
   }
 
   :root::selection {
-    @apply bg-brand-dark-grey/25
+    @apply bg-brand-dark-grey/10
   }
 
   body {

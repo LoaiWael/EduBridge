@@ -15,6 +15,10 @@ import createTeamSvg from "@/assets/imgs/svg/create-new-team.svg";
 import supervisionRequestsSvg from "@/assets/imgs/svg/supervision-requests.svg";
 import trackTeamsSvg from "@/assets/imgs/svg/track-teams.svg";
 import { useAuthStore } from "@/features/auth";
+import type { Team } from "@/features/teams";
+import usersData from "@/data/users.json";
+
+const EMPTY_TEAMS: Team[] = [];
 
 const HomePage = () => {
   const shouldReduceMotion = useReducedMotion();
@@ -69,13 +73,12 @@ const HomePage = () => {
     },
   };
 
-  const recentTeams = [
-    { id: 1, name: 'Harmony', leader: 'Olivia Brown', subject: 'OS2', members: 5 },
-    { id: 2, name: 'Innovators', leader: 'James Smith', subject: 'AI', members: 4 },
-    { id: 3, name: 'Byte Me', leader: 'Emma Wilson', subject: 'Data Structures', members: 6 },
-    { id: 4, name: 'Code Wizards', leader: 'Liam Davis', subject: 'Databases', members: 3 },
-    { id: 5, name: 'Tech Titans', leader: 'Sophia Johnson', subject: 'Networks', members: 5 },
-  ];
+  const registeredUsers = useAuthStore(state => state.users);
+  const userTeams = useAuthStore(state => state.users.find(u => u.id === state.id)?.myTeams || EMPTY_TEAMS);
+
+  const ongoingTeams: Team[] = [...userTeams].sort((a, b) =>
+    new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime()
+  ).slice(0, 6);
 
   return (
     <>
@@ -342,29 +345,54 @@ const HomePage = () => {
                   animate="visible"
                   className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
                 >
-                  {recentTeams.map((team) => (
-                    <motion.div
-                      key={team.id}
-                      variants={itemVariants}
-                      className="bg-brand-card rounded-brand-input p-5 shadow-brand-card flex flex-col relative z-10 border border-brand-grey/20 w-full"
-                    >
-                      <h3 className="text-lg font-bold text-brand-text-primary mb-2">{team.name}</h3>
-                      <div className="flex flex-col gap-1 text-sm text-brand-text-secondary mb-4 grow">
-                        <p>Team leader : <span className="font-semibold text-brand-text-primary">{team.leader}</span></p>
-                        <p>Subject : <span className="font-semibold text-brand-text-primary">{team.subject}</span></p>
-                        <p>Number of members : <span className="font-semibold text-brand-text-primary">{team.members}</span></p>
-                      </div>
-                      <div className="flex justify-end mt-auto">
-                        <Link
-                          to={`/teams/${team.name.toLowerCase().replace(' ', '-')}`}
-                          viewTransition
-                          className="bg-brand-primary text-brand-text-primary text-sm font-semibold px-4 py-2 flex items-center justify-center rounded-brand-button hover:bg-brand-primary/80 transition-colors w-full sm:w-auto"
+                  {ongoingTeams.length > 0 ? (
+                    ongoingTeams.map((team) => {
+                      const leader = team.leader ||
+                        registeredUsers.find(u => u.id === team.leaderId)?.profile ||
+                        (usersData as any[]).find(u => u.id === team.leaderId);
+                      const leaderName = leader ? `${leader.firstName} ${leader.lastName}` : 'N/A';
+
+                      return (
+                        <motion.div
+                          key={team.id}
+                          variants={itemVariants}
+                          className="bg-brand-card rounded-brand-input p-5 shadow-brand-card flex flex-col relative z-10 border border-brand-grey/20 w-full"
                         >
-                          View details
-                        </Link>
-                      </div>
+                          <h3 className="text-lg font-bold text-brand-text-primary mb-2">{team.name}</h3>
+                          <div className="flex flex-col gap-1 text-sm text-brand-text-secondary mb-4 grow">
+                            <p>Team leader : <span className="font-semibold text-brand-text-primary">
+                              {leaderName}
+                            </span></p>
+                            <p>Subject : <span className="font-semibold text-brand-text-primary">{team.subject || 'N/A'}</span></p>
+                            <p>Number of members : <span className="font-semibold text-brand-text-primary">{team.members.length}</span></p>
+                          </div>
+                          <div className="flex justify-end mt-auto">
+                            <Link
+                              to={`/teams/${team.id}`}
+                              viewTransition
+                              className="bg-brand-primary text-brand-text-primary text-sm font-semibold px-4 py-2 flex items-center justify-center rounded-brand-button hover:bg-brand-primary/80 transition-colors w-full sm:w-auto"
+                            >
+                              View details
+                            </Link>
+                          </div>
+                        </motion.div>
+                      );
+                    })
+                  ) : (
+                    <motion.div
+                      variants={itemVariants}
+                      className="col-span-full bg-brand-card/50 rounded-brand-input p-8 border border-dashed border-brand-grey/30 flex flex-col items-center justify-center text-center"
+                    >
+                      <p className="text-brand-text-secondary mb-4">No ongoing teams found in your supervision.</p>
+                      <Link
+                        to="/manage-teams"
+                        viewTransition
+                        className="text-brand-primary font-bold hover:underline"
+                      >
+                        Go to management
+                      </Link>
                     </motion.div>
-                  ))}
+                  )}
                 </motion.div>
               </div>
             )}
