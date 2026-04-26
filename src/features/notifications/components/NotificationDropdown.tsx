@@ -97,7 +97,9 @@ export const NotificationDropdown = ({
             <div className="space-y-3">
               <h3 className="text-xs font-bold text-brand-text-secondary tracking-wider uppercase pl-1">Today</h3>
               <div className="flex flex-col gap-2">
-                {todayNotifs.map(n => <NotificationItem key={n.id} notification={n} />)}
+                <AnimatePresence initial={false} mode="popLayout">
+                  {todayNotifs.map(n => <NotificationItem key={n.id} notification={n} />)}
+                </AnimatePresence>
               </div>
             </div>
           )}
@@ -106,7 +108,9 @@ export const NotificationDropdown = ({
             <div className="space-y-3">
               <h3 className="text-xs font-bold text-brand-text-secondary tracking-wider uppercase pl-1">Yesterday</h3>
               <div className="flex flex-col gap-2">
-                {yesterdayNotifs.map(n => <NotificationItem key={n.id} notification={n} />)}
+                <AnimatePresence initial={false} mode="popLayout">
+                  {yesterdayNotifs.map(n => <NotificationItem key={n.id} notification={n} />)}
+                </AnimatePresence>
               </div>
             </div>
           )}
@@ -115,7 +119,9 @@ export const NotificationDropdown = ({
             <div className="space-y-3">
               <h3 className="text-xs font-bold text-brand-text-secondary tracking-wider uppercase pl-1">This week</h3>
               <div className="flex flex-col gap-2">
-                {weekNotifs.map(n => <NotificationItem key={n.id} notification={n} />)}
+                <AnimatePresence initial={false} mode="popLayout">
+                  {weekNotifs.map(n => <NotificationItem key={n.id} notification={n} />)}
+                </AnimatePresence>
               </div>
             </div>
           )}
@@ -124,7 +130,9 @@ export const NotificationDropdown = ({
             <div className="space-y-3">
               <h3 className="text-xs font-bold text-brand-text-secondary tracking-wider uppercase pl-1">Older</h3>
               <div className="flex flex-col gap-2">
-                {olderNotifs.map(n => <NotificationItem key={n.id} notification={n} />)}
+                <AnimatePresence initial={false} mode="popLayout">
+                  {olderNotifs.map(n => <NotificationItem key={n.id} notification={n} />)}
+                </AnimatePresence>
               </div>
             </div>
           )}

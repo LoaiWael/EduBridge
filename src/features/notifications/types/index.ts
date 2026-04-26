@@ -7,7 +7,10 @@ export type NotificationType =
   | 'TaRequestRejected'
   | 'TeamMemberJoined'
   | 'InvitationReceived'
-  | 'RatingReceived';
+  | 'InvitationAccepted'
+  | 'InvitationRejected'
+  | 'RatingReceived'
+  | 'TaLeftSupervision';
 
 export interface AppNotification {
   id: string;

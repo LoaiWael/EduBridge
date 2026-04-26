@@ -177,14 +177,15 @@ export const InviteMemberOverlay = ({ isOpen, onClose, teamId, teamName }: Invit
                         <TooltipTrigger asChild>
                           <button
                             onClick={() => handleInvite(user)}
-                            className="p-3 bg-brand-primary text-brand-text-primary rounded-2xl hover:scale-110 hover:opacity-75 active:scale-95 transition-all shadow-md"
+                            disabled={registeredUsers.find(u => u.id === user.id)?.notifications?.some(n => n.type === 'InvitationReceived' && n.relatedEntityId === teamId)}
+                            className="p-3 bg-brand-primary text-brand-text-primary rounded-2xl hover:scale-110 hover:opacity-75 active:scale-95 transition-all shadow-md disabled:opacity-40 disabled:scale-100 disabled:cursor-not-allowed"
                             aria-label={`Invite ${user.firstName} ${user.lastName} to team`}
                           >
                             <UserPlus size={22} />
                           </button>
                         </TooltipTrigger>
                         <TooltipContent side="top" sideOffset={8}>
-                          <p>Invite to team</p>
+                          <p>{registeredUsers.find(u => u.id === user.id)?.notifications?.some(n => n.type === 'InvitationReceived' && n.relatedEntityId === teamId) ? "Invitation already sent" : "Invite to team"}</p>
                         </TooltipContent>
                       </Tooltip>
                     </motion.div>
