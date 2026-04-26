@@ -1,75 +1,109 @@
-# React + TypeScript + Vite
+# EduBridge
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="center">
+  <img src="public/imgs/eduBridge-banner.png" width="100%" alt="EduBridge Banner" />
+</p>
 
-Currently, two official plugins are available:
+<p align="center">
+  <strong>Bridging the gap between students, educators, and project opportunities.</strong>
+</p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## 🌟 Overview
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+EduBridge is a comprehensive ecosystem designed to streamline coordination within academic environments. It empowers students to find project ideas, form teams, and seek professional supervision from Teaching Assistants (TAs), all while providing educators with the tools to manage and track research progress seamlessly.
 
-Note: This will impact Vite dev & build performances.
+### 🎯 Objective
+To create a unified platform that eliminates the administrative friction in graduation projects and research coordination, fostering a culture of collaboration and innovation.
 
-## Expanding the ESLint configuration
+## ✨ Key Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 📑 **Idea Library**: Browse and save high-impact project concepts with detailed technology stacks and categorizations.
+- 👥 **Team Management**: Form teams, invite members, and manage roles within a dedicated workspace.
+- 👨‍🏫 **TA Supervision**: Direct request-to-approval workflow for project mentoring and academic supervision.
+- 🔍 **Unified Search**: Instant filtering across Users, Teams, Ideas, and TAs using a fast, centralized search component.
+- 🔔 **Real-time Notifications**: Custom notification system for team invites, request status updates, and milestones.
+- 🤖 **AI Support**: Integrated Chatbot for instant platform guidance and project assistance.
+- 🌗 **Dark Mode & Theming**: Full glassmorphism UI supporting both light and dark modes with branded aesthetics.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🛠️ Tech Stack
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **Frontend**: [React 19](https://react.dev/) + [React Compiler](https://react.dev/learn/react-compiler)
+- **Build Tool**: [Vite 8](https://vitejs.dev/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Components**: [shadcn/ui](https://ui.shadcn.com/) + [Lucide React](https://lucide.dev/)
+- **State Management**: [Zustand](https://github.com/pmndrs/zustand)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Routing**: [React Router 7](https://reactrouter.com/)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v20 or higher)
+- npm or pnpm
+
+### Installation
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/LoaiWael/EduBridge.git
+   cd EduBridge
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+
+4. **Build for production:**
+   ```bash
+   npm run build
+   ```
+
+## 📂 Architecture
+
+```text
+src/
+├── assets/          # Static images, icons, and SVG illustrations
+├── components/      # Reusable global UI components (Search, NavBar, etc.)
+│   └── ui/          # base shadcn primitives
+├── data/            # Mock JSON data for users, teams, and ideas
+├── features/        # Feature-based module organization
+│   ├── auth/        # Login, Register, Session management
+│   ├── ideas/       # Library browsing and detail views
+│   ├── profile/     # User profile and settings
+│   ├── teams/       # Team creation and member management
+│   ├── supervision/ # Request handling for TAs
+│   └── notifications/
+├── layouts/         # Layout wrappers (Root, WithoutNav)
+├── pages/           # High-level route components
+├── router/          # React Router configuration and guards
+└── store/           # Global Zustand store definitions
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🤝 Contributing
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+We welcome contributions! If you have ideas for features or find bugs, please:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. Fork the repo.
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
+4. Push to the branch (`git push origin feature/AmazingFeature`).
+5. Open a Pull Request.
+
+## 📄 License
+
+This project is private and intended for educational purposes at Mansoura University.
+
+---
+<p align="center">
+  Developed with ❤️ by <a href="https://github.com/LoaiWael">Loai Wael</a>
+</p>
