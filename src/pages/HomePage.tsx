@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
-import { SlidersHorizontal, Search } from "lucide-react";
+import { SlidersHorizontal } from "lucide-react";
+import Search from "@/components/Search";
 import { ProfileAvatar } from "@/features/profile";
 import { useProfileStore } from "@/features/profile";
 import { ChatbotButton } from "@/features/chatbot";
@@ -140,15 +141,7 @@ const HomePage = () => {
                 variants={headerChildrenVariants}
                 className="mt-7 relative z-10 hover:opacity-90 transition-opacity"
               >
-                <div className="relative flex items-center">
-                  <Search className="absolute left-4 w-[22px] h-[22px] text-brand-text-secondary" strokeWidth={1.5} />
-                  <input
-                    type="text"
-                    title="Search application"
-                    placeholder="Search"
-                    className="w-full h-14 bg-brand-card text-brand-text-secondary rounded-brand-input pl-12 pr-6 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary/50 text-base"
-                  />
-                </div>
+                <Search />
               </motion.div>
 
               {/* Hero Banner */}
