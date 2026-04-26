@@ -3,6 +3,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 import type { AppNotification } from "@/features/notifications/types";
 import type { UserProfile, TaProfile } from "@/features/profile/types";
 import type { Team, JoinRequest } from "@/features/teams/types";
+import type { SupervisionRequest } from "@/features/supervision/types";
 
 export interface RegisteredUser {
   id: string;
@@ -12,6 +13,7 @@ export interface RegisteredUser {
   savedIdeaIds: string[];
   myTeams: Team[];
   joinRequests: JoinRequest[];
+  supervisionRequests: SupervisionRequest[];
   notifications: AppNotification[];
   profile: UserProfile | TaProfile;
 }
@@ -38,8 +40,13 @@ interface AuthState {
   updateUserSavedIdeas: (userId: string, ideaIds: string[]) => void;
   updateUserMyTeams: (userId: string, teams: Team[]) => void;
   updateUserJoinRequests: (userId: string, requests: JoinRequest[]) => void;
+  updateUserSupervisionRequests: (userId: string, requests: SupervisionRequest[]) => void;
   updateUserNotifications: (userId: string, notifications: AppNotification[]) => void;
   updateUserProfile: (userId: string, profile: UserProfile | TaProfile) => void;
+
+  // Supervision Actions
+  acceptSupervisionRequest: (requestId: string) => void;
+  rejectSupervisionRequest: (requestId: string) => void;
 
   // Helper to get current user data
   getCurrentUser: () => RegisteredUser | null;
@@ -98,6 +105,14 @@ export const useAuthStore = create<AuthState>()(
         }));
       },
 
+      updateUserSupervisionRequests: (userId, requests) => {
+        set((state) => ({
+          users: state.users.map(u =>
+            u.id === userId ? { ...u, supervisionRequests: requests } : u
+          )
+        }));
+      },
+
       updateUserNotifications: (userId, notifications) => {
         set((state) => ({
           users: state.users.map(u =>
@@ -111,6 +126,139 @@ export const useAuthStore = create<AuthState>()(
           users: state.users.map(u =>
             u.id === userId ? { ...u, profile: profile } : u
           )
+        }));
+      },
+
+      acceptSupervisionRequest: (requestId: string) => {
+        const currentUser = get().getCurrentUser();
+        if (!currentUser) return;
+
+        const request = currentUser.supervisionRequests?.find(r => r.id === requestId);
+        if (!request) return;
+
+        const leader = get().users.find(u => u.id === request.studentId);
+        if (!leader) return;
+
+        const team = (leader.myTeams || []).find(t => t.id === request.projectId);
+        if (!team) return;
+
+        // 1. Update Leader Team: Assign current TA
+        const updatedLeaderTeams = leader.myTeams.map(t =>
+          t.id === team.id ? { ...t, taId: currentUser.id, status: 'TaApproved' as const } : t
+        );
+
+        // 2. Add to TA Team List
+        const updatedTeam = { ...team, taId: currentUser.id, status: 'TaApproved' as const };
+        const updatedTaTeams = [...(currentUser.myTeams || []), updatedTeam];
+
+        // 3. Update Request Status
+        const updatedRequests = currentUser.supervisionRequests.map(r =>
+          r.id === requestId ? { ...r, status: 'approved' as const, reviewedAt: new Date() } : r
+        );
+
+        // 4. Create Notification for Leader
+        const notification: AppNotification = {
+          id: `notif-ta-acc-${Date.now()}`,
+          userId: leader.id,
+          message: `TA ${currentUser.profile.firstName} has accepted to supervise your team "${team.name}"!`,
+          isRead: false,
+          type: 'TaRequestAccepted',
+          relatedEntityId: team.id,
+          createdAt: new Date(),
+          sender: {
+            id: currentUser.id,
+            name: `${currentUser.profile.firstName} ${currentUser.profile.lastName}`,
+            imageUrl: currentUser.profile.profileImageUrl
+          }
+        };
+
+        // 5. Update TA notifications (Transform request into accepted)
+        const updatedTaNotifications = (currentUser.notifications || []).map(n =>
+          (n.type === 'TaRequestReceived' && n.relatedEntityId === request.projectId)
+            ? { ...n, type: 'TaRequestAccepted' as const, message: `You accepted to supervise "${team.name}".`, isRead: true }
+            : n
+        );
+
+        set((state) => ({
+          users: state.users.map(u => {
+            if (u.id === leader.id) {
+              return {
+                ...u,
+                myTeams: updatedLeaderTeams,
+                notifications: [...(u.notifications || []), notification]
+              };
+            }
+            if (u.id === currentUser.id) {
+              return {
+                ...u,
+                myTeams: updatedTaTeams,
+                supervisionRequests: updatedRequests,
+                notifications: updatedTaNotifications
+              };
+            }
+            return u;
+          })
+        }));
+      },
+
+      rejectSupervisionRequest: (requestId: string) => {
+        const currentUser = get().getCurrentUser();
+        if (!currentUser) return;
+
+        const request = currentUser.supervisionRequests?.find(r => r.id === requestId);
+        if (!request) return;
+
+        const leader = get().users.find(u => u.id === request.studentId);
+        if (!leader) return;
+
+        const team = (leader.myTeams || []).find(t => t.id === request.projectId);
+        if (!team) return;
+
+        // 1. Update Request Status
+        const updatedRequests = currentUser.supervisionRequests.map(r =>
+          r.id === requestId ? { ...r, status: 'rejected' as const, reviewedAt: new Date() } : r
+        );
+
+        // 2. Create Notification for Leader
+        const notification: AppNotification = {
+          id: `notif-ta-rej-${Date.now()}`,
+          userId: leader.id,
+          message: `TA ${currentUser.profile.firstName} has declined to supervise your team.`,
+          isRead: false,
+          type: 'TaRequestRejected',
+          relatedEntityId: request.projectId,
+          createdAt: new Date(),
+          sender: {
+            id: currentUser.id,
+            name: `${currentUser.profile.firstName} ${currentUser.profile.lastName}`,
+            imageUrl: currentUser.profile.profileImageUrl
+          }
+        };
+
+        // 3. Update TA notifications (Transform request into declined)
+        const updatedTaNotifications = (currentUser.notifications || []).map(n =>
+          (n.type === 'TaRequestReceived' && n.relatedEntityId === request.projectId)
+            ? { ...n, type: 'TaRequestRejected' as const, message: `You declined to supervise "${team.name}".`, isRead: true }
+            : n
+        );
+
+        set((state) => ({
+          users: state.users.map(u => {
+            if (u.id === leader.id) {
+              return {
+                ...u,
+                notifications: [...(u.notifications || []), notification]
+              };
+            }
+            if (u.id === currentUser.id) {
+              return {
+                ...u,
+                supervisionRequests: updatedRequests,
+                notifications: updatedTaNotifications
+              };
+            }
+            return u;
+          })
         }));
       },
 

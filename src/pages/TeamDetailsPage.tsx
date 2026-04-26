@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 
 import { useTeamStore, type Team, type JoinRequest, InviteMemberOverlay } from "@/features/teams";
+import { SupervisionRequestOverlay } from '@/features/supervision'
 import { useIdeasStore } from "@/features/ideas";
 import { useAuthStore } from "@/features/auth";
 import { useProfileStore, ProfileAvatar } from "@/features/profile";
@@ -45,6 +46,7 @@ const TeamDetailsPage = () => {
 
   const [isRequesting, setIsRequesting] = useState(false);
   const [isInviteOverlayOpen, setIsInviteOverlayOpen] = useState(false);
+  const [isSupervisionOverlayOpen, setIsSupervisionOverlayOpen] = useState(false);
 
   // Load initial data if stores are empty
   useEffect(() => {
@@ -52,22 +54,48 @@ const TeamDetailsPage = () => {
     if (ideas.length === 0) setIdeas(ideasData);
   }, [teams.length, ideas.length, setTeams, setIdeas]);
 
-  // Sync current team based on ID
+  // Sync current team based on ID with absolute priority to persistent AuthStore
   useEffect(() => {
-    const team = teams.find(t => t.id === teamId);
-    if (team) {
-      setCurrentTeam(team);
-      document.title = `EduBridge - ${team.name}`;
+    // 1. Priority: Aggregate latest team state from all registered users (Source of Truth for changes)
+    const persistentTeams = registeredUsers.reduce((acc, u) => {
+      const teams = u.myTeams || [];
+      return [...acc, ...teams];
+    }, [] as Team[]);
+
+    const latestFromPersistence = persistentTeams.find(t => t.id === teamId);
+
+    // 2. Secondary: Global TeamStore state
+    const globalStateTeam = teams.find(t => t.id === teamId);
+
+    // Prefer persistence for membership changes, then global store, then default to null
+    const bestMatch = latestFromPersistence || globalStateTeam;
+
+    if (bestMatch) {
+      setCurrentTeam(bestMatch);
+      document.title = `EduBridge - ${bestMatch.name}`;
     }
-  }, [teamId, teams, setCurrentTeam]);
+  }, [teamId, teams, registeredUsers, setCurrentTeam]);
 
   // Combined user data from local storage and json
   const allUsers = (() => {
     const usersMap = new Map();
+
+    // 1. Initial source: Static JSON data
     usersData.forEach(u => usersMap.set(u.id, u));
+
+    // 2. Override/Add: Registered users (live data)
     registeredUsers.forEach(u => {
-      usersMap.set(u.id, { ...u.profile, id: u.id, role: u.role });
+      const profile = u.profile || {};
+      usersMap.set(u.id, {
+        ...profile,
+        id: u.id,
+        role: u.role,
+        // Fallbacks for missing profile info
+        firstName: profile.firstName || (u.email ? u.email.split('@')[0] : 'Anonymous'),
+        lastName: profile.lastName || 'Student'
+      });
     });
+
     return Array.from(usersMap.values());
   })();
 
@@ -197,11 +225,46 @@ const TeamDetailsPage = () => {
 
             // Sync with persistent AuthStore
             if (currentUserId && currentUser) {
+              // 1. Remove from my own list
               const updatedMyTeams = (currentUser.myTeams || []).filter(t => t.id !== currentTeam.id);
               updateUserMyTeams(currentUserId, updatedMyTeams);
 
+              // 2. Remove from my requests
               const updatedRequests = (currentUser.joinRequests || []).filter(r => r.teamId !== currentTeam.id);
               updateUserJoinRequests(currentUserId, updatedRequests);
+
+              // 3. REMOVE ME from the Leader's persistent member list
+              const leader = registeredUsers.find(u => u.id === currentTeam.leaderId);
+              if (leader && leader.id !== currentUserId) {
+                const updatedLeaderTeams = (leader.myTeams || []).map(t => {
+                  if (t.id === currentTeam.id) {
+                    return {
+                      ...t,
+                      members: t.members.filter(m => m.userId !== currentUserId),
+                      status: (t.members.length - 1 < t.maxMembers) ? ('Open' as const) : t.status
+                    };
+                  }
+                  return t;
+                });
+                updateUserMyTeams(leader.id, updatedLeaderTeams);
+
+                // 4. Notify Leader
+                const leaveNotif = {
+                  id: `notif-leave-${Date.now()}`,
+                  userId: leader.id,
+                  message: `${currentUser.profile.firstName} has left your team: ${currentTeam.name}`,
+                  isRead: false,
+                  type: 'TeamMemberJoined' as const, // We can reuse a generic type or just 'TeamUpdate'
+                  relatedEntityId: currentTeam.id,
+                  createdAt: new Date(),
+                  sender: {
+                    id: currentUserId,
+                    name: `${currentUser.profile.firstName} ${currentUser.profile.lastName}`,
+                    imageUrl: currentUser.profile.profileImageUrl
+                  }
+                };
+                updateUserNotifications(leader.id, [...(leader.notifications || []), leaveNotif]);
+              }
             }
 
             toast.success("You have left the team");
@@ -214,6 +277,56 @@ const TeamDetailsPage = () => {
         onClick: () => { }
       }
     });
+  };
+
+  const handleProvideSupervision = () => {
+    if (!currentUserId || !currentTeam || currentUserRole !== 'ta' || !currentUser) return;
+
+    const updatedTeam: Team = {
+      ...currentTeam,
+      taId: currentUserId,
+      updatedAt: new Date().toISOString()
+    };
+
+    // 1. Update Global Stores
+    setTeams(teams.map(t => t.id === currentTeam.id ? updatedTeam : t));
+    setCurrentTeam(updatedTeam);
+
+    // 2. Sync with Leader's persistent AuthStore
+    const leader = registeredUsers.find(u => u.id === currentTeam.leaderId);
+    if (leader) {
+      const updatedLeaderTeams = (leader.myTeams || []).map(t =>
+        t.id === currentTeam.id ? updatedTeam : t
+      );
+      updateUserMyTeams(leader.id, updatedLeaderTeams);
+
+      // Notify Leader
+      const notification = {
+        id: `notif-sup-${Date.now()}`,
+        userId: leader.id,
+        message: `TA ${currentUser.profile.firstName} has joined as your project supervisor!`,
+        isRead: false,
+        type: 'TaRequestAccepted' as const, // Reusing existing relevant type
+        relatedEntityId: currentTeam.id,
+        createdAt: new Date(),
+        sender: {
+          id: currentUserId,
+          name: `${currentUser.profile.firstName} ${currentUser.profile.lastName}`,
+          imageUrl: currentUser.profile.profileImageUrl
+        }
+      };
+      updateUserNotifications(leader.id, [...(leader.notifications || []), notification]);
+    }
+
+    // 3. Sync with Current TA's persistent MyTeams
+    const existingMyTeams = currentUser.myTeams || [];
+    const alreadyVisible = existingMyTeams.some(t => t.id === currentTeam.id);
+    const updatedMyTeams = alreadyVisible
+      ? existingMyTeams.map(t => t.id === currentTeam.id ? updatedTeam : t)
+      : [...existingMyTeams, updatedTeam];
+    updateUserMyTeams(currentUserId, updatedMyTeams);
+
+    toast.success(`You are now supervising "${currentTeam.name}"`);
   };
 
   const staggerVariants: Variants = {
@@ -231,7 +344,18 @@ const TeamDetailsPage = () => {
       case "Open": return "bg-brand-green/10 text-brand-green border-brand-green/20";
       case "Partial": return "bg-brand-secondary/10 text-brand-secondary border-brand-secondary/20";
       case "Full": return "bg-brand-pink/10 text-brand-pink border-brand-pink/20";
+      case "TaPending": return "bg-brand-blue/10 text-brand-blue border-brand-blue/20";
+      case "TaApproved": return "bg-brand-primary/10 text-brand-primary border-brand-primary/20";
       default: return "bg-brand-grey/10 text-brand-text-secondary border-brand-grey/20";
+    }
+  };
+
+  const formatStatus = (status: string) => {
+    switch (status) {
+      case "TaPending": return "Awaiting TA";
+      case "TaApproved": return "Supervised";
+      case "InProgress": return "In Progress";
+      default: return status;
     }
   };
 
@@ -266,7 +390,7 @@ const TeamDetailsPage = () => {
           >
             <div className="absolute sm:top-0 sm:right-0 -top-4 -right-3 p-8">
               <Badge className={`px-4 py-1.5 rounded-full text-xs font-bold border ${statusBadgeColor(teamDetails.status)}`}>
-                {teamDetails.status}
+                {formatStatus(teamDetails.status)}
               </Badge>
             </div>
 
@@ -399,7 +523,11 @@ const TeamDetailsPage = () => {
               <div className="flex items-center justify-between">
                 <h2 className="text-2xl font-black text-brand-text-primary">Supervisor</h2>
                 {isLeader && !teamDetails.ta && (
-                  <Button size="sm" className="bg-brand-green/10 text-brand-green border border-brand-green/20 hover:bg-brand-green hover:text-white rounded-2xl px-4 py-1.5 font-bold transition-all shadow-none">
+                  <Button
+                    size="sm"
+                    className="bg-brand-green/10 text-brand-green border border-brand-green/20 hover:bg-brand-green hover:text-white rounded-2xl px-4 py-1.5 font-bold transition-all shadow-none"
+                    onClick={() => setIsSupervisionOverlayOpen(true)}
+                  >
                     Request supervisor
                   </Button>
                 )}
@@ -432,7 +560,12 @@ const TeamDetailsPage = () => {
                 <div className="py-12 px-6 bg-brand-grey/5 rounded-[32px] border border-dashed border-brand-grey/20 text-center">
                   <p className="text-brand-text-secondary font-medium mb-2 italic">Awaiting supervisor assignment</p>
                   {currentUserRole === 'ta' && (
-                    <Button className="mt-2 bg-brand-secondary text-white font-bold rounded-xl px-6 hover:opacity-80">Provide Supervision</Button>
+                    <Button
+                      onClick={handleProvideSupervision}
+                      className="mt-2 bg-brand-secondary text-white font-bold rounded-xl px-6 hover:opacity-80 transition-all active:scale-95 shadow-md"
+                    >
+                      Provide Supervision
+                    </Button>
                   )}
                 </div>
               )}
@@ -549,6 +682,16 @@ const TeamDetailsPage = () => {
           <InviteMemberOverlay
             isOpen={isInviteOverlayOpen}
             onClose={() => setIsInviteOverlayOpen(false)}
+            teamId={currentTeam.id}
+            teamName={currentTeam.name}
+          />
+        )}
+
+        {/* Supervision Request Overlay */}
+        {currentTeam && isLeader && (
+          <SupervisionRequestOverlay
+            isOpen={isSupervisionOverlayOpen}
+            onClose={() => setIsSupervisionOverlayOpen(false)}
             teamId={currentTeam.id}
             teamName={currentTeam.name}
           />

@@ -67,7 +67,6 @@ const routes = createRoutesFromElements(
           </Route>
           <Route element={<StudentRoutes />}>
             <Route path='teams' element={<TeamsPage />} />
-            <Route path='bridge/' element={<TeamsPage />} />
           </Route>
         </Route>
 
