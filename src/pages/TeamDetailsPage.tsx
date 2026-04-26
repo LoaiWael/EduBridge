@@ -67,12 +67,17 @@ const TeamDetailsPage = () => {
     // 2. Secondary: Global TeamStore state
     const globalStateTeam = teams.find(t => t.id === teamId);
 
-    // Prefer persistence for membership changes, then global store, then default to null
-    const bestMatch = latestFromPersistence || globalStateTeam;
+    // 3. Tertiary: Static JSON data (Initial source)
+    const staticTeam = (teamsData as Team[]).find(t => t.id === teamId);
+
+    // Prefer persistence > global store > static data
+    const bestMatch = latestFromPersistence || globalStateTeam || staticTeam;
 
     if (bestMatch) {
       setCurrentTeam(bestMatch);
       document.title = `EduBridge - ${bestMatch.name}`;
+    } else {
+      setCurrentTeam(null);
     }
   }, [teamId, teams, registeredUsers, setCurrentTeam]);
 
@@ -133,6 +138,7 @@ const TeamDetailsPage = () => {
   const handleRequestToJoin = async () => {
     if (!currentUserId || !currentTeam || isTeamFull || hasPendingRequest) return;
 
+    setIsRequesting(true);
     const requestProcess = new Promise((resolve, reject) => {
       // Simulate network latency
       setTimeout(() => {
@@ -176,11 +182,15 @@ const TeamDetailsPage = () => {
       }, 1500);
     });
 
-    toast.promise(requestProcess, {
-      loading: "Transmitting your request...",
-      success: `Request to join ${currentTeam.name} sent!`,
-      error: "Transmission failed. Please try again."
-    });
+    try {
+      await toast.promise(requestProcess, {
+        loading: "Transmitting your request...",
+        success: `Request to join ${currentTeam.name} sent!`,
+        error: "Transmission failed. Please try again."
+      });
+    } finally {
+      setIsRequesting(false);
+    }
   };
 
   const handleDisbandTeam = () => {

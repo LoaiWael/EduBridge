@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { Bookmark } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip';
 import type { Team } from '../types';
