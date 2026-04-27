@@ -157,33 +157,9 @@ const RegisterPage = () => {
           >
             <div className="space-y-4">
 
-              {/* First Name - Small screens */}
-              <motion.div variants={itemVariants} className="relative lg:hidden">
-                <Input
-                  type="text"
-                  placeholder="First Name"
-                  {...register("firstName", { required: "First name is required" })}
-                  autoComplete="given-name"
-                  className={`bg-brand-card/80 border ${errors.firstName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
-                />
-                {errors.firstName && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.firstName.message as string}</p>}
-              </motion.div>
-
-              {/* Last Name - Small screens */}
-              <motion.div variants={itemVariants} className="relative lg:hidden">
-                <Input
-                  type="text"
-                  placeholder="Last Name"
-                  {...register("lastName", { required: "Last name is required" })}
-                  autoComplete="family-name"
-                  className={`bg-brand-card/80 border ${errors.lastName ? 'border-brand-red' : 'border-0'} h-14 px-5 text-brand-text-secondary placeholder:text-brand-text-secondary/50 text-base focus-visible:ring-2 focus-visible:ring-brand-text-primary/20`}
-                />
-                {errors.lastName && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.lastName.message as string}</p>}
-              </motion.div>
-
-              {/* First Name & Last Name - Large screens (side by side) */}
-              <motion.div variants={itemVariants} className="relative hidden lg:flex gap-4">
-                <div className="flex-1">
+              {/* First Name & Last Name - Responsive Layout */}
+              <motion.div variants={itemVariants} className="flex flex-col lg:flex-row gap-4">
+                <div className="flex-1 relative">
                   <Input
                     type="text"
                     placeholder="First Name"
@@ -193,7 +169,7 @@ const RegisterPage = () => {
                   />
                   {errors.firstName && <p className="text-brand-red text-xs mt-1 ml-2 ">{errors.firstName.message as string}</p>}
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 relative">
                   <Input
                     type="text"
                     placeholder="Last Name"

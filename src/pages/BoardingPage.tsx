@@ -123,7 +123,7 @@ const BoardingPage = () => {
 
         {/* Content Area */}
         <motion.div
-          className="flex-1 w-full flex flex-col justify-center items-center mt-8"
+          className="flex-1 w-full flex flex-col justify-center items-center mt-4 sm:mt-8"
           variants={contentVariants}
         >
           <AnimatePresence mode="wait">
@@ -144,7 +144,7 @@ const BoardingPage = () => {
               className="flex flex-col items-center text-center w-full"
             >
               {/* Image section */}
-              <div className="w-full max-w-[280px] h-[300px] flex items-center justify-center mb-8">
+              <div className="w-full max-w-[200px] sm:max-w-[280px] h-[220px] sm:h-[300px] flex items-center justify-center mb-4 sm:mb-8">
                 <img
                   src={currentContent.image}
                   alt={currentContent.title}
@@ -153,10 +153,10 @@ const BoardingPage = () => {
               </div>
 
               {/* Text Section */}
-              <h1 className="text-brand-text-primary text-2xl font-bold mb-4 px-2">
+              <h1 className="text-brand-text-primary text-xl sm:text-2xl font-bold mb-2 sm:mb-4 px-2">
                 {currentContent.title}
               </h1>
-              <p className="text-brand-text-secondary text-base leading-relaxed max-w-[75ch]">
+              <p className="text-brand-text-secondary text-sm sm:text-base leading-relaxed max-w-[75ch]">
                 {currentContent.description}
               </p>
             </motion.div>
@@ -185,7 +185,7 @@ const BoardingPage = () => {
 
         {/* Bottom Footer Area */}
         <motion.div
-          className="w-full flex justify-center items-center gap-4 pb-8 pt-6 z-10"
+          className="w-full flex justify-center items-center gap-4 pb-4 sm:pb-8 pt-4 sm:pt-6 z-10"
           variants={contentVariants}
         >
           {/* Previous Button (only show if not on first step) */}
