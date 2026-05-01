@@ -12,7 +12,7 @@ const ChatMessage: React.FC<Omit<ChatMessageData, "id">> = ({ text, isBot, times
       <div
         className={`px-5 py-3.5 rounded-brand-input ${isBot
           ? "bg-brand-card text-brand-text-primary rounded-bl-sm"
-          : "bg-brand-secondary text-white rounded-br-sm"
+          : "bg-brand-secondary text-white rounded-br-sm overflow-clip"
           }`}
       >
         <p className="text-brand-body-sm font-medium leading-relaxed">{text}</p>
